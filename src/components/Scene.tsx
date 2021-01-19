@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Physics } from "@react-three/cannon";
 import { useFrame } from "react-three-fiber";
 import { OrbitControls } from "@react-three/drei";
@@ -11,6 +11,7 @@ import { Water } from "./Water";
 import { ScaleIndicator } from "./ScaleIndicator";
 import { SelectedParticleDisplay } from "./SelectedParticleDisplay";
 import { useStore } from "../store";
+import { useSpring } from "@react-spring/core";
 
 const Scene = () => {
   // audio track
@@ -58,15 +59,21 @@ export default Scene;
  *
  */
 function StorylineSequence() {
-  const scale = useStore((s) => s.scale);
-
   // first, animate the scale to 0.01
-  useAnimateAfterTimeout({
+  useAnimateAfterTimeout2({
     startTime: 5000,
     endTime: 12000,
     target: 0.01,
-    current: scale,
+    property: "scale",
   });
+
+  // // first, animate the scale to 0.01
+  // useAnimateAfterTimeout({
+  //   startTime: 5000,
+  //   endTime: 12000,
+  //   target: 0.01,
+  //   property: "scale"
+  // });
 
   // set something once after a timeout
   // useEffect(() => {
@@ -85,24 +92,67 @@ function StorylineSequence() {
 /** animate a value to a target value over a certain time */
 function useAnimateAfterTimeout({
   target,
-  current,
   startTime,
   endTime,
+  property,
 }: {
   target: number;
-  current: number;
   startTime: number;
   endTime: number;
+  property: string;
 }) {
   const set = useStore((s) => s.set);
+  const current = useStore((s) => s[property]);
 
-  const delta = target - current;
+  const delta = (target - current) / 10; /* <- animation function */
   useFrame(({ clock }) => {
     const time = clock.elapsedTime * 1000 - clock.startTime;
     const shouldAnimate = clock.running && startTime < time && time < endTime;
     if (shouldAnimate) {
-      const nextScale = target - delta / 1.1; /* <- animation function */
-      set({ scale: nextScale });
+      const nextValue = target - delta;
+      set({ [property]: nextValue });
     }
+  });
+}
+/** animate a value to a target value over a certain time */
+function useAnimateAfterTimeout2({
+  target,
+  startTime,
+  endTime,
+  property,
+}: {
+  target: number;
+  startTime: number;
+  endTime: number;
+  property: string;
+}) {
+  const set = useStore((s) => s.set);
+  const current = useStore((s) => s[property]);
+
+  const [animating, setAnimating] = useState(false);
+
+  // https://codesandbox.io/s/react-spring-v9-rc-6hi1y?file=/src/index.js:983-1012
+  // Set up a shared spring which simply animates the toggle above
+  // We use this spring to interpolate all the colors, position and rotations
+  const { x } = useSpring({
+    x: animating,
+    config: { mass: 5, tension: 1000, friction: 50, precision: 0.0001 },
+  });
+  useEffect(() => {
+    console.log("🌟🚨 ~ x", x);
+    set({ [property]: x.to([0, 1], [current, target]) });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [x]);
+
+  useFrame(({ clock }) => {
+    const time = clock.elapsedTime * 1000 - clock.startTime;
+    const shouldAnimate = clock.running && startTime < time && time < endTime;
+    if (!animating && shouldAnimate) {
+      setAnimating(shouldAnimate);
+    }
+    // if (shouldAnimate) {
+    //   const nextScale = target - delta;
+    //   set({ scale: nextScale });
+    // }
   });
 }
