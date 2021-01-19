@@ -71,5 +71,5 @@ function useRenderOnlyNewParticlesWhenCreated(
       );
       setPositionsArray((prev) => [...prev, ...newPositionsArray]);
     }
-  }, [numParticles, positionsArray, worldRadius]);
+  }, [numParticles, positionsArray, worldRadius, setPositionsArray]);
 }

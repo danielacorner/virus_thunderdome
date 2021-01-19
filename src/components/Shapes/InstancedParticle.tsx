@@ -1,20 +1,12 @@
-import React, { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useSphere } from "@react-three/cannon";
 import { useSpring, a } from "react-spring/three";
 import { useJitterInstanceParticle } from "./useJitterParticle";
-import { useFrame, useLoader } from "react-three-fiber";
-import * as THREE from "three";
 // https://discourse.threejs.org/t/there-is-no-gltfloader-in-three-module/16117/4
-import { useMount } from "../../utils/utils";
 import { useGLTF } from "@react-three/drei";
 import { getRandStartPosition } from "./particleUtils";
 import { useStore } from "../../store";
 // import * as antibody from "./models/1bv1/scene.gltf";
-import niceColors from "nice-color-palettes";
-
-const dummy = new THREE.Object3D();
-
-const rpi = () => Math.random() * Math.PI;
 
 const InstancedParticle = ({
   ChildParticle,
@@ -23,13 +15,12 @@ const InstancedParticle = ({
   numParticles,
   pathToGLTF,
   jittery,
-  ...rest
 }) => {
   const worldRadius = useStore((state) => state.worldRadius);
 
   // https://codesandbox.io/s/may-with-60fps-your-web-site-run-xj31x?from-embed=&file=/src/index.js:297-1112
 
-  const [ref, sphereApi] = useSphere((index) => ({
+  const [ref] = useSphere(() => ({
     // rotation: [-Math.PI / 2, 0, 0],
     mass: 1,
     position: getRandStartPosition(worldRadius),
@@ -77,7 +68,6 @@ const InstancedParticle = ({
             scale={springProps.scale}
             position={position}
           >
-            {/* ??? .scene works for SARSCov2 but not others? */}
             <primitive object={usedgltf.scene} attach="geometry" />
             <primitive object={material} attach="material" />
             {/* <instancedBufferGeometry
@@ -95,19 +85,6 @@ const InstancedParticle = ({
       )}
     </mesh>
   );
-  // <instancedMesh
-  //   ref={mesh}
-  //   args={[null, null, numParticles]}
-  //   renderOrder={2}
-  //   // onPointerMove={(e) => setHovered(e.instanceId)}
-  //   // onPointerOut={(e) => setHovered(undefined)}
-  // >
-  //   {/* <Suspense fallback={null}>
-  //     <ChildParticle scale={[scale, scale, scale]} />
-  //   </Suspense> */}
-  //   <boxBufferGeometry attach="geometry" />
-  //   <meshNormalMaterial attach="material" transparent opacity={1} />
-  // </instancedMesh>
 };
 
 export default InstancedParticle;

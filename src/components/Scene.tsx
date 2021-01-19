@@ -20,7 +20,7 @@ const Scene = () => {
       <OrbitControls />
       <Lighting />
       <Physics {...PHYSICS_PROPS}>
-        {PROTEINS.map((protein) => {
+        {PROTEINS.viruses.map((protein) => {
           return <ProteinGroup key={protein.name} {...protein} />;
         })}
         <Water />
