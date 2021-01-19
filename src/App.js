@@ -5,7 +5,6 @@ import WarningOutlined from "@material-ui/icons/WarningOutlined";
 import { CanvasAndSceneEmpty } from "./CanvasAndSceneEmpty";
 import { useStore } from "./store";
 import { LoadingIndicator } from "./components/LoadingIndicator";
-import GuidedTour from "./components/GuidedTour";
 import { useLocalStorageState } from "./utils/useLocalStorageState";
 import { useMount } from "./utils/utils";
 
@@ -16,7 +15,7 @@ function App() {
       <LazyLoadedScene />
       <div id="memoryStats"></div>
       <Tooltip />
-      <GuidedTour />
+      {/* <GuidedTour /> */}
       <SaveControlsSettingsToLocalStorage />
     </div>
   );
