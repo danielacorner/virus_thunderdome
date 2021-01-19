@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Physics } from "@react-three/cannon";
-import { useFrame } from "react-three-fiber";
 import { OrbitControls } from "@react-three/drei";
 import { Lighting } from "./Lighting";
 import { Walls as Cube } from "./Walls";
@@ -12,12 +11,12 @@ import { ScaleIndicator } from "./ScaleIndicator";
 import { SelectedParticleDisplay } from "./SelectedParticleDisplay";
 import { useStore } from "../store";
 import { useSpring } from "@react-spring/core";
+import { useMount } from "../utils/utils";
 
 const Scene = () => {
   // audio track
   // useAudioTrack();
 
-  // useSetTemperatureLowInitially();
   return (
     <>
       <OrbitControls />
@@ -60,14 +59,14 @@ export default Scene;
  */
 function StorylineSequence() {
   // first, animate the scale to 0.01
-  useAnimateAfterTimeout2({
+  useSpringAfterTimeout({
     startTime: 5000,
-    endTime: 12000,
-    target: 0.01,
     property: "scale",
+    target: 0.01,
+    springConfig: { mass: 1, tension: 170, friction: 50, precision: 0.0001 },
   });
 
-  // // first, animate the scale to 0.01
+  // animate something once after a timeout
   // useAnimateAfterTimeout({
   //   startTime: 5000,
   //   endTime: 12000,
@@ -90,69 +89,65 @@ function StorylineSequence() {
 }
 
 /** animate a value to a target value over a certain time */
-function useAnimateAfterTimeout({
-  target,
-  startTime,
-  endTime,
-  property,
-}: {
-  target: number;
-  startTime: number;
-  endTime: number;
-  property: string;
-}) {
-  const set = useStore((s) => s.set);
-  const current = useStore((s) => s[property]);
+// function useAnimateAfterTimeout({
+//   target,
+//   startTime,
+//   endTime,
+//   property,
+// }: {
+//   target: number;
+//   startTime: number;
+//   endTime: number;
+//   property: string;
+// }) {
+//   const set = useStore((s) => s.set);
+//   const current = useStore((s) => s[property]);
 
-  const delta = (target - current) / 10; /* <- animation function */
-  useFrame(({ clock }) => {
-    const time = clock.elapsedTime * 1000 - clock.startTime;
-    const shouldAnimate = clock.running && startTime < time && time < endTime;
-    if (shouldAnimate) {
-      const nextValue = target - delta;
-      set({ [property]: nextValue });
-    }
-  });
-}
+//   const delta = (target - current) / 10; /* <- animation function */
+//   useFrame(({ clock }) => {
+//     const time = clock.elapsedTime * 1000 - clock.startTime;
+//     const shouldAnimate = clock.running && startTime < time && time < endTime;
+//     if (shouldAnimate) {
+//       const nextValue = target - delta;
+//       set({ [property]: nextValue });
+//     }
+//   });
+// }
+
 /** animate a value to a target value over a certain time */
-function useAnimateAfterTimeout2({
+function useSpringAfterTimeout({
   target,
   startTime,
-  endTime,
   property,
+  springConfig,
 }: {
   target: number;
   startTime: number;
-  endTime: number;
   property: string;
+  springConfig: any;
 }) {
   const set = useStore((s) => s.set);
   const current = useStore((s) => s[property]);
+  const firstValue = useRef(current).current;
+  const delta = target - firstValue;
 
-  const [animating, setAnimating] = useState(false);
+  const [animating, setAnimating] = useState(0);
 
   // https://codesandbox.io/s/react-spring-v9-rc-6hi1y?file=/src/index.js:983-1012
-  // Set up a shared spring which simply animates the toggle above
-  // We use this spring to interpolate all the colors, position and rotations
-  const { x } = useSpring({
-    x: animating,
-    config: { mass: 5, tension: 1000, friction: 50, precision: 0.0001 },
+  // set up a spring to bounce from 0 to 1
+  // set the stored value based on this progress %
+  useSpring({
+    progress: animating,
+    config: springConfig,
+    onChange({ progress }) {
+      set({ [property]: firstValue + delta * progress });
+    },
   });
-  useEffect(() => {
-    console.log("🌟🚨 ~ x", x);
-    set({ [property]: x.to([0, 1], [current, target]) });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [x]);
 
-  useFrame(({ clock }) => {
-    const time = clock.elapsedTime * 1000 - clock.startTime;
-    const shouldAnimate = clock.running && startTime < time && time < endTime;
-    if (!animating && shouldAnimate) {
-      setAnimating(shouldAnimate);
-    }
-    // if (shouldAnimate) {
-    //   const nextScale = target - delta;
-    //   set({ scale: nextScale });
-    // }
+  // start the timer
+  useMount(() => {
+    setTimeout(() => {
+      setAnimating(1);
+    }, startTime);
   });
 }
