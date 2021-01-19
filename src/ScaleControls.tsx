@@ -7,6 +7,7 @@ import { getIsTouchDevice } from "./getIsTouchDevice";
 
 export function ScaleControls() {
   const scale = useStore((s) => s.scale);
+  console.log("🌟🚨 ~ ScaleControls ~ scale", scale);
   const set = useStore((s) => s.set);
   const isTouchDevice = getIsTouchDevice();
   const isLandscape =
@@ -22,13 +23,14 @@ export function ScaleControls() {
         </div>
         <div className="grid-item">
           <Slider
+            valueLabelDisplay="auto"
             orientation="vertical"
             aria-labelledby="volume-slider"
             onChange={(event, newValue) => {
               set({ scale: newValue });
             }}
-            min={0.0005}
-            step={0.00000001}
+            min={0.001}
+            step={0.001}
             scale={(x) => x ** 2}
             max={0.03}
             value={scale}
