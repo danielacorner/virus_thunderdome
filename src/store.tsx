@@ -30,7 +30,7 @@ export const useStore = create<GlobalStateType>(
     worldRadius: 5,
     temperature: 0,
     shuffled: 0,
-    scale: 0.0005,
+    scale: 0.03,
     selectedProtein: null as null | SelectedProtein,
     set: (newState) => set((state) => ({ ...state, ...newState })),
   })
