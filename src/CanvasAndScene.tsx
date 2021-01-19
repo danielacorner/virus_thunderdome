@@ -4,9 +4,9 @@ import Scene from "./components/Scene";
 import { useWindowSize } from "./utils/hooks";
 import * as THREE from "three";
 
-import { ScaleControls } from "./ScaleControls";
 // import { useFrame } from "react-three-fiber";
 import BottomControls from "./BottomControls";
+import { ScaleControls } from "./ScaleControls";
 export default function CanvasAndScene({ renderProteins = true }) {
   const windowSize = useWindowSize();
 
