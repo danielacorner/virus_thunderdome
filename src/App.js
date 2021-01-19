@@ -16,7 +16,7 @@ function App() {
       <div id="memoryStats"></div>
       <Tooltip />
       {/* <GuidedTour /> */}
-      <SaveControlsSettingsToLocalStorage />
+      {/* <SaveControlsSettingsToLocalStorage /> */}
     </div>
   );
 }
