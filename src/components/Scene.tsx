@@ -23,9 +23,6 @@ const Scene = () => {
       <OrbitControls />
       <Lighting />
       <Physics {...PHYSICS_PROPS}>
-        {PROTEINS.antibodies.map((protein) => {
-          return <ProteinGroup key={protein.name} {...protein} />;
-        })}
         {PROTEINS.viruses.map((protein) => {
           return <ProteinGroup key={protein.name} {...protein} />;
         })}
@@ -64,7 +61,7 @@ export default Scene;
 function StorylineSequence() {
   // first, animate the scale to 0.01
   useSpringAfterTimeout({
-    startTime: 5000,
+    startTime: 60 * 1000,
     property: "scale",
     target: 0.01,
     springConfig: { mass: 1, tension: 170, friction: 50, precision: 0.0001 },

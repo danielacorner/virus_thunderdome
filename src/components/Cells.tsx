@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useStore, GlobalStateType } from "../store";
 import { useGLTF } from "@react-three/drei";
-import Antibody_herpes from "./GLTFs/antibodies/Antibody_herpes";
-import Antibody_hiv_10 from "./GLTFs/antibodies/Antibody_hiv_10";
 import { useSphere } from "@react-three/cannon";
 import { usePauseUnpause } from "./Shapes/usePauseUnpause";
 import { PROTEINS } from "../utils/PROTEINS";
+import { useInterval } from "../utils/utils";
 import { SingleParticle } from "./Shapes/SingleParticle";
 
 const antibody_hiv = PROTEINS.antibodies.find(
@@ -43,15 +42,23 @@ export default function Cells() {
 }
 
 function Cell({ Component, antibody, position }) {
-  const [numAntibodies, setNumAntibodies] = useState(0);
+  const [antibodies, setAntibodies] = useState([]);
 
   return (
     <React.Fragment>
-      {[...new Array(numAntibodies)].map((_, idx) => (
-        <SingleParticle {...{ ...antibody, position }} />
+      {antibodies.map((ab, idx) => (
+        <SingleParticle
+          {...{
+            ...ab,
+            position,
+            key: idx,
+            // each antibody decomposes after a set amount of time
+            lifespan: 5 * 1000,
+          }}
+        />
       ))}
       <Component
-        onClick={() => setNumAntibodies((prev) => prev + 1)}
+        onClick={() => setAntibodies((prev) => [...prev, antibody])}
         position={position}
         scale={[SCALE, SCALE, SCALE]}
       />

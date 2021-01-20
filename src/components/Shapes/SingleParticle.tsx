@@ -1,13 +1,24 @@
-import React, { useRef } from "react";
+import React, { ReactNode, useRef, useState } from "react";
 import { useConvexPolyhedron } from "@react-three/cannon";
 import { useJitterParticle } from "./useJitterParticle";
 import { GlobalStateType, useStore } from "../../store";
 import * as THREE from "three";
 import { usePauseUnpause } from "./usePauseUnpause";
 import { useChangeVelocityWhenTemperatureChanges } from "./useChangeVelocityWhenTemperatureChanges";
+import { useMount } from "../../utils/utils";
+
+export type ParticleProps = {
+  position: [number, number, number];
+  Component: ReactNode;
+  mass: number;
+  numIcosahedronFaces: number;
+  radius: number;
+  interactive: boolean;
+  lifespan?: number | null;
+};
 
 /** Particle which can interact with others, or not (passes right through them) */
-export function SingleParticle(props) {
+export function SingleParticle(props: ParticleProps) {
   const Particle = props.interactive
     ? InteractiveParticle
     : NonInteractiveParticle;
@@ -15,12 +26,20 @@ export function SingleParticle(props) {
 }
 /** interacts with other particles using @react-three/cannon */
 function InteractiveParticle(props) {
-  const { position, Component, mass, numIcosahedronFaces, radius } = props;
+  console.log("🌟🚨 ~ InteractiveParticle ~ props", props);
+  const {
+    position,
+    Component,
+    mass,
+    numIcosahedronFaces,
+    radius,
+    lifespan = null,
+  } = props;
 
   const set = useStore((s) => s.set);
   const scale = useStore((s) => s.scale);
 
-  const shouldRender = useShouldRenderParticle(radius);
+  const shouldRender = useShouldRenderParticle(radius, lifespan);
 
   // each virus has a polyhedron shape, usually icosahedron (20 faces)
   // this shape determines how it bumps into other particles
@@ -62,12 +81,27 @@ function InteractiveParticle(props) {
 }
 
 /** hide particle if too big or too small */
-export function useShouldRenderParticle(radius: number) {
+export function useShouldRenderParticle(
+  radius: number,
+  lifespan?: number | null
+) {
   const scale = useStore((state: GlobalStateType) => state.scale);
   const worldRadius = useStore((state: GlobalStateType) => state.worldRadius);
 
-  const tooBigToRender = scale * radius > worldRadius / 3;
-  const tooSmallToRender = scale * radius < worldRadius / 20;
+  const [radiusRendered, setRadiusRendered] = useState(radius);
+
+  // lifespan: set a decay timer on mount
+  useMount(() => {
+    console.log("🌟🚨 ~ useMount ~ lifespan", lifespan);
+    if (lifespan) {
+      window.setTimeout(() => {
+        setRadiusRendered(0);
+      }, lifespan);
+    }
+  });
+
+  const tooBigToRender = scale * radiusRendered > worldRadius / 3;
+  const tooSmallToRender = scale * radiusRendered < worldRadius / 20;
   return !(tooBigToRender || tooSmallToRender);
 }
 
