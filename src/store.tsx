@@ -12,6 +12,7 @@ export type GlobalStateType = {
   loading: boolean;
   started: boolean;
   paused: boolean;
+  isRoofOn: boolean;
   shuffled: number; // random number to trigger useEffect
   scale: number;
   selectedProtein: null | SelectedProtein;
@@ -25,6 +26,7 @@ const startsStarted = /* false && */ process.env.NODE_ENV === "development";
 export const useStore = create<GlobalStateType>(
   (set): GlobalStateType => ({
     paused: false,
+    isRoofOn: true,
     started: startsStarted,
     loading: !startsStarted,
     worldRadius: 5,

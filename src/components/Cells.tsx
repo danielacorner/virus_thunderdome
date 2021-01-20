@@ -4,7 +4,6 @@ import { useGLTF } from "@react-three/drei";
 import { useSphere } from "@react-three/cannon";
 import { usePauseUnpause } from "./Shapes/usePauseUnpause";
 import { PROTEINS } from "../utils/PROTEINS";
-import { useInterval } from "../utils/utils";
 import { SingleParticle } from "./Shapes/SingleParticle";
 
 const antibody_hiv = PROTEINS.antibodies.find(
@@ -53,7 +52,7 @@ function Cell({ Component, antibody, position }) {
             position,
             key: idx,
             // each antibody decomposes after a set amount of time
-            lifespan: 5 * 1000,
+            lifespan: 2 * 1000,
           }}
         />
       ))}
