@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Physics } from "@react-three/cannon";
 import { OrbitControls } from "@react-three/drei";
 import { Lighting } from "./Lighting";
-import { Walls as Cube } from "./Walls";
+import { Walls } from "./Walls";
 import ProteinGroup from "./ProteinGroup";
 import { PHYSICS_PROPS } from "../utils/PHYSICS_PROPS";
 import { PROTEINS } from "../utils/PROTEINS";
@@ -27,7 +27,7 @@ const Scene = () => {
           return <ProteinGroup key={protein.name} {...protein} />;
         })}
         <Water />
-        <Cube />
+        <Walls />
         <SelectedParticleDisplay />
         <ScaleIndicator />
         <Cells />
