@@ -7,6 +7,7 @@ import { usePauseUnpause } from "./usePauseUnpause";
 import { useChangeVelocityWhenTemperatureChanges } from "./useChangeVelocityWhenTemperatureChanges";
 import { useMount } from "../../utils/utils";
 import { usePrevious } from "../../utils/hooks";
+import { CEILING_HEIGHT_MULTIPLIER } from "../Walls";
 
 export type ParticleProps = {
   position: [number, number, number];
@@ -97,6 +98,8 @@ function useLifespan(
   ref: React.MutableRefObject<THREE.Object3D>,
   prevPosition: any
 ) {
+  const worldRadius = useStore((state: GlobalStateType) => state.worldRadius);
+
   useMount(() => {
     if (lifespan) {
       window.setTimeout(() => {
@@ -114,14 +117,19 @@ function useLifespan(
       console.log("🌟🚨 ~ useEffect ~ ref", ref);
       // need to take the lid off momentarily to achieve this?
       // TODO: make walls height ~infinite instead?
-      set({ isRoofOn: false });
+      // set({ isRoofOn: false });
+      const ceilingHeight = worldRadius * CEILING_HEIGHT_MULTIPLIER;
       setTimeout(() => {
-        api.position.set(Math.random() * 10, 1000, Math.random() * 10);
+        api.position.set(
+          Math.random() * 0.5,
+          ceilingHeight,
+          Math.random() * 0.5
+        );
         api.velocity.set(0, 0, 0);
       }, 0);
-      setTimeout(() => {
-        set({ isRoofOn: true });
-      }, 1);
+      // setTimeout(() => {
+      //   set({ isRoofOn: true });
+      // }, 1);
     } else if (prevPosition?.[0]) {
       api.position.set(prevPosition[0], prevPosition[1], prevPosition[2]);
       // ? api.velocity.set(0, 0, 0);
