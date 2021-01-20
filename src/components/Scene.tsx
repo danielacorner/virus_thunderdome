@@ -12,6 +12,7 @@ import { SelectedParticleDisplay } from "./SelectedParticleDisplay";
 import { useStore } from "../store";
 import { useSpring } from "@react-spring/core";
 import { useMount } from "../utils/utils";
+import Cells from "./Cells";
 
 const Scene = () => {
   // audio track
@@ -22,6 +23,9 @@ const Scene = () => {
       <OrbitControls />
       <Lighting />
       <Physics {...PHYSICS_PROPS}>
+        {PROTEINS.antibodies.map((protein) => {
+          return <ProteinGroup key={protein.name} {...protein} />;
+        })}
         {PROTEINS.viruses.map((protein) => {
           return <ProteinGroup key={protein.name} {...protein} />;
         })}
@@ -29,7 +33,7 @@ const Scene = () => {
         <Cube />
         <SelectedParticleDisplay />
         <ScaleIndicator />
-        {/* <Cells /> */}
+        <Cells />
       </Physics>
       {/* <Effects /> */}
       <StorylineSequence />
