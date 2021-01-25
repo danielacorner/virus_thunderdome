@@ -4,6 +4,10 @@ import "./index.css";
 import App from "./App";
 // import reportWebVitals from "./reportWebVitals";
 import * as serviceWorker from "./serviceWorker";
+import ReactGA from "react-ga";
+ReactGA.initialize("G-RMP0BKW0EL");
+ReactGA.pageview(window.location.pathname + window.location.search);
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

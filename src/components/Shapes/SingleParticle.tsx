@@ -1,13 +1,15 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useConvexPolyhedron } from "@react-three/cannon";
 import { useJitterParticle } from "./useJitterParticle";
-import { GlobalStateType, useStore } from "../../store";
+import { useStore } from "../../store";
 import * as THREE from "three";
 import { usePauseUnpause } from "./usePauseUnpause";
 import { useChangeVelocityWhenTemperatureChanges } from "./useChangeVelocityWhenTemperatureChanges";
 import { useMount } from "../../utils/utils";
 import { usePrevious } from "../../utils/hooks";
 import { CEILING_HEIGHT_MULTIPLIER } from "../Walls";
+import styled from "styled-components/macro";
+import { HTML } from "@react-three/drei";
 
 export type ParticleProps = {
   position: [number, number, number];
@@ -18,7 +20,6 @@ export type ParticleProps = {
   interactive: boolean;
   lifespan?: number | null;
 };
-
 /** Particle which can interact with others, or not (passes right through them) */
 export function SingleParticle(props: ParticleProps) {
   const Particle = props.interactive
@@ -33,22 +34,27 @@ function InteractiveParticle(props) {
     Component,
     mass,
     numIcosahedronFaces,
-    radius,
     lifespan = null,
   } = props;
   const prevPosition: any = usePrevious(position);
 
   const set = useStore((s) => s.set);
   const scale = useStore((s) => s.scale);
-
-  const shouldRender = useShouldRenderParticle(radius);
+  const isTooltipMaximized = useStore((s) => s.isTooltipMaximized);
+  const selectedProtein = useStore((s) => s.selectedProtein);
+  const isSelectedProtein =
+    selectedProtein && selectedProtein.name === props.name;
 
   // each virus has a polyhedron shape, usually icosahedron (20 faces)
   // this shape determines how it bumps into other particles
   // https://codesandbox.io/s/r3f-convex-polyhedron-cnm0s?from-embed=&file=/src/index.js:1639-1642
-  const detail = Math.ceil(numIcosahedronFaces / 20);
+  const detail = Math.floor(numIcosahedronFaces / 20);
+  const volumeOfSphere = (4 / 3) * Math.PI * props.radius ** 3;
+  const mockMass = 10 ** -5 * volumeOfSphere;
+
   const [ref, api] = useConvexPolyhedron(() => ({
-    mass,
+    // TODO: accurate mass data from PDB --> need to multiply by number of residues or something else? doesn't seem right
+    mass: mockMass, // approximate mass using volume of a sphere equation
     position,
     // https://threejs.org/docs/scenes/geometry-browser.html#IcosahedronBufferGeometry
     args: new THREE.IcosahedronGeometry(1, detail),
@@ -62,7 +68,7 @@ function InteractiveParticle(props) {
     api,
   });
 
-  // ! conflicts with useLifespan()
+  // ! conflicts with useLifespan() ?
   // useJitterParticle({
   //   mass,
   //   ref,
@@ -75,18 +81,49 @@ function InteractiveParticle(props) {
   const handleSetSelectedProtein = () =>
     set({ selectedProtein: { ...props, api } });
 
+  const pointerDownTime = useRef(0);
+  // if we mousedown AND mouseup over the same particle very quickly, select it
+  const handlePointerDown = () => {
+    pointerDownTime.current = Date.now();
+  };
+  const handlePointerUp = () => {
+    const timeSincePointerDown = Date.now() - pointerDownTime.current;
+    if (timeSincePointerDown < 300) {
+      handleSetSelectedProtein();
+    }
+  };
+
   return (
     <mesh
-      // visible={shouldRender}
       ref={ref}
-      scale={shouldRender ? [scale, scale, scale] : [0, 0, 0]}
-      onPointerDown={handleSetSelectedProtein}
+      scale={[scale, scale, scale]}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
     >
-      {shouldRender ? <Component /> : null}
+      {isSelectedProtein && !isTooltipMaximized ? <HighlightParticle /> : null}
+      <Component />
     </mesh>
   );
 }
 
+const CircleOutline = styled.div`
+  border: 2px solid #ff4775;
+  box-sizing: border-box;
+  border-radius: 50%;
+  width: ${(props) => props.radius * 2}px;
+  height: ${(props) => props.radius * 2}px;
+  margin-left: ${(props) => -props.radius}px;
+  margin-top: ${(props) => -props.radius}px;
+`;
+function HighlightParticle() {
+  const selectedProtein = useStore((s) => s.selectedProtein);
+  const scale = useStore((s) => s.scale);
+  return selectedProtein ? (
+    <HTML>
+      <CircleOutline radius={selectedProtein.radius * scale * 70} />
+    </HTML>
+  ) : null;
+}
 /** lifespan: set a decay timer on mount (move off-screen to "unmount")
  * TODO: slow decay opacity out animation
  */
@@ -98,7 +135,7 @@ function useLifespan(
   ref: React.MutableRefObject<THREE.Object3D>,
   prevPosition: any
 ) {
-  const worldRadius = useStore((state: GlobalStateType) => state.worldRadius);
+  const worldRadius = useStore((s) => s.worldRadius);
 
   useMount(() => {
     if (lifespan) {
@@ -109,7 +146,6 @@ function useLifespan(
   });
 
   // remove or add the particle back
-  const set = useStore((s) => s.set);
   useEffect(() => {
     console.log("🌟🚨 ~ useEffect ~ isOffscreen", isOffscreen);
     if (isOffscreen) {
@@ -140,11 +176,22 @@ function useLifespan(
 
 /** hide particle if too big or too small */
 export function useShouldRenderParticle(radius: number) {
-  const scale = useStore((state: GlobalStateType) => state.scale);
-  const worldRadius = useStore((state: GlobalStateType) => state.worldRadius);
+  const scale = useStore((s) => s.scale);
+  const worldRadius = useStore((s) => s.worldRadius);
 
-  const tooBigToRender = scale * radius > worldRadius / 3;
-  const tooSmallToRender = scale * radius < worldRadius / 20;
+  return getShouldRenderParticle(scale, radius, worldRadius);
+}
+
+const MIN_RADIUS = 5;
+const MAX_RADIUS = 20;
+export function getShouldRenderParticle(
+  scale: number,
+  radius: number,
+  worldRadius: number
+) {
+  const particleSize = scale * radius;
+  const tooBigToRender = particleSize > worldRadius / MIN_RADIUS;
+  const tooSmallToRender = particleSize < worldRadius / MAX_RADIUS;
   return !(tooBigToRender || tooSmallToRender);
 }
 
