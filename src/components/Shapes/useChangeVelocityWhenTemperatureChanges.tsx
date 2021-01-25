@@ -30,6 +30,7 @@ export function useChangeVelocityWhenTemperatureChanges({
   // set particle velocity based on temperature
   // ? should velocity randomly change (including direction) whenever you change the temperature
   useEffect(() => {
+    if(!api){return}
     if (temperature === 0) {
       if (instanced) {
         return;

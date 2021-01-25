@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import { Physics } from "@react-three/cannon";
 import { OrbitControls } from "@react-three/drei";
 import { Lighting } from "./Lighting";
@@ -9,33 +9,31 @@ import { PROTEINS } from "../utils/PROTEINS";
 import { Water } from "./Water";
 import { ScaleIndicator } from "./ScaleIndicator";
 import { SelectedParticleDisplay } from "./SelectedParticleDisplay";
-import { useStore } from "../store";
-import { useSpring } from "@react-spring/core";
-import { useMount } from "../utils/utils";
 import Cells from "./Cells";
+import { useSpringAfterTimeout } from "./useSpringAfterTimeout";
 
 const Scene = () => {
-  // audio track
-  // useAudioTrack();
+	// audio track
+	// useAudioTrack();
 
-  return (
-    <>
-      <OrbitControls />
-      <Lighting />
-      <Physics {...PHYSICS_PROPS}>
-        {PROTEINS.viruses.map((protein) => {
-          return <ProteinGroup key={protein.name} {...protein} />;
-        })}
-        <Water />
-        <Walls />
-        <SelectedParticleDisplay />
-        <ScaleIndicator />
-        <Cells />
-      </Physics>
-      {/* <Effects /> */}
-      <StorylineSequence />
-    </>
-  );
+	return (
+		<>
+			<OrbitControls />
+			<Lighting />
+			<Physics {...PHYSICS_PROPS}>
+				{PROTEINS.viruses.map((protein) => {
+					return <ProteinGroup key={protein.name} {...protein} />;
+				})}
+				<Water />
+				<Walls />
+				<SelectedParticleDisplay />
+				<ScaleIndicator />
+				<Cells />
+			</Physics>
+			{/* <Effects /> */}
+			<StorylineSequence />
+		</>
+	);
 };
 
 // PROTEINS.forEach(({ pathToGLTF }) => // useGLTF.preload(pathToGLTF));
@@ -59,96 +57,32 @@ export default Scene;
  *
  */
 function StorylineSequence() {
-  // first, animate the scale to 0.01
-  useSpringAfterTimeout({
-    startTime: 60 * 1000,
-    property: "scale",
-    target: 0.01,
-    springConfig: { mass: 1, tension: 170, friction: 50, precision: 0.0001 },
-  });
+	// first, animate the scale to 0.01
+	useSpringAfterTimeout({
+		startTime: 60 * 1000,
+		property: "scale",
+		target: 0.01,
+		springConfig: { mass: 1, tension: 170, friction: 50, precision: 0.0001 },
+	});
 
-  // animate something once after a timeout
-  // useAnimateAfterTimeout({
-  //   startTime: 5000,
-  //   endTime: 12000,
-  //   target: 0.01,
-  //   property: "scale"
-  // });
+	// animate something once after a timeout
+	// useAnimateAfterTimeout({
+	//   startTime: 5000,
+	//   endTime: 12000,
+	//   target: 0.01,
+	//   property: "scale"
+	// });
 
-  // set something once after a timeout
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     set({ scale: 0.01 });
-  //   }, 5000);
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [set]);
+	// set something once after a timeout
+	// useEffect(() => {
+	//   const timer = setTimeout(() => {
+	//     set({ scale: 0.01 });
+	//   }, 5000);
+	//   return () => {
+	//     clearTimeout(timer);
+	//   };
+	//   // eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [set]);
 
-  return null;
-}
-
-/** animate a value to a target value over a certain time */
-// function useAnimateAfterTimeout({
-//   target,
-//   startTime,
-//   endTime,
-//   property,
-// }: {
-//   target: number;
-//   startTime: number;
-//   endTime: number;
-//   property: string;
-// }) {
-//   const set = useStore((s) => s.set);
-//   const current = useStore((s) => s[property]);
-
-//   const delta = (target - current) / 10; /* <- animation function */
-//   useFrame(({ clock }) => {
-//     const time = clock.elapsedTime * 1000 - clock.startTime;
-//     const shouldAnimate = clock.running && startTime < time && time < endTime;
-//     if (shouldAnimate) {
-//       const nextValue = target - delta;
-//       set({ [property]: nextValue });
-//     }
-//   });
-// }
-
-/** animate a value to a target value over a certain time */
-function useSpringAfterTimeout({
-  target,
-  startTime,
-  property,
-  springConfig,
-}: {
-  target: number;
-  startTime: number;
-  property: string;
-  springConfig: any;
-}) {
-  const set = useStore((s) => s.set);
-  const current = useStore((s) => s[property]);
-  const firstValue = useRef(current).current;
-  const delta = target - firstValue;
-
-  const [animating, setAnimating] = useState(0);
-
-  // https://codesandbox.io/s/react-spring-v9-rc-6hi1y?file=/src/index.js:983-1012
-  // set up a spring to bounce from 0 to 1
-  // set the stored value based on this progress %
-  useSpring({
-    progress: animating,
-    config: springConfig,
-    onChange({ progress }) {
-      set({ [property]: firstValue + delta * progress });
-    },
-  });
-
-  // start the timer
-  useMount(() => {
-    setTimeout(() => {
-      setAnimating(1);
-    }, startTime);
-  });
+	return null;
 }
