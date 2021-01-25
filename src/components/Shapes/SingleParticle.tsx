@@ -8,7 +8,6 @@ import { useMount } from "../../utils/utils";
 import { usePrevious } from "../../utils/hooks";
 import { useSpring, a } from "react-spring/three";
 import { HighlightParticle } from "./HighlightParticle";
-import { useFrame } from "react-three-fiber";
 
 export type ParticleProps = {
 	position: [number, number, number];
@@ -35,7 +34,7 @@ function InteractiveParticle(props) {
 		mass,
 		numIcosahedronFaces,
 		lifespan = null,
-		unmount,
+		unmount = () => {},
 	} = props;
 	const prevPosition: any = usePrevious(position);
 
@@ -89,19 +88,17 @@ function InteractiveParticle(props) {
 		},
 	});
 
-	// ! conflicts with useLifespan() ?
-	// useJitterParticle({
-	//   mass,
-	//   ref,
-	//   api,
-	// });
+	useJitterParticle({
+		mass,
+		ref,
+		api,
+	});
 
 	// when temperature changes, change particle velocity
 	useChangeVelocityWhenTemperatureChanges({ mass, api });
 
-	const handleSetSelectedProtein = () => {};
-	// const handleSetSelectedProtein = () =>
-	//   set({ selectedProtein: { ...props, api } });
+	const handleSetSelectedProtein = () =>
+		set({ selectedProtein: { ...props, api } });
 
 	const pointerDownTime = useRef(0);
 	// if we mousedown AND mouseup over the same particle very quickly, select it
@@ -115,25 +112,12 @@ function InteractiveParticle(props) {
 		}
 	};
 
-	// TODO: material's opacity is affecting all copies' opacities
-	// useFrame(() => {
-	// 	if (ref.current && isDecaying) {
-	// 		ref.current.traverse((node) => {
-	// 			if ((node as any).material) {
-	// 				(node as any).material.transparent = true;
-	// 				(node as any).material.opacity = isDecaying
-	// 					? springProps.opacity.value
-	// 					: 1;
-	// 			}
-	// 		});
-	// 	}
-	// });
 	return (
 		<a.mesh
 			ref={ref}
 			scale={springProps.scale}
-			onPointerDown={handlePointerDown}
-			onPointerUp={handlePointerUp}
+			// onPointerDown={handlePointerDown}
+			// onPointerUp={handlePointerUp}
 		>
 			<meshStandardMaterial opacity={0.1} transparent={true} />
 			{isSelectedProtein && !isTooltipMaximized ? <HighlightParticle /> : null}
