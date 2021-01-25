@@ -3,7 +3,6 @@ import { useConvexPolyhedron } from "@react-three/cannon";
 import { useJitterParticle } from "./useJitterParticle";
 import { useStore } from "../../store";
 import * as THREE from "three";
-import { usePauseUnpause } from "./usePauseUnpause";
 import { useChangeVelocityWhenTemperatureChanges } from "./useChangeVelocityWhenTemperatureChanges";
 import { useMount } from "../../utils/utils";
 import { usePrevious } from "../../utils/hooks";
@@ -63,10 +62,6 @@ function InteractiveParticle(props) {
   const [isOffscreen, setIsOffscreen] = useState(false);
 
   useLifespan(lifespan, setIsOffscreen, isOffscreen, api, ref, prevPosition);
-
-  usePauseUnpause({
-    api,
-  });
 
   // ! conflicts with useLifespan() ?
   // useJitterParticle({
@@ -149,11 +144,8 @@ function useLifespan(
   useEffect(() => {
     console.log("🌟🚨 ~ useEffect ~ isOffscreen", isOffscreen);
     if (isOffscreen) {
-      console.log("🌟🚨 ~ useEffect ~ api", api);
-      console.log("🌟🚨 ~ useEffect ~ ref", ref);
       // need to take the lid off momentarily to achieve this?
       // TODO: make walls height ~infinite instead?
-      // set({ isRoofOn: false });
       const ceilingHeight = worldRadius * CEILING_HEIGHT_MULTIPLIER;
       setTimeout(() => {
         api.position.set(
@@ -162,10 +154,10 @@ function useLifespan(
           Math.random() * 0.5
         );
         api.velocity.set(0, 0, 0);
+        // disable movement
+        api.linearDamping.set(1);
+        api.angularDamping.set(1);
       }, 0);
-      // setTimeout(() => {
-      //   set({ isRoofOn: true });
-      // }, 1);
     } else if (prevPosition?.[0]) {
       api.position.set(prevPosition[0], prevPosition[1], prevPosition[2]);
       // ? api.velocity.set(0, 0, 0);
