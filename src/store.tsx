@@ -1,4 +1,5 @@
 import create from "zustand";
+import { MAX_SCALE } from "./utils/constants";
 import { Protein } from "./utils/PROTEINS";
 
 type SelectedProtein = Protein & {
@@ -9,6 +10,7 @@ type SelectedProtein = Protein & {
 export type GlobalStateType = {
   worldRadius: number;
   temperature: number;
+  isTooltipMaximized: boolean;
   loading: boolean;
   started: boolean;
   paused: boolean;
@@ -25,14 +27,15 @@ const startsStarted = /* false && */ process.env.NODE_ENV === "development";
 // with typescript https://react-tracked.js.org/docs/tutorial-zustand-01/
 export const useStore = create<GlobalStateType>(
   (set): GlobalStateType => ({
+    isTooltipMaximized: false,
     paused: false,
     isRoofOn: true,
     started: startsStarted,
     loading: !startsStarted,
     worldRadius: 5,
-    temperature: 0,
+    temperature: 1,
     shuffled: 0,
-    scale: 0.03,
+    scale: MAX_SCALE,
     selectedProtein: null as null | SelectedProtein,
     set: (newState) => set((state) => ({ ...state, ...newState })),
   })

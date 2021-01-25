@@ -718,7 +718,7 @@ export const PROTEINS: { [type: string]: Protein[] } = {
       numIcosahedronFaces: 10,
       numAsymmetricUnits: 1,
       pathToGLTF: "/models/nanotech/co_assembling_protein_dna_nanowires_13.glb",
-      pathToImage: "/models/nanotech/self_assembled_3d_dna_crystals.webp",
+      pathToImage: "/models/nanotech/co_assembling_protein_dna_nanowires.webp",
       interactive: true,
       authors: "Mou, Y., Yu, J.Y., Wannier, T.M., Guo, C.L., Mayo, S.L.",
       pubmedAbstract:

@@ -3,7 +3,7 @@ import { useSphere } from "@react-three/cannon";
 import * as THREE from "three";
 import { getRandStartPosition } from "./Shapes/particleUtils";
 import { useStore } from "../store";
-import { usePauseUnpause } from "./Shapes/usePauseUnpause";
+import { useChangeVelocityWhenTemperatureChanges } from "./Shapes/useChangeVelocityWhenTemperatureChanges";
 const RADIUS = 0.05;
 const NUM_INSTANCES = 50;
 
@@ -20,9 +20,12 @@ export function Water() {
       restitution: 0.0001,
     },
   }));
-  // const scale = useStore(({ scale }) => scale * 500);
-  usePauseUnpause({ api, instanced: true, numInstances: NUM_INSTANCES });
-
+  useChangeVelocityWhenTemperatureChanges({
+    mass,
+    api,
+    instanced: true,
+    numParticles: NUM_INSTANCES,
+  });
   return (
     <instancedMesh
       ref={ref}
