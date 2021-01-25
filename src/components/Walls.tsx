@@ -11,7 +11,6 @@ export const CEILING_HEIGHT_MULTIPLIER = 16;
 // const palette = niceColors[6]; // e.g. => [ "#69d2e7", "#a7dbd8", "#e0e4cc", "#f38630", "#fa6900" ]
 export function Walls() {
   const worldRadius = useStore((state) => state.worldRadius);
-  const isRoofOn = useStore((state) => state.isRoofOn);
   const ceilingHeight = worldRadius * CEILING_HEIGHT_MULTIPLIER;
   const walls = [
     {
@@ -66,13 +65,9 @@ export function Walls() {
 
   return (
     <>
-      {walls.map(
-        (props, idx) => (
-          // props.name === "ceiling" && !isRoofOn ? null : (
-          <Plane {...props} key={idx} />
-        )
-        // )
-      )}
+      {walls.map((props, idx) => (
+        <Plane {...props} key={idx} />
+      ))}
     </>
   );
 }

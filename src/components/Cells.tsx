@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useStore, GlobalStateType } from "../store";
 import { useGLTF } from "@react-three/drei";
 import { useSphere } from "@react-three/cannon";
-import { usePauseUnpause } from "./Shapes/usePauseUnpause";
 import { PROTEINS } from "../utils/PROTEINS";
 import { SingleParticle } from "./Shapes/SingleParticle";
 
@@ -86,8 +85,6 @@ export function Antibody({ AntibodyComponent, position, numInstances }) {
       restitution: 0.0001,
     },
   }));
-  // const scale = useStore(({ scale }) => scale * 500);
-  usePauseUnpause({ api, instanced: true, numInstances });
 
   return (
     <instancedMesh
