@@ -1,5 +1,6 @@
 import React from "react";
 import { usePlane } from "@react-three/cannon";
+import { useMatcapTexture } from "@react-three/drei";
 
 export function Plane({
   width,
@@ -14,12 +15,20 @@ export function Plane({
     ...rest,
     // position: [-100, -100, -100],
   }));
-
+  const [matcap] = useMatcapTexture(
+    133, // index of the matcap texture https://github.com/emmelleppi/matcaps/blob/master/matcap-list.json
+    1024 // size of the texture ( 64, 128, 256, 512, 1024 )
+  );
   return (
     <mesh ref={ref} /* receiveShadow */>
       <planeGeometry
         attach="geometry"
         args={[width, height, widthSegments, heightSegments]}
+      />
+      <meshMatcapMaterial
+        matcap={matcap as any}
+        opacity={0.3}
+        transparent={true}
       />
       {/* <meshStandardMaterial
 				attach="material"

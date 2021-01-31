@@ -73,7 +73,6 @@ function InteractiveParticle(props) {
   });
 
   const springProps = useSpring({
-    opacity: isDecaying ? 0 : 1,
     scale: [
       scale * (isDecaying ? 0 : 1),
       scale * (isDecaying ? 0 : 1),
