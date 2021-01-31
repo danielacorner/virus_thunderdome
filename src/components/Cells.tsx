@@ -77,7 +77,6 @@ function Cell({ Component, antibody, position }) {
 export function SingleParticleMounted(props) {
   const [isMounted, setIsMounted] = useState(true);
   const unmount = () => setIsMounted(false);
-  console.log("🌟🚨 ~ SingleParticleMounted ~ isMounted", isMounted);
   return isMounted ? (
     <SingleParticle
       {...{

@@ -8,6 +8,8 @@ import { useMount } from "../../utils/utils";
 import { usePrevious } from "../../utils/hooks";
 import { useSpring, a } from "react-spring/three";
 import { HighlightParticle } from "./HighlightParticle";
+import { HTML } from "@react-three/drei";
+import styled from "styled-components/macro";
 
 export type ParticleProps = {
   position: [number, number, number];
@@ -35,6 +37,7 @@ function InteractiveParticle(props) {
     numIcosahedronFaces,
     lifespan = null,
     unmount = () => {},
+    name,
   } = props;
   const prevPosition: any = usePrevious(position);
 
@@ -64,7 +67,6 @@ function InteractiveParticle(props) {
 
   // start decaying after lifespan elapses,
   // then unmount after lifespan+decay time
-  console.log("🌟🚨 ~ InteractiveParticle ~ unmount", unmount);
   useMount(() => {
     if (lifespan) {
       window.setTimeout(() => {
@@ -85,6 +87,7 @@ function InteractiveParticle(props) {
       friction: 20,
       clamp: true,
     },
+    // unmount the particle when it's fully decayed
     onRest: (spring) => {
       const isDecayed = spring.scale[0] === 0;
       if (isDecayed) {
@@ -127,9 +130,48 @@ function InteractiveParticle(props) {
       <meshStandardMaterial opacity={0.1} transparent={true} />
       {isSelectedProtein && !isTooltipMaximized ? <HighlightParticle /> : null}
       <Component />
+      <HTMLInfo
+        {...{
+          name,
+          lifespan,
+        }}
+      />
     </a.mesh>
   );
 }
+
+function HTMLInfo({ name, lifespan }) {
+  const [mounted, setMounted] = useState(false);
+  useMount(() => {
+    setMounted(true);
+  });
+
+  return (
+    <HTML>
+      <HTMLInfoStyles {...{ mounted, lifespan }}>
+        <p>{name}</p>
+        <div className="hpBar">
+          <div className="hp"></div>
+        </div>
+      </HTMLInfoStyles>
+    </HTML>
+  );
+}
+const HTMLInfoStyles = styled.div`
+  .hpBar {
+    width: 50px;
+    height: 5px;
+    outline: 1px solid grey;
+    .hp {
+      width: 100%;
+      height: 100%;
+      background: limegreen;
+      transition: transform ${(p) => p.lifespan}ms linear;
+      transform: scaleX(${(p) => (p.mounted ? 0 : 1)});
+      transform-origin: left;
+    }
+  }
+`;
 
 /** hide particle if too big or too small */
 export function useShouldRenderParticle(radius: number) {
