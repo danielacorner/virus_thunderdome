@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useStore, GlobalStateType } from "../store";
 import { useGLTF } from "@react-three/drei";
-import { useSphere } from "@react-three/cannon";
 import { PROTEINS } from "../utils/PROTEINS";
-import { SingleParticle } from "./Shapes/SingleParticle";
+import { SingleParticleMounted } from "./SingleParticleMounted";
 
 const antibody_hiv = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-HIV Antibody"
@@ -74,48 +73,6 @@ function Cell({ Component, antibody, position }) {
   );
 }
 
-export function SingleParticleMounted(props) {
-  const [isMounted, setIsMounted] = useState(true);
-  const unmount = () => setIsMounted(false);
-  return isMounted ? (
-    <SingleParticle
-      {...{
-        ...props,
-        unmount,
-      }}
-    />
-  ) : null;
-}
-
-export function Antibody({ AntibodyComponent, position, numInstances }) {
-  const mass = 18.0153 / 1000; /* 18.0153 daltons */
-  const paused = useStore((s) => s.paused);
-  const [ref, api] = useSphere((index) => ({
-    mass: paused ? 0 : mass,
-    position,
-    args: 1,
-    material: {
-      restitution: 0.0001,
-    },
-  }));
-
-  return (
-    <instancedMesh
-      ref={ref}
-      receiveShadow
-      args={[null, null, numInstances]}
-      renderOrder={2}
-    >
-      <AntibodyComponent attach="geometry" />
-      {/* <sphereBufferGeometry args={[RADIUS, 8, 8]} />
-      <meshStandardMaterial
-        color={new THREE.Color("#6f6dda")}
-        transparent={true}
-        opacity={selectedProtein ? 0.1 : 0.3}
-      /> */}
-    </instancedMesh>
-  );
-}
 /**
  * Dendritic cells are known as the most efficient antigen-presenting cell type with the ability to interact with T cells and initiate an immune response.  Dendritic cells are receiving increasing scientific and clinical interest due to their key role in the immune response and potential use with tumor vaccines.
  */

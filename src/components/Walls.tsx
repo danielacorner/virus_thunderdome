@@ -23,7 +23,8 @@ export function Walls() {
       position: [0, ceilingHeight / 2 - worldRadius, -worldRadius],
     },
     {
-      name: "behind",
+      reflect: true,
+      name: "behind", // (camera-side)
       width: worldRadius * 2,
       height: ceilingHeight,
       rotation: [0, -1 * Math.PI, 0],
