@@ -64,6 +64,7 @@ function InteractiveParticle(props) {
 
   // start decaying after lifespan elapses,
   // then unmount after lifespan+decay time
+  console.log("🌟🚨 ~ InteractiveParticle ~ unmount", unmount);
   useMount(() => {
     if (lifespan) {
       window.setTimeout(() => {
@@ -83,7 +84,12 @@ function InteractiveParticle(props) {
       tension: 30,
       friction: 20,
       clamp: true,
-      onRest: unmount,
+    },
+    onRest: (spring) => {
+      const isDecayed = spring.scale[0] === 0;
+      if (isDecayed) {
+        unmount();
+      }
     },
   });
 
