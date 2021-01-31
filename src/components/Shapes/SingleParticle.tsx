@@ -5,13 +5,13 @@ import { useStore } from "../../store";
 import * as THREE from "three";
 import { useChangeVelocityWhenTemperatureChanges } from "./useChangeVelocityWhenTemperatureChanges";
 import { useMount } from "../../utils/utils";
-import { usePrevious } from "../../utils/hooks";
 import { useSpring, a } from "react-spring/three";
 import { HighlightParticle } from "./HighlightParticle";
 import { HTML } from "@react-three/drei";
 import styled from "styled-components/macro";
+import { Protein, PROTEIN_TYPES } from "../../utils/PROTEINS";
 
-export type ParticleProps = {
+export type ParticleProps = Protein & {
   position: [number, number, number];
   Component: ReactNode;
   mass: number;
@@ -29,7 +29,7 @@ export function SingleParticle(props: ParticleProps) {
   return <Particle {...props} />;
 }
 /** interacts with other particles using @react-three/cannon */
-function InteractiveParticle(props) {
+function InteractiveParticle(props: ParticleProps) {
   const {
     position,
     Component,
@@ -38,10 +38,10 @@ function InteractiveParticle(props) {
     lifespan = null,
     unmount = () => {},
     name,
+    type,
   } = props;
-  const prevPosition: any = usePrevious(position);
 
-  const set = useStore((s) => s.set);
+  // const set = useStore((s) => s.set);
   const scale = useStore((s) => s.scale);
   const isTooltipMaximized = useStore((s) => s.isTooltipMaximized);
   const selectedProtein = useStore((s) => s.selectedProtein);
@@ -105,20 +105,22 @@ function InteractiveParticle(props) {
   // when temperature changes, change particle velocity
   useChangeVelocityWhenTemperatureChanges({ mass, api });
 
-  const handleSetSelectedProtein = () =>
-    set({ selectedProtein: { ...props, api } });
+  // const handleSetSelectedProtein = () =>
+  //   set({ selectedProtein: { ...props, api } });
 
-  const pointerDownTime = useRef(0);
+  // const pointerDownTime = useRef(0);
+
+  // ! disabled for game version
   // if we mousedown AND mouseup over the same particle very quickly, select it
-  const handlePointerDown = () => {
-    pointerDownTime.current = Date.now();
-  };
-  const handlePointerUp = () => {
-    const timeSincePointerDown = Date.now() - pointerDownTime.current;
-    if (timeSincePointerDown < 300) {
-      handleSetSelectedProtein();
-    }
-  };
+  // const handlePointerDown = () => {
+  //   pointerDownTime.current = Date.now();
+  // };
+  // const handlePointerUp = () => {
+  //   const timeSincePointerDown = Date.now() - pointerDownTime.current;
+  //   if (timeSincePointerDown < 300) {
+  //     handleSetSelectedProtein();
+  //   }
+  // };
 
   return (
     <a.mesh
@@ -134,22 +136,26 @@ function InteractiveParticle(props) {
         {...{
           name,
           lifespan,
+          type,
         }}
       />
     </a.mesh>
   );
 }
 
-function HTMLInfo({ name, lifespan }) {
+function HTMLInfo({ name, lifespan, type }) {
   const [mounted, setMounted] = useState(false);
   useMount(() => {
-    setMounted(true);
+    setTimeout(() => {
+      // timeout to ensure bar starts 100% width
+      setMounted(true);
+    }, 1);
   });
 
   return (
     <HTML>
-      <HTMLInfoStyles {...{ mounted, lifespan }}>
-        <p>{name}</p>
+      <HTMLInfoStyles {...{ mounted, lifespan, type }}>
+        <div className="name">{name}</div>
         <div className="hpBar">
           <div className="hp"></div>
         </div>
@@ -158,6 +164,17 @@ function HTMLInfo({ name, lifespan }) {
   );
 }
 const HTMLInfoStyles = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .name {
+    font-size: 8px;
+    font-weight: bold;
+    white-space: nowrap;
+    text-shadow: 0px 0px 2px white, 0px 0px 6px white;
+    padding-bottom: 0.5em;
+    text-align: center;
+  }
   .hpBar {
     width: 50px;
     height: 5px;
@@ -165,7 +182,8 @@ const HTMLInfoStyles = styled.div`
     .hp {
       width: 100%;
       height: 100%;
-      background: limegreen;
+      background: ${(p) =>
+        p.type === PROTEIN_TYPES.antibody ? "cornflowerblue" : "limegreen"};
       transition: transform ${(p) => p.lifespan}ms linear;
       transform: scaleX(${(p) => (p.mounted ? 0 : 1)});
       transform-origin: left;
