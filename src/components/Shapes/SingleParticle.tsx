@@ -90,6 +90,8 @@ function InteractiveParticle(props: ParticleProps) {
     // unmount the particle when it's fully decayed
     onRest: (spring) => {
       const isDecayed = spring.scale[0] === 0;
+      // TODO: if type === PROTEIN_TYPES.antibody
+      // TODO: else if type === PROTEIN_TYPES.virus
       if (isDecayed) {
         unmount();
       }
@@ -167,6 +169,8 @@ const HTMLInfoStyles = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 0;
   .name {
     font-size: 8px;
     font-weight: bold;

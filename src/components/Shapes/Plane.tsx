@@ -1,6 +1,6 @@
 import React from "react";
 import { usePlane } from "@react-three/cannon";
-import { useMatcapTexture } from "@react-three/drei";
+import { Reflector, useMatcapTexture } from "@react-three/drei";
 
 export function Plane({
   width,
@@ -8,6 +8,7 @@ export function Plane({
   widthSegments = 1,
   heightSegments = 1,
   color,
+  reflect = false,
   ...rest
 }) {
   const [ref] = usePlane(() => ({
@@ -21,15 +22,28 @@ export function Plane({
   );
   return (
     <mesh ref={ref} /* receiveShadow */>
-      <planeGeometry
-        attach="geometry"
-        args={[width, height, widthSegments, heightSegments]}
-      />
-      <meshMatcapMaterial
-        matcap={matcap as any}
-        opacity={0.3}
-        transparent={true}
-      />
+      {reflect ? (
+        <>
+          <Reflector>
+            <planeGeometry
+              attach="geometry"
+              args={[width, height, widthSegments, heightSegments]}
+            />
+          </Reflector>
+        </>
+      ) : (
+        <>
+          <planeGeometry
+            attach="geometry"
+            args={[width, height, widthSegments, heightSegments]}
+          />
+          <meshMatcapMaterial
+            matcap={matcap as any}
+            opacity={0.3}
+            transparent={true}
+          />
+        </>
+      )}
       {/* <meshStandardMaterial
 				attach="material"
 				color={color}
