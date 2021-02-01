@@ -7,7 +7,7 @@ import { useChangeVelocityWhenTemperatureChanges } from "../Shapes/useChangeVelo
 import { useMount } from "../../utils/utils";
 import { useSpring, a } from "react-spring/three";
 import { HighlightParticle } from "../Shapes/HighlightParticle";
-import { Protein } from "../../utils/PROTEINS";
+import { Protein, PROTEINS } from "../../utils/PROTEINS";
 import { HTMLInfo } from "./HTMLOverlay";
 
 export type ParticleProps = Protein & {
@@ -58,6 +58,53 @@ function InteractiveParticle(props: ParticleProps) {
     // TODO: accurate mass data from PDB --> need to multiply by number of residues or something else? doesn't seem right
     mass: mockMass, // approximate mass using volume of a sphere equation
     position,
+    onCollide: (event) => {
+      const {
+        body, // this
+        collidionFilters,
+        contact,
+        op,
+        target, // collided with this
+        type,
+      } = event as any;
+
+      // ignore water
+      if (
+        body.name === "Water" ||
+        target.name === "Water" ||
+        !body ||
+        !target
+      ) {
+        return;
+      }
+
+      // if it's an antibody hitting a virus,
+      // destroy the antibody and lower the virus's HP
+      console.log("🌟🚨 ~ const[ref,api]=useConvexPolyhedron ~ event", event);
+
+      const thisComponentAntibodyData = PROTEINS.antibodies.find(
+        (ab) => ab.name === target.name
+      );
+      const collisionTargetVirusData = PROTEINS.viruses.find(
+        (vr) => vr.name === body.name
+      );
+
+      const isAntibodyCollidingWithItsTargetVirus =
+        thisComponentAntibodyData &&
+        collisionTargetVirusData &&
+        thisComponentAntibodyData.virusTarget === collisionTargetVirusData.name;
+
+      if (isAntibodyCollidingWithItsTargetVirus) {
+        // TODO: if it's the right antibody for the virus
+
+        // TODO: decrease the virus's HP
+
+        // unmount the antibody
+        setTimeout(() => {
+          unmount();
+        });
+      }
+    },
     // https://threejs.org/docs/scenes/geometry-browser.html#IcosahedronBufferGeometry
     args: new THREE.IcosahedronGeometry(1, detail),
   }));
@@ -127,6 +174,7 @@ function InteractiveParticle(props: ParticleProps) {
     <a.mesh
       ref={ref}
       scale={springProps.scale}
+      name={name}
       // onPointerDown={handlePointerDown}
       // onPointerUp={handlePointerUp}
     >

@@ -156,6 +156,8 @@ export type Protein = {
   Component: (props: any) => JSX.Element;
   /** display name */
   name: string;
+  /** if it's an antibody, it can have a virusTarget */
+  virusTarget?: string;
   /** url to Protein Data Bank entry */
   PDBUrl: string;
   /** virus, antibody... */
@@ -504,6 +506,7 @@ export const PROTEINS: { [type: string]: Protein[] } = {
       Component: Antibody_hiv_10,
       name: "anti-HIV Antibody",
       type: PROTEIN_TYPES.antibody,
+      virusTarget: "HIV",
       PDBUrl: "https://www.rcsb.org/structure/3RPI",
       mass: 96.41,
       atomCount: 6650,
@@ -522,6 +525,7 @@ export const PROTEINS: { [type: string]: Protein[] } = {
       Component: Antibody_herpes,
       name: "anti-Herpes Antibody",
       type: PROTEIN_TYPES.antibody,
+      virusTarget: "Herpes",
       PDBUrl: "https://www.rcsb.org/structure/3W9E",
       mass: 81.86,
       atomCount: 5355,

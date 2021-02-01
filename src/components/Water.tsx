@@ -28,6 +28,7 @@ export function Water() {
   });
   return (
     <instancedMesh
+      name="Water"
       ref={ref}
       receiveShadow
       args={[null, null, NUM_INSTANCES]}
