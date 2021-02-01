@@ -77,13 +77,14 @@ function StorylineSequence() {
   // ? they appear one at a time, over a period of 1 minute
   const numViruses = 5;
   const poliovirus = PROTEINS.viruses.find((v) => v.name === "Poliovirus");
+  const herpesvirus = PROTEINS.viruses.find((v) => v.name === "Herpes");
 
   // they appear from the top
   const position = [0, worldRadius, 0];
   useMount(() => {
     [...Array(numViruses)].forEach((_, idx) => {
       setTimeout(() => {
-        addVirus(poliovirus);
+        addVirus(herpesvirus);
       }, (idx + 1) * 1000);
     });
   });
