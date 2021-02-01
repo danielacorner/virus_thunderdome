@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useStore, GlobalStateType } from "../store";
 import { useGLTF } from "@react-three/drei";
 import { PROTEINS } from "../utils/PROTEINS";
@@ -13,7 +13,6 @@ const antibody_herpes = PROTEINS.antibodies.find(
 const antibody_poliovirus = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-Poliovirus Antibody"
 );
-console.log("🌟🚨 ~ antibody_poliovirus", antibody_poliovirus);
 
 const CELLS = [
   { Component: Lymphocyte, antibody: antibody_poliovirus },
@@ -44,7 +43,23 @@ export default function Cells() {
 
 function Cell({ Component, antibody, position }) {
   const [antibodies, setAntibodies] = useState([]);
+  const [isPointerDown, setIsPointerDown] = useState(false);
 
+  useEffect(() => {
+    const createAntibody = () => setAntibodies((prev) => [...prev, antibody]);
+    let intervalCreateABs;
+    if (isPointerDown) {
+      createAntibody();
+      intervalCreateABs = window.setInterval(() => {
+        createAntibody();
+      }, 100);
+    }
+    return () => {
+      if (intervalCreateABs) {
+        window.clearInterval(intervalCreateABs);
+      }
+    };
+  }, [isPointerDown, setAntibodies, antibody]);
   return (
     <>
       {antibodies.map((ab, idx) => (
@@ -59,7 +74,8 @@ function Cell({ Component, antibody, position }) {
         />
       ))}
       <Component
-        onClick={() => setAntibodies((prev) => [...prev, antibody])}
+        onPointerDown={() => setIsPointerDown(true)}
+        onPointerUp={() => setIsPointerDown(false)}
         position={position}
         scale={[SCALE, SCALE, SCALE]}
       />

@@ -4,7 +4,7 @@ import { HTML } from "@react-three/drei";
 import styled from "styled-components/macro";
 import { PROTEIN_TYPES } from "../../utils/PROTEINS";
 
-export function HTMLInfo({ name, lifespan, type }) {
+export function HTMLOverlay({ name, lifespan, type, virusHpPct }) {
   const [mounted, setMounted] = useState(false);
   useMount(() => {
     setTimeout(() => {
@@ -15,17 +15,18 @@ export function HTMLInfo({ name, lifespan, type }) {
 
   return (
     <HTML>
-      <HTMLInfoStyles {...{ mounted, lifespan, type }}>
+      <HTMLOverlayStyles {...{ mounted, lifespan, type, virusHpPct }}>
         <div className="name">{name}</div>
         <div className="hpBar">
           <div className="hp"></div>
         </div>
-      </HTMLInfoStyles>
+      </HTMLOverlayStyles>
     </HTML>
   );
 }
 
-const HTMLInfoStyles = styled.div`
+const HTMLOverlayStyles = styled.div`
+  pointer-events: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -54,7 +55,12 @@ const HTMLInfoStyles = styled.div`
           : "none"};
       transition: transform ${(p) => p.lifespan}ms linear;
       transform: scaleX(
-        ${(p) => (p.type === PROTEIN_TYPES.antibody && p.mounted ? 0 : 1)}
+        ${(p) =>
+          p.type === PROTEIN_TYPES.antibody && p.mounted
+            ? 0
+            : p.type === PROTEIN_TYPES.virus && p.virusHpPct
+            ? p.virusHpPct
+            : 1}
       );
       transform-origin: left;
     }
