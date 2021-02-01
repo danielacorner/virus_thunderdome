@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useConvexPolyhedron } from "@react-three/cannon";
 import { useJitterParticle } from "../Shapes/useJitterParticle";
 import { useStore } from "../../store";
@@ -7,8 +7,8 @@ import { useChangeVelocityWhenTemperatureChanges } from "../Shapes/useChangeVelo
 import { useMount } from "../../utils/utils";
 import { useSpring, a } from "react-spring/three";
 import { HighlightParticle } from "../Shapes/HighlightParticle";
-import { Protein, PROTEINS } from "../../utils/PROTEINS";
-import { HTMLInfo } from "./HTMLOverlay";
+import { Protein, PROTEINS, PROTEIN_TYPES } from "../../utils/PROTEINS";
+import { HTMLOverlay } from "./HTMLOverlay";
 
 export type ParticleProps = Protein & {
   position: [number, number, number];
@@ -54,6 +54,20 @@ function InteractiveParticle(props: ParticleProps) {
   const volumeOfSphere = (4 / 3) * Math.PI * props.radius ** 3;
   const mockMass = 10 ** -5 * volumeOfSphere;
 
+  // virus hp scales with radius (~= number of antibodies required to cover its surface)
+  const initialHp = props.radius;
+  const [virusHp, setVirusHp] = useState(initialHp);
+
+  // decay the virus when hp runs out
+  const isVirus = type === PROTEIN_TYPES.virus;
+  useEffect(() => {
+    if (isVirus && virusHp <= 0) {
+      window.setTimeout(() => {
+        setIsDecaying(true);
+      }, 0);
+    }
+  }, [virusHp, isVirus]);
+
   const [ref, api] = useConvexPolyhedron(() => ({
     // TODO: accurate mass data from PDB --> need to multiply by number of residues or something else? doesn't seem right
     mass: mockMass, // approximate mass using volume of a sphere equation
@@ -61,11 +75,11 @@ function InteractiveParticle(props: ParticleProps) {
     onCollide: (event) => {
       const {
         body, // this
-        collidionFilters,
-        contact,
-        op,
         target, // collided with this
-        type,
+        // collidionFilters,
+        // contact,
+        // op,
+        // type,
       } = event as any;
 
       // ignore water
@@ -78,30 +92,44 @@ function InteractiveParticle(props: ParticleProps) {
         return;
       }
 
-      // if it's an antibody hitting a virus,
+      // if it's an antibody hitting a target virus,
       // destroy the antibody and lower the virus's HP
-      console.log("🌟🚨 ~ const[ref,api]=useConvexPolyhedron ~ event", event);
 
-      const thisComponentAntibodyData = PROTEINS.antibodies.find(
+      const thisComponentAntibody = PROTEINS.antibodies.find(
         (ab) => ab.name === target.name
       );
-      const collisionTargetVirusData = PROTEINS.viruses.find(
+      const collisionTargetVirus = PROTEINS.viruses.find(
         (vr) => vr.name === body.name
       );
 
+      if (!thisComponentAntibody || !collisionTargetVirus) {
+        return;
+      }
+
       const isAntibodyCollidingWithItsTargetVirus =
-        thisComponentAntibodyData &&
-        collisionTargetVirusData &&
-        thisComponentAntibodyData.virusTarget === collisionTargetVirusData.name;
+        thisComponentAntibody.virusTarget === collisionTargetVirus.name;
 
+      const isVirusTargetCollidingWithItsAntibody =
+        thisComponentAntibody.virusTarget === collisionTargetVirus.name;
+
+      // if it's the antibody,
       if (isAntibodyCollidingWithItsTargetVirus) {
-        // TODO: if it's the right antibody for the virus
-
-        // TODO: decrease the virus's HP
-
         // unmount the antibody
         setTimeout(() => {
           unmount();
+        });
+        // if it's the virus,
+      } else if (isVirusTargetCollidingWithItsAntibody) {
+        console.log(
+          "🌟🚨 ~ const[ref,api]=useConvexPolyhedron ~ isVirusTargetCollidingWithItsAntibody",
+          isVirusTargetCollidingWithItsAntibody
+        );
+        // decrease the virus's HP
+        setTimeout(() => {
+          setVirusHp((prev) => {
+            console.log("🌟🚨 ~ setTimeout ~ prev", prev);
+            return prev - 10;
+          });
         });
       }
     },
@@ -181,11 +209,12 @@ function InteractiveParticle(props: ParticleProps) {
       <meshStandardMaterial opacity={0.1} transparent={true} />
       {isSelectedProtein && !isTooltipMaximized ? <HighlightParticle /> : null}
       <Component />
-      <HTMLInfo
+      <HTMLOverlay
         {...{
           name,
           lifespan,
           type,
+          virusHpPct: isVirus ? virusHp / initialHp : 0,
         }}
       />
     </a.mesh>
