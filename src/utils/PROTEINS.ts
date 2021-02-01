@@ -59,6 +59,9 @@ const Virion_of_native_gene_transfer_agent_gta_particle_120 = React.lazy(
 const Antibody_hiv_10 = React.lazy(
   () => import("../components/GLTFs/antibodies/Antibody_hiv_10")
 );
+const Antibody_poliovirus_10 = React.lazy(
+  () => import("../components/GLTFs/antibodies/Antibody_poliovirus_10")
+);
 const Antibody_herpes = React.lazy(
   () => import("../components/GLTFs/antibodies/Antibody_herpes")
 );
@@ -486,7 +489,7 @@ export const PROTEINS: { [type: string]: Protein[] } = {
       mass: 1575,
       atomCount: 424596,
       radius: 280,
-      numIcosahedronFaces: 12,
+      numIcosahedronFaces: 1,
       numAsymmetricUnits: 12,
       pathToGLTF: "/models/viruses/hpv_100.glb",
       pathToImage: "/models/viruses/hpv.webp",
@@ -502,6 +505,25 @@ export const PROTEINS: { [type: string]: Protein[] } = {
   // ANTIBODIES
   // ANTIBODIES
   antibodies: [
+    {
+      Component: Antibody_poliovirus_10,
+      name: "anti-Poliovirus Antibody",
+      type: PROTEIN_TYPES.antibody,
+      virusTarget: "Poliovirus",
+      PDBUrl: "https://www.rcsb.org/structure/1FPT",
+      mass: 49.5,
+      atomCount: 3465,
+      radius: 30,
+      numIcosahedronFaces: 1,
+      numAsymmetricUnits: 1,
+      pathToGLTF: "/models/antibodies/antibody_poliovirus_10.glb",
+      pathToImage: "/models/antibodies/antibody_poliovirus_10.webp",
+      interactive: true,
+      authors:
+        "Wien, M.W., Filman, D.J., Stura, E.A., Guillot, S., Delpeyroux, F., Crainic, R., Hogle, J.M.",
+      pubmedAbstract:
+        "The crystal structure of the complex between the Fab fragment of C3, a neutralizing antibody for poliovirus, and a peptide corresponding to the viral epitope has been determined at 3.0 A resolution. Although this antibody was originally raised to heat inactivated (noninfectious) virus particles, it strongly neutralizes the Mahoney strain of type 1 poliovirus. Eleven peptide residues are well-defined in the electron-density map and form two type I beta-turns in series. At the carboxyl end, the peptide is bound snugly in the antibody-combining site and adopts a conformation that differs significantly from the structure of the corresponding residues in the virus. Structural comparisons between the peptide in the complex and the viral epitope suggests that on binding to infectious virions, this antibody may induce structural changes important for neutralization.",
+    },
     {
       Component: Antibody_hiv_10,
       name: "anti-HIV Antibody",
