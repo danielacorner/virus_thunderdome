@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SingleParticle } from "./Shapes/SingleParticle";
+import { SingleParticle } from "./SingleParticle";
 
 export function SingleParticleMounted(props) {
   const [isMounted, setIsMounted] = useState(true);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useStore, GlobalStateType } from "../store";
 import { useGLTF } from "@react-three/drei";
 import { PROTEINS } from "../utils/PROTEINS";
-import { SingleParticleMounted } from "./SingleParticleMounted";
+import { SingleParticleMounted } from "./particle/SingleParticleMounted";
 
 const antibody_hiv = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-HIV Antibody"
