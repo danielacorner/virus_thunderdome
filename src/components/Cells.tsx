@@ -10,9 +10,13 @@ const antibody_hiv = PROTEINS.antibodies.find(
 const antibody_herpes = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-Herpes Antibody"
 );
+const antibody_poliovirus = PROTEINS.antibodies.find(
+  (ab) => ab.name === "anti-Poliovirus Antibody"
+);
+console.log("🌟🚨 ~ antibody_poliovirus", antibody_poliovirus);
 
 const CELLS = [
-  { Component: Lymphocyte, antibody: antibody_hiv },
+  { Component: Lymphocyte, antibody: antibody_poliovirus },
   { Component: Monocyte, antibody: antibody_hiv },
   { Component: DendriticCell, antibody: antibody_hiv },
   { Component: Eosinophil, antibody: antibody_herpes },
