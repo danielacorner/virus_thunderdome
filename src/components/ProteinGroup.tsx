@@ -3,7 +3,7 @@ import { useControl } from "react-three-gui";
 import {
   SingleParticle,
   useShouldRenderParticle,
-} from "./Shapes/SingleParticle";
+} from "./particle/SingleParticle";
 import { getRandStartPosition } from "./Shapes/particleUtils";
 import { useStore } from "../store";
 import { PROTEIN_TYPES } from "../utils/PROTEINS";

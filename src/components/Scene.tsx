@@ -11,7 +11,7 @@ import { ScaleIndicator } from "./ScaleIndicator";
 import { SelectedParticleDisplay } from "./SelectedParticleDisplay";
 import Cells from "./Cells";
 import { useSpringAfterTimeout } from "./useSpringAfterTimeout";
-import { SingleParticleMounted } from "./SingleParticleMounted";
+import { SingleParticleMounted } from "./particle/SingleParticleMounted";
 import { useStore } from "../store";
 import { useMount } from "../utils/utils";
 
