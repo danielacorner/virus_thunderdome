@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import Tooltip from "./components/Tooltip";
+import Tooltip from "./components/SelectedParticleTooltip";
 import { Button, Typography } from "@material-ui/core";
 import WarningOutlined from "@material-ui/icons/WarningOutlined";
 import { CanvasAndSceneEmpty } from "./CanvasAndSceneEmpty";
