@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useStore } from "../store";
 import styled from "styled-components/macro";
 import { Close, Fullscreen, FullscreenExit } from "@material-ui/icons";
@@ -6,6 +6,7 @@ import {
   ClickAwayListener,
   IconButton,
   Modal,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from "@material-ui/core";
@@ -14,13 +15,15 @@ import {
   BREAKPOINT_DESKTOP,
   BREAKPOINT_MOBILE,
   BREAKPOINT_TABLET,
+  CUSTOM_SCROLLBAR_CSS,
 } from "../utils/constants";
+
 const TOOLTIP = {
   height: 442,
   width: 300,
 };
 
-const Tooltip = () => {
+const SelectedParticleTooltip = () => {
   const isTooltipMaximized = useStore((s) => s.isTooltipMaximized);
   const set = useStore((s) => s.set);
   const selectedProtein = useStore((s) => s.selectedProtein);
@@ -66,21 +69,23 @@ function BtnMaximize() {
   const isTooltipMaximized = useStore((s) => s.isTooltipMaximized);
 
   return (
-    <IconButton
-      className="btnMaximize"
-      onClick={(e) => {
-        e.stopPropagation();
-        set({ isTooltipMaximized: !isTooltipMaximized });
-      }}
-    >
-      {isTooltipMaximized ? (
-        isDesktopOrLarger ? null : (
-          <FullscreenExit />
-        )
-      ) : (
-        <Fullscreen />
-      )}
-    </IconButton>
+    <Tooltip title="maximize">
+      <IconButton
+        className="btnMaximize"
+        onClick={(e) => {
+          e.stopPropagation();
+          set({ isTooltipMaximized: !isTooltipMaximized });
+        }}
+      >
+        {isTooltipMaximized ? (
+          isDesktopOrLarger ? null : (
+            <FullscreenExit />
+          )
+        ) : (
+          <Fullscreen />
+        )}
+      </IconButton>
+    </Tooltip>
   );
 }
 
@@ -140,23 +145,23 @@ function TooltipContent() {
           style={{ width: "100%", height: "100%", objectFit: "contain" }}
         />
       ) : null}
-      <div className="tooltipContent">
-        {isTooltipMaximized ? <BtnClose /> : null}
-        <div className="titleSection">
-          <a
-            href={selectedProtein.PDBUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Typography className="title" variant="body1">
-              {startCase(selectedProtein.name)}
-            </Typography>
-          </a>
-          <Typography variant="subtitle1" style={{ whiteSpace: "nowrap" }}>
-            {selectedProtein.type}
+      <div className="header">
+        <BtnMaximize />
+        <BtnClose />
+        <a
+          href={selectedProtein.PDBUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Typography className="title" variant="body1">
+            {startCase(selectedProtein.name)}
           </Typography>
-        </div>
-
+        </a>
+        <Typography variant="subtitle1" style={{ whiteSpace: "nowrap" }}>
+          {selectedProtein.type}
+        </Typography>
+      </div>
+      <div className="tooltipContent">
         <div className="details">
           <div className="measurement weight">
             <div className="label">weight</div>
@@ -180,25 +185,11 @@ function TooltipContent() {
         </div>
         {/* {isHorizontalLayout&& ? null : <BtnClose />} */}
         {isHorizontalLayout ? null : (
-          <div
-            className="imgWrapper"
-            onClick={() => {
-              set({ isTooltipMaximized: !isTooltipMaximized });
-            }}
-          >
-            {isTooltipMaximized ? null : <BtnClose />}
+          <div className="imgWrapper">
             <ParticleImage />
-            <BtnMaximize />
           </div>
         )}
-        <div
-          className="pubmedAbstract"
-          onClick={() => {
-            if (!isTooltipMaximized) {
-              set({ isTooltipMaximized: true });
-            }
-          }}
-        >
+        <div className="pubmedAbstract">
           {isTooltipMaximized ? (
             <p className="authors">{selectedProtein.authors}</p>
           ) : null}
@@ -219,6 +210,18 @@ function numberWithCommas(x) {
 const TooltipStyles = styled.div`
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
+  ${(props) =>
+    props.maximized
+      ? ""
+      : `
+        * {
+          text-shadow:  0px -1px 4px white,
+                      0px -1px 6px white,
+                      0px -1px 8px white,
+                      0px -1px 10px white,
+                      0px -1px 12px white;
+                      }
+        `}
   @media (min-width: ${BREAKPOINT_MOBILE}px) {
     transform: unset;
   }
@@ -257,8 +260,71 @@ const TooltipStyles = styled.div`
     }
     `
         : ""}
+    .header {
+      .btnClose {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        z-index: 3;
+      }
+      .btnMaximize {
+        position: absolute;
+        top: 4px;
+        right: 56px;
+        z-index: 3;
+      }
+      ${(props) =>
+        !props.maximized
+          ? `
+      .btnClose {
+        top: -16px;
+        right: 11px;
+        background: #ffffff3b;
+      }
+      .btnMaximize {
+        top: 78px;
+        right: 12px;
+      }
+          `
+          : ``}
+      pointer-events: auto;
+      box-sizing: border-box;
+      text-align: left;
+      display: grid;
+      ${(props) =>
+        props.isHorizontalLayout || props.maximized ? "" : "height: 1.5em;"}
+      grid-template-rows: 1fr auto;
+      align-content: end;
+      align-items: center;
+      ${(props) =>
+        props.maximized
+          ? `
+        text-align: center;
+        width: 100%;
+        padding: 0.5em;
+        background: white;
+        box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.31);
+        `
+          : `
+          padding: 0 1em;
+          `};
+      h6 {
+        font-style: italic;
+        color: hsl(0, 0%, 50%);
+        line-height: 1em;
+      }
+      a {
+        color: #14bcff;
+      }
+
+      .title {
+        font-size: 1.2em;
+        line-height: 1.2em;
+      }
+    }
 
     .tooltipContent {
+      ${CUSTOM_SCROLLBAR_CSS}
       pointer-events: auto;
       max-height: 90vh;
       ${(props) =>
@@ -281,53 +347,33 @@ const TooltipStyles = styled.div`
       box-sizing: border-box;
       color: black;
       display: grid;
-      grid-template-rows: auto ${(props) =>
+      grid-template-rows: ${(props) =>
           props.maximized && props.isHorizontalLayout ? 1.5 : 2}em ${(props) =>
           props.isHorizontalLayout ? "" : "auto "} ${(props) =>
           props.maximized ? "1fr" : "5em"};
       grid-gap: 0.5em;
       position: relative;
       text-shadow: 0px 1px 0px white, 0px 1px 0px white;
-      .titleSection {
-        text-align: left;
-        display: grid;
-        ${(props) =>
-          props.isHorizontalLayout || props.maximized ? "" : "height: 1.5em;"}
-        grid-template-rows: 1fr auto;
-        align-content: end;
-        align-items: center;
-        grid-gap: 0.5em;
-        h6 {
-          font-style: italic;
-          color: hsl(0, 0%, 50%);
-          line-height: 1em;
-        }
-        a {
-          color: #14bcff;
-        }
-        .title {
-          font-size: 1.2em;
-          line-height: 1.2em;
-          ${(props) =>
-            props.maximized
-              ? `
-        text-shadow: 0px -1px 4px white, 0px -1px 4px white, 0px -1px 4px white, 0px -1px 4px white, 0px -1px 4px white;
-        `
-              : ""}
-        }
-      }
+
       .details {
         display: grid;
         height: fit-content;
         font-size: 0.8em;
         grid-template-columns: 1.5fr 0.6fr 1.5fr;
+
         ${(props) =>
           props.maximized
             ? `
-      width: fit-content;
-      grid-gap: 1em;
+            width: 100%;
+    justify-items: center;
       `
-            : ""}
+            : `
+        text-shadow:  0px -1px 4px white,
+                      0px -1px 6px white,
+                      0px -1px 8px white,
+                      0px -1px 10px white,
+                      0px -1px 12px white;
+        `}
         .measurement {
           display: grid;
           grid-template-rows: auto auto;
@@ -359,25 +405,9 @@ const TooltipStyles = styled.div`
         font-size: 32px;
         position: absolute;
         color: black;
+        z-index: 3;
       }
-      .btnClose {
-        position: absolut;
-        top: 0;
-        right: 0;
-        ${(props) =>
-          props.maximized && !props.isDesktopOrLarger
-            ? `
-        position: fixed;
-        top: 0.25em;
-        right: 0.25em;
-        background: hsla(0,0%,95%,0.2);
-        `
-            : ""}
-      }
-      .btnMaximize {
-        bottom: 0em;
-        right: 0em;
-      }
+
       .pubmedAbstract {
         background: white;
         ${(props) =>
@@ -403,4 +433,4 @@ const TooltipStyles = styled.div`
   }
 `;
 
-export default Tooltip;
+export default SelectedParticleTooltip;
