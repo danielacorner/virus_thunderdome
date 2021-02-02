@@ -72,67 +72,7 @@ function InteractiveParticle(props: ParticleProps) {
     // TODO: accurate mass data from PDB --> need to multiply by number of residues or something else? doesn't seem right
     mass: mockMass, // approximate mass using volume of a sphere equation
     position,
-    onCollide: (event) => {
-      const {
-        body, // this
-        target, // collided with this
-        // collidionFilters,
-        // contact,
-        // op,
-        // type,
-      } = event as any;
-
-      // ignore water
-      if (
-        body.name === "Water" ||
-        target.name === "Water" ||
-        !body ||
-        !target
-      ) {
-        return;
-      }
-
-      // if it's an antibody hitting a target virus,
-      // destroy the antibody and lower the virus's HP
-
-      const thisComponentAntibody = PROTEINS.antibodies.find(
-        (ab) => ab.name === target.name
-      );
-      const collisionTargetVirus = PROTEINS.viruses.find(
-        (vr) => vr.name === body.name
-      );
-
-      if (!thisComponentAntibody || !collisionTargetVirus) {
-        return;
-      }
-
-      const isAntibodyCollidingWithItsTargetVirus =
-        thisComponentAntibody.virusTarget === collisionTargetVirus.name;
-
-      const isVirusTargetCollidingWithItsAntibody =
-        thisComponentAntibody.virusTarget === collisionTargetVirus.name;
-
-      // if it's the antibody,
-      if (isAntibodyCollidingWithItsTargetVirus) {
-        // unmount the antibody
-        setTimeout(() => {
-          unmount();
-        });
-        // if it's the virus,
-      } else if (isVirusTargetCollidingWithItsAntibody) {
-        console.log(
-          "🌟🚨 ~ const[ref,api]=useConvexPolyhedron ~ isVirusTargetCollidingWithItsAntibody",
-          isVirusTargetCollidingWithItsAntibody
-        );
-        // decrease the virus's HP
-        setTimeout(() => {
-          setVirusHp((prev) => {
-            console.log("🌟🚨 ~ setTimeout ~ prev", prev);
-            return prev - 10;
-          });
-        });
-      }
-    },
+    onCollide: handleCollide(unmount, setVirusHp),
     // https://threejs.org/docs/scenes/geometry-browser.html#IcosahedronBufferGeometry
     args: new THREE.IcosahedronGeometry(1, detail),
   }));
@@ -198,6 +138,8 @@ function InteractiveParticle(props: ParticleProps) {
   //   }
   // };
 
+  const virusHpPct = isVirus ? virusHp / initialHp : 0;
+
   return (
     <a.mesh
       ref={ref}
@@ -214,11 +156,81 @@ function InteractiveParticle(props: ParticleProps) {
           name,
           lifespan,
           type,
-          virusHpPct: isVirus ? virusHp / initialHp : 0,
+          virusHpPct,
         }}
       />
     </a.mesh>
   );
+}
+
+function handleCollide(
+  unmount: Function,
+  setVirusHp: React.Dispatch<React.SetStateAction<number>>
+) {
+  return (event) => {
+    const { body, target } = event as any;
+
+    // ignore water
+    if (!body || !target || body.name === "Water" || target.name === "Water") {
+      return;
+    }
+
+    // * if it's an antibody hitting a target virus,
+    // destroy the antibody
+    const thisComponentAntibody = PROTEINS.antibodies.find(
+      (ab) => ab.name === target.name
+    );
+    const collisionTargetVirus = PROTEINS.viruses.find(
+      (vr) => vr.name === body.name
+    );
+    const isAntibodyHittingItsVirus = Boolean(
+      thisComponentAntibody && collisionTargetVirus
+    );
+
+    // * if it's a virus target hitting its antibody
+    // lower the virus's hp
+    const thisComponentVirus = PROTEINS.viruses.find(
+      (ab) => ab.name === target.name
+    );
+
+    const collisionTargetAntibody = PROTEINS.antibodies.find(
+      (vr) => vr.name === body.name
+    );
+
+    const isVirusHittingItsAntibody = Boolean(
+      thisComponentVirus && collisionTargetAntibody
+    );
+
+    if (!isAntibodyHittingItsVirus && !isVirusHittingItsAntibody) {
+      return;
+    }
+
+    const isAntibodyCollidingWithItsTargetVirus =
+      thisComponentAntibody &&
+      collisionTargetVirus &&
+      thisComponentAntibody.virusTarget === collisionTargetVirus.name;
+
+    const isVirusTargetCollidingWithItsAntibody =
+      thisComponentVirus &&
+      collisionTargetAntibody &&
+      thisComponentVirus.name === collisionTargetAntibody.virusTarget;
+
+    // if it's the antibody,
+    if (isAntibodyCollidingWithItsTargetVirus) {
+      // unmount the antibody
+      setTimeout(() => {
+        unmount();
+      });
+      // if it's the virus, ?
+    } else if (isVirusTargetCollidingWithItsAntibody) {
+      // decrease the virus's HP
+      setTimeout(() => {
+        setVirusHp((prev) => {
+          return prev - 10;
+        });
+      });
+    }
+  };
 }
 
 /** hide particle if too big or too small */
