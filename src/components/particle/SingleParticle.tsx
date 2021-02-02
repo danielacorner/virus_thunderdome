@@ -41,6 +41,7 @@ function InteractiveParticle(props: ParticleProps) {
   } = props;
 
   // const set = useStore((s) => s.set);
+  const set = useStore((s) => s.set);
   const scale = useStore((s) => s.scale);
   const isTooltipMaximized = useStore((s) => s.isTooltipMaximized);
   const selectedProtein = useStore((s) => s.selectedProtein);
@@ -121,22 +122,22 @@ function InteractiveParticle(props: ParticleProps) {
   // when temperature changes, change particle velocity
   useChangeVelocityWhenTemperatureChanges({ mass, api });
 
-  // const handleSetSelectedProtein = () =>
-  //   set({ selectedProtein: { ...props, api } });
+  const handleSetSelectedProtein = () =>
+    set({ selectedProtein: { ...props, api } });
 
-  // const pointerDownTime = useRef(0);
+  const pointerDownTime = useRef(0);
 
   // ! disabled for game version
   // if we mousedown AND mouseup over the same particle very quickly, select it
-  // const handlePointerDown = () => {
-  //   pointerDownTime.current = Date.now();
-  // };
-  // const handlePointerUp = () => {
-  //   const timeSincePointerDown = Date.now() - pointerDownTime.current;
-  //   if (timeSincePointerDown < 300) {
-  //     handleSetSelectedProtein();
-  //   }
-  // };
+  const handlePointerDown = () => {
+    pointerDownTime.current = Date.now();
+  };
+  const handlePointerUp = () => {
+    const timeSincePointerDown = Date.now() - pointerDownTime.current;
+    if (timeSincePointerDown < 300) {
+      handleSetSelectedProtein();
+    }
+  };
 
   const virusHpPct = isVirus ? virusHp / initialHp : 0;
 
@@ -145,8 +146,8 @@ function InteractiveParticle(props: ParticleProps) {
       ref={ref}
       scale={springProps.scale}
       name={name}
-      // onPointerDown={handlePointerDown}
-      // onPointerUp={handlePointerUp}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
     >
       <meshStandardMaterial opacity={0.1} transparent={true} />
       {isSelectedProtein && !isTooltipMaximized ? <HighlightParticle /> : null}
