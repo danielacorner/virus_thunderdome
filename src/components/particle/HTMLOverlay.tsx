@@ -3,8 +3,10 @@ import { useMount } from "../../utils/utils";
 import { HTML } from "@react-three/drei";
 import styled from "styled-components/macro";
 import { PROTEIN_TYPES } from "../../utils/PROTEINS";
+import { useStore } from "../../store";
 
 export function HTMLOverlay({ name, lifespan, type, virusHpPct }) {
+  const showHp = useStore((s) => s.showHp);
   const [mounted, setMounted] = useState(false);
   useMount(() => {
     setTimeout(() => {
@@ -13,7 +15,7 @@ export function HTMLOverlay({ name, lifespan, type, virusHpPct }) {
     }, 1);
   });
 
-  return (
+  return showHp ? (
     <HTML>
       <HTMLOverlayStyles {...{ mounted, lifespan, type, virusHpPct }}>
         <div className="name">{name}</div>
@@ -22,7 +24,7 @@ export function HTMLOverlay({ name, lifespan, type, virusHpPct }) {
         </div>
       </HTMLOverlayStyles>
     </HTML>
-  );
+  ) : null;
 }
 
 type HTMLOverlayProps = {

@@ -7,8 +7,11 @@ import * as THREE from "three";
 // import { useFrame } from "react-three-fiber";
 import BottomControls from "./BottomControls";
 import { ScaleControls } from "./ScaleControls";
-import { useMediaQuery } from "@material-ui/core";
+import { IconButton, useMediaQuery } from "@material-ui/core";
 import { BREAKPOINT_TABLET } from "./utils/constants";
+import { useStore } from "./store";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
+
 export default function CanvasAndScene({ renderProteins = true }) {
   const windowSize = useWindowSize();
   const isTabletOrLarger = useMediaQuery(`(min-width: ${BREAKPOINT_TABLET}px)`);
@@ -34,8 +37,21 @@ export default function CanvasAndScene({ renderProteins = true }) {
           <Controls anchor={"top_right"} style={{ marginTop: -64 }} />
         ) : null}
       </Controls.Provider>
+      <HideHpControls />
       <ScaleControls />
       <BottomControls />
     </>
+  );
+}
+
+function HideHpControls() {
+  const set = useStore((s) => s.set);
+  const showHp = useStore((s) => s.showHp);
+  return (
+    <div style={{ position: "fixed", top: 4, right: 4 }}>
+      <IconButton onClick={() => set({ showHp: !showHp })}>
+        {showHp ? <Visibility /> : <VisibilityOff />}
+      </IconButton>
+    </div>
   );
 }

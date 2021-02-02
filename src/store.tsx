@@ -11,6 +11,7 @@ export type GlobalStateType = {
   worldRadius: number;
   temperature: number;
   isTooltipMaximized: boolean;
+  showHp: boolean;
   loading: boolean;
   started: boolean;
   paused: boolean;
@@ -28,6 +29,7 @@ export const useStore = create<GlobalStateType>(
   (set): GlobalStateType => ({
     isTooltipMaximized: false,
     paused: false,
+    showHp: true,
     started: startsStarted,
     loading: !startsStarted,
     worldRadius: 5,
