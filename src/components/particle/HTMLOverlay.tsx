@@ -25,7 +25,14 @@ export function HTMLOverlay({ name, lifespan, type, virusHpPct }) {
   );
 }
 
-const HTMLOverlayStyles = styled.div`
+type HTMLOverlayProps = {
+  type: keyof typeof PROTEIN_TYPES;
+  virusHpPct: number;
+  lifespan: number;
+  mounted: boolean;
+};
+
+const HTMLOverlayStyles = styled.div<HTMLOverlayProps>`
   pointer-events: none;
   display: flex;
   flex-direction: column;
@@ -55,12 +62,13 @@ const HTMLOverlayStyles = styled.div`
           : "none"};
       transition: transform ${(p) => p.lifespan}ms linear;
       transform: scaleX(
-        ${(p) =>
-          p.type === PROTEIN_TYPES.antibody && p.mounted
+        ${(p) => {
+          return p.type === PROTEIN_TYPES.antibody && p.mounted
             ? 0
             : p.type === PROTEIN_TYPES.virus && p.virusHpPct
             ? p.virusHpPct
-            : 1}
+            : 1;
+        }}
       );
       transform-origin: left;
     }
