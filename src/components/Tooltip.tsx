@@ -261,6 +261,8 @@ const TooltipStyles = styled.div`
     `
         : ""}
     .header {
+      z-index: 2;
+      position: relative;
       .btnClose {
         position: absolute;
         top: 4px;
