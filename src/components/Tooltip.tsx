@@ -330,7 +330,7 @@ const TooltipStyles = styled.div`
       ${(props) =>
         props.maximized
           ? `
-
+          background: white;
     `
           : ""}
       overflow: ${(props) => (props.maximized ? "auto" : "visible")};
