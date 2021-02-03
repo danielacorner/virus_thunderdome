@@ -5,7 +5,7 @@ import styled from "styled-components/macro";
 import { PROTEIN_TYPES } from "../../utils/PROTEINS";
 import { useStore } from "../../store";
 
-export function HtmlOverlay({ name, lifespan, type, virusHpPct }) {
+export function FloatingHtmlOverlay({ name, lifespan, type, virusHpPct }) {
   const showHp = useStore((s) => s.showHp);
   const [mounted, setMounted] = useState(false);
   useMount(() => {

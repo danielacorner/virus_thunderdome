@@ -8,7 +8,7 @@ import { useMount } from "../../utils/utils";
 import { useSpring, a } from "react-spring/three";
 import { HighlightParticle } from "../Shapes/HighlightParticle";
 import { Protein, PROTEINS, PROTEIN_TYPES } from "../../utils/PROTEINS";
-import { HtmlOverlay } from "./HtmlOverlay";
+import { FloatingHtmlOverlay } from "./FloatingHtmlOverlay";
 
 export type ParticleProps = Protein & {
   position: [number, number, number];
@@ -155,7 +155,7 @@ function InteractiveParticle(props: ParticleProps) {
       <meshStandardMaterial opacity={0.1} transparent={true} />
       {isSelectedProtein && !isTooltipMaximized ? <HighlightParticle /> : null}
       <Component />
-      <HtmlOverlay
+      <FloatingHtmlOverlay
         {...{
           name,
           lifespan,
