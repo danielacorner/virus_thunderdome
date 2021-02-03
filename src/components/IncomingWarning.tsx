@@ -14,7 +14,7 @@ export function IncomingWarning() {
     }
     setTimeout(() => {
       setIsIncoming(false);
-    }, 6 * 1000);
+    }, 3 * 1000);
   }, [currentWave]);
 
   return isIncoming ? (
@@ -30,7 +30,7 @@ const IncomingStyles = styled.div`
     white-space: nowrap;
   }
   animation-name: appearDisappear;
-  animation-duration: 0.5s;
+  animation-duration: 0.8s;
   animation-iteration-count: infinite;
   animation-direction: alternate;
   animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
