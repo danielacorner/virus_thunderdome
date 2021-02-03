@@ -8,6 +8,7 @@ import { LoadingIndicator } from "./components/LoadingIndicator";
 import { useMount } from "./utils/utils";
 import { render } from "react-dom";
 import MemoryStats from "react-memorystats";
+import { IncomingWarning } from "./components/IncomingWarning";
 
 function App() {
   useMount(() => {
@@ -22,6 +23,7 @@ function App() {
       <LazyLoadedScene />
       <div id="memoryStats"></div>
       <Tooltip />
+      <IncomingWarning />
       {/* <GuidedTour /> */}
       {/* <SaveControlsSettingsToLocalStorage /> */}
     </div>
