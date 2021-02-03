@@ -59,6 +59,9 @@ const Virion_of_native_gene_transfer_agent_gta_particle_120 = React.lazy(
 const Antibody_hiv_10 = React.lazy(
   () => import("../components/GLTFs/antibodies/Antibody_hiv_10")
 );
+const Antibody_hpv_10 = React.lazy(
+  () => import("../components/GLTFs/antibodies/Antibody_hpv_10")
+);
 const Antibody_poliovirus_10 = React.lazy(
   () => import("../components/GLTFs/antibodies/Antibody_poliovirus_10")
 );
@@ -533,7 +536,26 @@ export const PROTEINS: { [type: string]: Protein[] } = {
       mass: 96.41,
       atomCount: 6650,
       radius: 50,
-      numIcosahedronFaces: 20,
+      numIcosahedronFaces: 1,
+      numAsymmetricUnits: 1,
+      pathToGLTF: "/models/antibodies/antibody_hiv_10.glb",
+      pathToImage: "/models/antibodies/antibody_hiv.webp",
+      interactive: true,
+      authors:
+        "Scheid, J.F., Mouquet, H., Ueberheide, B., Diskin, R., Klein, F., Oliveira, T.Y., Pietzsch, J., Fenyo, D., Abadir, A., Velinzon, K., Hurley, A., Myung, S., Boulad, F., Poignard, P., Burton, D.R., Pereyra, F., Ho, D.D., Walker, B.D., Seaman, M.S., Bjorkman, P.J., Chait, B.T., Nussenzweig, M.C.",
+      pubmedAbstract:
+        "Passive transfer of broadly neutralizing HIV antibodies can prevent infection, which suggests that vaccines that elicit such antibodies would be protective. Thus far, however, few broadly neutralizing HIV antibodies that occur naturally have been characterized. To determine whether these antibodies are part of a larger group of related molecules, we cloned 576 new HIV antibodies from four unrelated individuals. All four individuals produced expanded clones of potent broadly neutralizing CD4-binding-site antibodies that mimic binding to CD4. Despite extensive hypermutation, the new antibodies shared a consensus sequence of 68 immunoglobulin H (IgH) chain amino acids and arise independently from two related IgH genes. Comparison of the crystal structure of one of the antibodies to the broadly neutralizing antibody VRC01 revealed conservation of the contacts to the HIV spike.",
+    },
+    {
+      Component: Antibody_hpv_10,
+      name: "anti-HPV Antibody",
+      type: PROTEIN_TYPES.antibody,
+      virusTarget: "Human Papillomavirus (HPV)",
+      PDBUrl: "https://www.rcsb.org/structure/6BSP",
+      mass: 96.41, // copied from antibody_hiv
+      atomCount: 6650,
+      radius: 50,
+      numIcosahedronFaces: 1,
       numAsymmetricUnits: 1,
       pathToGLTF: "/models/antibodies/antibody_hiv_10.glb",
       pathToImage: "/models/antibodies/antibody_hiv.webp",
@@ -552,7 +574,7 @@ export const PROTEINS: { [type: string]: Protein[] } = {
       mass: 81.86,
       atomCount: 5355,
       radius: 45,
-      numIcosahedronFaces: 20,
+      numIcosahedronFaces: 1,
       numAsymmetricUnits: 1,
       pathToGLTF: "/models/antibodies/antibody_herpes.glb",
       pathToImage: "/models/antibodies/anti_herpes_antibody.webp",
@@ -905,3 +927,8 @@ export const PROTEINS: { [type: string]: Protein[] } = {
 //   pathToImage: "/models/cells/cell_membrane.jpg",
 //   interactive: true,
 // },
+
+console.log(
+  "🌟🚨 ~ PROTEINS.viruses.sort((a,b)=>b.radius-a.radius)",
+  PROTEINS.viruses.sort((a, b) => b.radius - a.radius)
+);

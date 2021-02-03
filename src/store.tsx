@@ -7,8 +7,9 @@ type SelectedProtein = Protein & {
   api: any;
 };
 
-export type GlobalStateType = {
+type GlobalStateType = {
   worldRadius: number;
+  currentWave: number;
   temperature: number;
   isTooltipMaximized: boolean;
   showHp: boolean;
@@ -18,6 +19,7 @@ export type GlobalStateType = {
   shuffled: number; // random number to trigger useEffect
   scale: number;
   selectedProtein: null | SelectedProtein;
+  setSelectedProtein: (newSelectedProtein: null | SelectedProtein) => void;
   set: (newState: any) => any;
 };
 
@@ -33,10 +35,13 @@ export const useStore = create<GlobalStateType>(
     started: startsStarted,
     loading: !startsStarted,
     worldRadius: 5,
+    currentWave: 0,
+
     temperature: 1,
     shuffled: 0,
     scale: MAX_SCALE,
     selectedProtein: null as null | SelectedProtein,
+    setSelectedProtein: (selectedProtein) => set(() => ({ selectedProtein })),
     set: (newState) => set((state) => ({ ...state, ...newState })),
   })
 );

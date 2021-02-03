@@ -10,20 +10,22 @@ export default function Model(props) {
   const { nodes } = useGLTF("/models/antibodies/antibody_poliovirus_10.glb");
   return (
     <group ref={group} {...props} dispose={null}>
-      <mesh
-        material={nodes["1fptcif_P_Gaussian_surface"].material}
-        geometry={nodes["1fptcif_P_Gaussian_surface"].geometry}
-      />
-      <mesh
-        material={nodes["1fptcif_L_Gaussian_surface"].material}
-        geometry={nodes["1fptcif_L_Gaussian_surface"].geometry}
-      />
-      <mesh
-        material={nodes["1fptcif_H_Gaussian_surface"].material}
-        geometry={nodes["1fptcif_H_Gaussian_surface"].geometry}
-      />
+      <group position={[-21.83, -44.89, -59.32]}>
+        <mesh
+          material={nodes["1fptcif_H_Gaussian_surface"].material}
+          geometry={nodes["1fptcif_H_Gaussian_surface"].geometry}
+        />
+        <mesh
+          material={nodes["1fptcif_L_Gaussian_surface"].material}
+          geometry={nodes["1fptcif_L_Gaussian_surface"].geometry}
+        />
+        <mesh
+          material={nodes["1fptcif_P_Gaussian_surface"].material}
+          geometry={nodes["1fptcif_P_Gaussian_surface"].geometry}
+        />
+      </group>
     </group>
   );
 }
 
-// useGLTF.preload("/models/antibodies/antibody_poliovirus_10.glb");
+useGLTF.preload("/models/antibodies/antibody_poliovirus_10.glb");

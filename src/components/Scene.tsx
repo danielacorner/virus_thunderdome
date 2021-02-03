@@ -9,7 +9,7 @@ import { Water } from "./Water";
 import { ScaleIndicator } from "./ScaleIndicator";
 import { SelectedParticleDisplay } from "./SelectedParticleDisplay";
 import Cells from "./Cells";
-import { StorylineSequence } from "./StorylineSequence";
+import { StorylineAndIncomingViruses } from "./StorylineSequence";
 
 const Scene = () => {
   // audio track
@@ -28,7 +28,7 @@ const Scene = () => {
         <SelectedParticleDisplay />
         <ScaleIndicator />
         <Cells />
-        <StorylineSequence />
+        <StorylineAndIncomingViruses />
       </Physics>
       {/* <Effects /> */}
     </>

@@ -5,20 +5,39 @@ import { SingleParticleMounted } from "./particle/SingleParticleMounted";
 import { useStore } from "../store";
 import { useMount } from "../utils/utils";
 
-const WAVES = [
-  {
-    startTime: 6 * 1000,
-    virus: PROTEINS.viruses.find((v) => v.name === "Poliovirus"),
-    numViruses: 10,
-  },
-  {
-    startTime: 24 * 1000,
-    virus: PROTEINS.viruses.find(
-      (v) => v.name === "Penaeus vannamei nodavirus"
-    ),
-    numViruses: 12,
-  },
-];
+export function StorylineAndIncomingViruses() {
+  const [viruses, setViruses] = useState([]);
+  const position = [0, 5 * 2, 0];
+  return (
+    <>
+      <StorylineSequence {...{ setViruses }} />
+      {viruses.map((ab, idx) => (
+        <SingleParticleMounted
+          {...{
+            ...ab,
+            position,
+            key: idx,
+          }}
+        />
+      ))}
+    </>
+  );
+}
+
+// const WAVES = [
+//   {
+//     startTime: 1 * 1000,
+//     virus: PROTEINS.viruses.find((v) => v.name === "Poliovirus"),
+//     numViruses: 10,
+//   },
+//   // {
+//   //   startTime: 24 * 1000,
+//   //   virus: PROTEINS.viruses.find(
+//   //     (v) => v.name === "Human Papillomavirus (HPV)"
+//   //   ),
+//   //   numViruses: 12,
+//   // },
+// ];
 
 /**
  * 1. the game starts at the antibody scale (0.03)
@@ -36,34 +55,45 @@ const WAVES = [
  * 4. scale out more and repeat
  *
  */
-export function StorylineSequence() {
-  const worldRadius = useStore((s) => s.worldRadius);
-  const [viruses, setViruses] = useState([]);
-  const addVirus = (virus) => setViruses((prev) => [...prev, virus]);
+export function StorylineSequence({ setViruses }) {
+  const set = useStore((s) => s.set);
+  const addVirus = (newVirus) => setViruses((p) => [...p, newVirus]);
 
-  // 1. first, animate the scale to 0.01
-  useSpringAfterTimeout({
-    startTime: WAVES[0].startTime,
-    // startTime: 60 * 1000,
-    property: "scale",
-    target: 0.01,
-    springConfig: { mass: 1, tension: 170, friction: 50, precision: 0.0001 },
-  });
+  // // 1. first, animate the scale to 0.01
+  // useSpringAfterTimeout({
+  //   startTime: WAVES[0].startTime,
+  //   // startTime: 60 * 1000,
+  //   property: "scale",
+  //   target: 0.01,
+  //   springConfig: { mass: 1, tension: 170, friction: 50, precision: 0.0001 },
+  // });
 
-  // viruses appear from the top
-  const position = [0, worldRadius, 0];
-  // 2. the first wave of viruses appear!
-  // they appear one at a time, over a period of 1 minute
-  const APPEAR_INTERVAL = 1000;
-  useMount(() => {
-    WAVES.forEach((wave) => {
-      [...Array(wave.numViruses)].forEach((_, idx) => {
-        setTimeout(() => {
-          addVirus(wave.virus);
-        }, wave.startTime + (idx + 1) * APPEAR_INTERVAL);
-      });
-    });
-  });
+  // // viruses appear from the top
+  // // 2. each wave of viruses appears in sequence!
+  // // they appear one at a time, over a period of 1 minute
+  // const APPEAR_INTERVAL = 2000;
+  // useMount(() => {
+  //   WAVES.forEach((wave, idx) => {
+  //     setTimeout(() => {
+  //       set({ currentWave: idx });
+  //     }, wave.startTime);
+
+  //     [...Array(wave.numViruses)].forEach((_, idx) => {
+  //       setTimeout(() => {
+  //         addVirus(wave.virus);
+  //       }, wave.startTime + (idx + 1) * APPEAR_INTERVAL);
+  //     });
+  //   });
+  // });
+
+  // 2.1. animate the scale to 0.01
+  // useSpringAfterTimeout({
+  //   startTime: WAVES[1].startTime,
+  //   // startTime: 60 * 1000,
+  //   property: "scale",
+  //   target: 0.006,
+  //   springConfig: { mass: 1, tension: 170, friction: 50, precision: 0.0001 },
+  // });
 
   // animate something once after a timeout
   // useAnimateAfterTimeout({
@@ -82,17 +112,5 @@ export function StorylineSequence() {
   //   };
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [set]);
-  return (
-    <>
-      {viruses.map((ab, idx) => (
-        <SingleParticleMounted
-          {...{
-            ...ab,
-            position,
-            key: idx,
-          }}
-        />
-      ))}
-    </>
-  );
+  return <></>;
 }
