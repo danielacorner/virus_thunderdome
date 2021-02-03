@@ -119,9 +119,9 @@ function InteractiveFloorWithHPIndicator({
     // rotation: [-Math.PI / 2, 0, 0],
     ...rest,
     onCollide: (event) => {
-      const { body:collidingBody, target:thisElement } = event as any;
+      const { body:collidingBody } = event as any;
       // if it's hit by a virus... derease hp
-      const virusCollisionTarget = collidingBody.name&&PROTEINS.viruses.find(v=>v.name===collidingBody.name)
+      const virusCollisionTarget = collidingBody?.name&&PROTEINS.viruses.find(v=>v.name===collidingBody.name)
       if(virusCollisionTarget){
         setPlayerHp(prev=>prev-virusCollisionTarget.radius)
       }
@@ -138,7 +138,7 @@ function InteractiveFloorWithHPIndicator({
       <Html>
         <HPIndicatorStyles {...{playerHpPct}}>
           <div className="hpBar">
-            <div className="hp"></div>
+            <div className="hp"/>
           </div>
         </HPIndicatorStyles>
       </Html>

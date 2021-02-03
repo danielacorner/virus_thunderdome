@@ -79,10 +79,10 @@ export function StorylineSequence({ setViruses }) {
         set({ currentWave: idx+1 });
       }, wave.startTime);
 
-      [...Array(wave.numViruses)].forEach((_, idx) => {
+      [...Array(wave.numViruses)].forEach((_, idx2) => {
         setTimeout(() => {
           addVirus(wave.virus);
-        }, wave.startTime + (idx + 1) * APPEAR_INTERVAL);
+        }, wave.startTime + (idx2 + 1) * APPEAR_INTERVAL);
       });
     });
   });
