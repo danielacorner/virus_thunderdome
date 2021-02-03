@@ -8,7 +8,7 @@ import { useMount } from "../../utils/utils";
 import { useSpring, a } from "react-spring/three";
 import { HighlightParticle } from "../Shapes/HighlightParticle";
 import { Protein, PROTEINS, PROTEIN_TYPES } from "../../utils/PROTEINS";
-import { HTMLOverlay } from "./HTMLOverlay";
+import { HtmlOverlay } from "./HtmlOverlay";
 
 export type ParticleProps = Protein & {
   position: [number, number, number];
@@ -40,8 +40,7 @@ function InteractiveParticle(props: ParticleProps) {
     type,
   } = props;
 
-  // const set = useStore((s) => s.set);
-  const set = useStore((s) => s.set);
+  const setSelectedProtein = useStore((s) => s.setSelectedProtein);
   const scale = useStore((s) => s.scale);
   const isTooltipMaximized = useStore((s) => s.isTooltipMaximized);
   const selectedProtein = useStore((s) => s.selectedProtein);
@@ -58,16 +57,17 @@ function InteractiveParticle(props: ParticleProps) {
   // virus hp scales with radius (~= number of antibodies required to cover its surface)
   const initialHp = props.radius;
   const [virusHp, setVirusHp] = useState(initialHp);
+  const [isDecaying, setIsDecaying] = useState(false);
 
   // decay the virus when hp runs out
   const isVirus = type === PROTEIN_TYPES.virus;
   useEffect(() => {
-    if (isVirus && virusHp <= 0) {
+    if (isVirus && virusHp <= 0 && !isDecaying) {
       window.setTimeout(() => {
         setIsDecaying(true);
       }, 0);
     }
-  }, [virusHp, isVirus]);
+  }, [virusHp, isVirus, isDecaying]);
 
   const [ref, api] = useConvexPolyhedron(() => ({
     // TODO: accurate mass data from PDB --> need to multiply by number of residues or something else? doesn't seem right
@@ -78,16 +78,20 @@ function InteractiveParticle(props: ParticleProps) {
     args: new THREE.IcosahedronGeometry(1, detail),
   }));
 
-  const [isDecaying, setIsDecaying] = useState(false);
-
   // start decaying after lifespan elapses,
   // then unmount after lifespan+decay time
   useMount(() => {
+    let timer;
     if (lifespan) {
-      window.setTimeout(() => {
+      timer = window.setTimeout(() => {
         setIsDecaying(true);
       }, lifespan);
     }
+    return () => {
+      if (timer) {
+        window.clearTimeout(timer);
+      }
+    };
   });
 
   const springProps = useSpring({
@@ -113,17 +117,16 @@ function InteractiveParticle(props: ParticleProps) {
     },
   });
 
-  useJitterParticle({
-    mass,
-    ref,
-    api,
-  });
+  // useJitterParticle({
+  //   mass,
+  //   ref,
+  //   api,
+  // });
 
   // when temperature changes, change particle velocity
   useChangeVelocityWhenTemperatureChanges({ mass, api });
 
-  const handleSetSelectedProtein = () =>
-    set({ selectedProtein: { ...props, api } });
+  const handleSetSelectedProtein = () => setSelectedProtein({ ...props, api });
 
   const pointerDownTime = useRef(0);
 
@@ -152,7 +155,7 @@ function InteractiveParticle(props: ParticleProps) {
       <meshStandardMaterial opacity={0.1} transparent={true} />
       {isSelectedProtein && !isTooltipMaximized ? <HighlightParticle /> : null}
       <Component />
-      <HTMLOverlay
+      <HtmlOverlay
         {...{
           name,
           lifespan,
@@ -218,18 +221,18 @@ function handleCollide(
 
     // if it's the antibody,
     if (isAntibodyCollidingWithItsTargetVirus) {
-      // unmount the antibody
-      setTimeout(() => {
-        unmount();
-      });
+      // unmount the antibody immediately
+      // setTimeout(() => {
+      unmount();
+      // });
       // if it's the virus, ?
     } else if (isVirusTargetCollidingWithItsAntibody) {
       // decrease the virus's HP
-      setTimeout(() => {
-        setVirusHp((prev) => {
-          return prev - 10;
-        });
+      // setTimeout(() => {
+      setVirusHp((prev) => {
+        return prev - 10;
       });
+      // });
     }
   };
 }

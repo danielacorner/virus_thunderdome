@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useStore } from "../store";
 import styled from "styled-components/macro";
 import { Close, Fullscreen, FullscreenExit } from "@material-ui/icons";

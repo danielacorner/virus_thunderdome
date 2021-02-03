@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useMount } from "../../utils/utils";
-import { HTML } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 import styled from "styled-components/macro";
 import { PROTEIN_TYPES } from "../../utils/PROTEINS";
 import { useStore } from "../../store";
 
-export function HTMLOverlay({ name, lifespan, type, virusHpPct }) {
+export function HtmlOverlay({ name, lifespan, type, virusHpPct }) {
   const showHp = useStore((s) => s.showHp);
   const [mounted, setMounted] = useState(false);
   useMount(() => {
@@ -16,25 +16,25 @@ export function HTMLOverlay({ name, lifespan, type, virusHpPct }) {
   });
 
   return showHp ? (
-    <HTML>
-      <HTMLOverlayStyles {...{ mounted, lifespan, type, virusHpPct }}>
+    <Html>
+      <HtmlOverlayStyles {...{ mounted, lifespan, type, virusHpPct }}>
         <div className="name">{name}</div>
         <div className="hpBar">
           <div className="hp"></div>
         </div>
-      </HTMLOverlayStyles>
-    </HTML>
+      </HtmlOverlayStyles>
+    </Html>
   ) : null;
 }
 
-type HTMLOverlayProps = {
+type HtmlOverlayProps = {
   type: keyof typeof PROTEIN_TYPES;
   virusHpPct: number;
   lifespan: number;
   mounted: boolean;
 };
 
-const HTMLOverlayStyles = styled.div<HTMLOverlayProps>`
+const HtmlOverlayStyles = styled.div<HtmlOverlayProps>`
   pointer-events: none;
   display: flex;
   flex-direction: column;
