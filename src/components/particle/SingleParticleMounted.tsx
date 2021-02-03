@@ -13,4 +13,3 @@ export function SingleParticleMounted(props) {
     />
   ) : null;
 }
-SingleParticleMounted.whyDidYouRender = true;
