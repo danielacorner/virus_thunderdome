@@ -27,7 +27,7 @@ export function StorylineAndIncomingViruses() {
 
 const WAVES = [
   {
-    startTime: 1 * 1000,
+    startTime: 5 * 1000,
     virus: PROTEINS.viruses.find((v) => v.name === "Poliovirus"),
     numViruses: 10,
   },
@@ -76,7 +76,7 @@ export function StorylineSequence({ setViruses }) {
   useMount(() => {
     WAVES.forEach((wave, idx) => {
       setTimeout(() => {
-        set({ currentWave: idx });
+        set({ currentWave: idx+1 });
       }, wave.startTime);
 
       [...Array(wave.numViruses)].forEach((_, idx) => {

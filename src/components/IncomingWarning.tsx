@@ -9,7 +9,9 @@ export function IncomingWarning() {
   // then stop after a bit
   const [isIncoming, setIsIncoming] = useState(false);
   useEffect(() => {
+    if(currentWave){
     setIsIncoming(true);
+    }
     setTimeout(() => {
       setIsIncoming(false);
     }, 6 * 1000);
@@ -17,7 +19,7 @@ export function IncomingWarning() {
 
   return isIncoming ? (
     <IncomingStyles>
-      <div className="text">Wave {currentWave + 1} Incoming!!</div>
+      <div className="text">Wave {currentWave} Incoming!!</div>
     </IncomingStyles>
   ) : null;
 }
