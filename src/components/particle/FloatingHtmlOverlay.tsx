@@ -20,7 +20,7 @@ export function FloatingHtmlOverlay({ name, lifespan, type, virusHpPct }) {
       <HtmlOverlayStyles {...{ mounted, lifespan, type, virusHpPct }}>
         <div className="name">{name}</div>
         <div className="hpBar">
-          <div className="hp"></div>
+          <div className="hp"/>
         </div>
       </HtmlOverlayStyles>
     </Html>

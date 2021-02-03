@@ -928,7 +928,7 @@ export const PROTEINS: { [type: string]: Protein[] } = {
 //   interactive: true,
 // },
 
-console.log(
-  "🌟🚨 ~ PROTEINS.viruses.sort((a,b)=>b.radius-a.radius)",
-  PROTEINS.viruses.sort((a, b) => b.radius - a.radius)
-);
+// console.log(
+//   "🌟🚨 ~ PROTEINS.viruses.sort((a,b)=>b.radius-a.radius)",
+//   PROTEINS.viruses.sort((a, b) => b.radius - a.radius)
+// );
