@@ -6,7 +6,6 @@ import * as THREE from "three";
 import { useChangeVelocityWhenTemperatureChanges } from "../Shapes/useChangeVelocityWhenTemperatureChanges";
 import { useMount } from "../../utils/utils";
 import { useSpring, a } from "react-spring/three";
-import { HighlightParticle } from "../Shapes/HighlightParticle";
 import { Protein, PROTEINS, PROTEIN_TYPES } from "../../utils/PROTEINS";
 import { FloatingHtmlOverlay } from "./FloatingHtmlOverlay";
 
@@ -153,7 +152,7 @@ function InteractiveParticle(props: ParticleProps) {
       onPointerUp={handlePointerUp}
     >
       <meshStandardMaterial opacity={0.1} transparent={true} />
-      {isSelectedProtein && !isTooltipMaximized ? <HighlightParticle /> : null}
+      {/* {isSelectedProtein && !isTooltipMaximized ? <HighlightParticle /> : null} */}
       <Component />
       <FloatingHtmlOverlay
         {...{
