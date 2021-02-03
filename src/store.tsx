@@ -35,7 +35,7 @@ export const useStore = create<GlobalStateType>(
     started: startsStarted,
     loading: !startsStarted,
     worldRadius: 5,
-    currentWave: 0,
+    currentWave: 1,
 
     temperature: 1,
     shuffled: 0,
