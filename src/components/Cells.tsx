@@ -49,7 +49,6 @@ export default function Cells() {
 function Cell({ Component: CellComponent, antibody, position }) {
   const [antibodies, setAntibodies] = useState([]);
 
-  console.log("🌟🚨 ~ Cell ~ antibodies", antibodies);
   return (
     <>
       {antibodies.map((ab, idx) => (
