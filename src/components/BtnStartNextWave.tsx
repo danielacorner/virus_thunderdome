@@ -6,6 +6,7 @@ import { WAVES } from "./WAVES";
 
 export function BtnStartNextWave() {
   const set = useStore((s) => s.set);
+  const started = useStore((s) => s.started);
   const currentWave = useStore((s) => s.currentWave);
   const numDefeatedViruses = useStore((s) => s.numDefeatedViruses);
 
@@ -39,7 +40,7 @@ export function BtnStartNextWave() {
     }
   }, [isWaveIncoming]);
 
-  return (
+  return !started ? null : (
     <NextWaveStyles>
       {isWaveComplete ? (
         <Button
