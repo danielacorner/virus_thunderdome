@@ -1,10 +1,16 @@
-import { PROTEINS } from "../utils/PROTEINS";
+import { Protein, PROTEINS } from "../utils/PROTEINS";
 import { useSpringStoreImmediately } from "./useSpringAfterTimeout";
 
-export const WAVES = [
+type Wave = {
+  virus: Protein;
+  numViruses: number;
+  Spring: Function;
+};
+
+export const WAVES: Wave[] = [
   {
     virus: PROTEINS.viruses.find((v) => v.name === "Poliovirus"),
-    numViruses: 10,
+    numViruses: 6,
     Spring: () => {
       useSpringStoreImmediately({
         property: "scale",
@@ -16,6 +22,16 @@ export const WAVES = [
           precision: 0.0001,
         },
       });
+      useSpringStoreImmediately({
+        property: "ceilingHeight",
+        target: 16,
+        springConfig: {
+          mass: 1,
+          tension: 170,
+          friction: 10,
+          precision: 0.0001,
+        },
+      });
       return null;
     },
   },
@@ -23,7 +39,19 @@ export const WAVES = [
     virus: PROTEINS.viruses.find(
       (v) => v.name === "Human Papillomavirus (HPV)"
     ),
-    numViruses: 12,
-    Spring: null,
+    numViruses: 9,
+    Spring: () => {
+      useSpringStoreImmediately({
+        property: "scale",
+        target: 0.005,
+        springConfig: {
+          mass: 1,
+          tension: 170,
+          friction: 50,
+          precision: 0.0001,
+        },
+      });
+      return null;
+    },
   },
 ];

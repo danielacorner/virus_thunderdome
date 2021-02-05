@@ -18,7 +18,7 @@ type GlobalStateType = {
   loading: boolean;
   started: boolean;
   paused: boolean;
-  wallHeight: number;
+  ceilingHeight: number;
   scale: number;
   selectedProtein: null | SelectedProtein;
   setSelectedProtein: (newSelectedProtein: null | SelectedProtein) => void;
@@ -42,7 +42,7 @@ export const useStore = create<GlobalStateType>(
     incrementNumDefeatedViruses: () =>
       set((state) => ({ numDefeatedViruses: state.numDefeatedViruses + 1 })),
     temperature: 1,
-    wallHeight: 10,
+    ceilingHeight: 10,
     scale: MAX_SCALE,
     selectedProtein: null as null | SelectedProtein,
     setSelectedProtein: (selectedProtein) => set(() => ({ selectedProtein })),

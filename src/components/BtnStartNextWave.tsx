@@ -51,7 +51,7 @@ export function BtnStartNextWave() {
           Next Wave
         </Button>
       ) : isWaveIncoming ? (
-        <div className="incomingText">Wave {currentWave + 1} Incoming!!</div>
+        <div className="incomingText">Wave {currentWave} Incoming!!</div>
       ) : null}
     </NextWaveStyles>
   );

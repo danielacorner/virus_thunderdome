@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useStore } from "../store";
 import { PROTEINS } from "../utils/PROTEINS";
 import { Plane } from "./Shapes/Plane";
@@ -10,14 +10,12 @@ import styled from "styled-components/macro";
 // const colors = niceColors[17];
 const colors = ["#69d2e7", "#a7dbd8", "#e0e4cc", "#f38630", "#fa6900"];
 
-export const CEILING_HEIGHT_MULTIPLIER = 4;
-
 // https://www.npmjs.com/package/nice-color-palettes
 // https://raw.githubusercontent.com/Jam3/nice-color-palettes/HEAD/visualize/1000.png
 // const palette = niceColors[6]; // e.g. => [ "#69d2e7", "#a7dbd8", "#e0e4cc", "#f38630", "#fa6900" ]
 export function Walls() {
   const worldRadius = useStore((state) => state.worldRadius);
-  const ceilingHeight = worldRadius * CEILING_HEIGHT_MULTIPLIER;
+  const ceilingHeight = useStore((state) => state.ceilingHeight);
   const walls = [
     {
       name: "in front",
@@ -75,7 +73,7 @@ export function Walls() {
   return (
     <>
       {walls.map((props, idx) => (
-        <Plane {...props} key={idx} />
+        <Plane {...props} key={JSON.stringify(props.position)} />
       ))}
       <mesh>
         <icosahedronBufferGeometry args={[scalePct * 100, 5]} />
@@ -113,22 +111,24 @@ function InteractiveFloorWithHPIndicator({
   reflect = false,
   ...rest
 }) {
-  const initialPlayerHp = 10000
-  const [playerHp, setPlayerHp] = useState(initialPlayerHp)
+  const initialPlayerHp = 10000;
+  const [playerHp, setPlayerHp] = useState(initialPlayerHp);
   const [ref] = usePlane(() => ({
     // rotation: [-Math.PI / 2, 0, 0],
     ...rest,
     onCollide: (event) => {
-      const { body:collidingBody } = event as any;
+      const { body: collidingBody } = event as any;
       // if it's hit by a virus... derease hp
-      const virusCollisionTarget = collidingBody?.name&&PROTEINS.viruses.find(v=>v.name===collidingBody.name)
-      if(virusCollisionTarget){
-        setPlayerHp(prev=>prev-virusCollisionTarget.radius)
+      const virusCollisionTarget =
+        collidingBody?.name &&
+        PROTEINS.viruses.find((v) => v.name === collidingBody.name);
+      if (virusCollisionTarget) {
+        setPlayerHp((prev) => prev - virusCollisionTarget.radius);
       }
     },
     // position: [-100, -100, -100],
   }));
-  const playerHpPct = playerHp / initialPlayerHp
+  const playerHpPct = playerHp / initialPlayerHp;
   return (
     <mesh ref={ref}>
       <planeGeometry
@@ -136,9 +136,9 @@ function InteractiveFloorWithHPIndicator({
         args={[width, height, widthSegments, heightSegments]}
       />
       <Html>
-        <HPIndicatorStyles {...{playerHpPct}}>
+        <HPIndicatorStyles {...{ playerHpPct }}>
           <div className="hpBar">
-            <div className="hp"/>
+            <div className="hp" />
           </div>
         </HPIndicatorStyles>
       </Html>
@@ -153,6 +153,7 @@ const HPIndicatorStyles = styled.div`
   align-items: center;
   justify-content: center;
   width: 0;
+  margin-top: 6em;
   .name {
     font-size: 8px;
     font-weight: bold;
