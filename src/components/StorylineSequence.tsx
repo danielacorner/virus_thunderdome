@@ -3,6 +3,7 @@ import { SingleParticleMounted } from "./particle/SingleParticleMounted";
 import { useStore } from "../store";
 import { useMount } from "../utils/utils";
 import { WAVES } from "./WAVES";
+import { WAVE_START_DELAY } from "./BtnStartNextWave";
 
 export function StorylineAndIncomingViruses() {
   const [viruses, setViruses] = useState([]);
@@ -30,8 +31,8 @@ function WavesOfViruses({ setViruses }) {
 
   return (
     <>
-      {wavesSoFar.map((waveProps) => (
-        <SingleWave {...{ ...waveProps, setViruses }} />
+      {wavesSoFar.map((waveProps, idx) => (
+        <SingleWave key={idx} {...{ ...waveProps, setViruses }} />
       ))}
     </>
   );
@@ -45,7 +46,7 @@ function SingleWave({ numViruses, virus, setViruses }) {
     [...Array(numViruses)].forEach((_, idx2) => {
       setTimeout(() => {
         addVirus(virus);
-      }, (idx2 + 1) * APPEAR_INTERVAL);
+      }, (idx2 + 1) * APPEAR_INTERVAL + WAVE_START_DELAY);
     });
   });
 
@@ -68,7 +69,7 @@ function SingleWave({ numViruses, virus, setViruses }) {
  * 4. scale out more and repeat
  *
  */
-export function StorylineSequence({}) {
+export function StorylineSequence() {
   // 1. first, animate the scale to 0.01
   // useSpringStoreAfterTimeout({
   //   startTime: WAVES[0].startTime,

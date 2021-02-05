@@ -5,6 +5,8 @@ import { Button } from "@material-ui/core";
 import { WAVES } from "./WAVES";
 import { useGLTF, useProgress } from "@react-three/drei";
 
+export const WAVE_START_DELAY = 1 * 1000;
+
 export function BtnStartNextWave() {
   const set = useStore((s) => s.set);
   const started = useStore((s) => s.started);
@@ -118,7 +120,17 @@ function NextWaveAssets() {
 function NextWaveSprings() {
   const currentWave = useStore((s) => s.currentWave);
   const nextWave = WAVES[currentWave - 1];
-  const { active } = useProgress();
+  const { active: loadingAssets } = useProgress();
+
+  // when assets are done loading, launch the spring after a short timeout (otherwise it gets blocked in production?)
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (!ready && !loadingAssets) {
+      setTimeout(() => {
+        setReady(true);
+      }, WAVE_START_DELAY);
+    }
+  }, [ready, loadingAssets]);
 
   if (!nextWave) {
     return null;
@@ -128,5 +140,5 @@ function NextWaveSprings() {
 
   // some waves animate properties in the store
   // like scale, wallHeight
-  return !active && Spring ? <Spring /> : null;
+  return ready && Spring ? <Spring /> : null;
 }

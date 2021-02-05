@@ -34,7 +34,7 @@ function InteractiveParticle(props: ParticleProps) {
     mass,
     numIcosahedronFaces,
     lifespan = null,
-    unmount = () => {},
+    unmount = () => null,
     name,
     type,
   } = props;
@@ -174,7 +174,7 @@ function handleCollide(
   setVirusHp: React.Dispatch<React.SetStateAction<number>>
 ) {
   return (event) => {
-    const { body, target } = event as any;
+    const { body, target } = event;
 
     // ignore water
     if (!body || !target || body.name === "Water" || target.name === "Water") {
