@@ -37,7 +37,7 @@ function WavesOfViruses({ setViruses }) {
   );
 }
 
-function SingleWave({ numViruses, virus, setViruses, Spring }) {
+function SingleWave({ numViruses, virus, setViruses }) {
   const addVirus = (newVirus) => setViruses((p) => [...p, newVirus]);
 
   const APPEAR_INTERVAL = 1000;
@@ -49,9 +49,7 @@ function SingleWave({ numViruses, virus, setViruses, Spring }) {
     });
   });
 
-  // some waves animate properties in the store
-  // like scale, wallHeight
-  return Spring ? <Spring /> : null;
+  return null;
 }
 
 /**
@@ -70,7 +68,7 @@ function SingleWave({ numViruses, virus, setViruses, Spring }) {
  * 4. scale out more and repeat
  *
  */
-export function StorylineSequence({ setViruses }) {
+export function StorylineSequence({}) {
   // 1. first, animate the scale to 0.01
   // useSpringStoreAfterTimeout({
   //   startTime: WAVES[0].startTime,

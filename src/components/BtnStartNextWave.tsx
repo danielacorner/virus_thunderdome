@@ -3,7 +3,7 @@ import { INITIAL_PLAYER_HP, useStore } from "../store";
 import styled from "styled-components/macro";
 import { Button } from "@material-ui/core";
 import { WAVES } from "./WAVES";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, useProgress } from "@react-three/drei";
 
 export function BtnStartNextWave() {
   const set = useStore((s) => s.set);
@@ -55,11 +55,14 @@ export function BtnStartNextWave() {
             }}
             variant="outlined"
           >
-            Next Wave
+            {currentWave === 0 ? "Ready" : "Next Wave"}
           </Button>
         </>
       ) : isWaveIncoming ? (
-        <div className="incomingText">Wave {currentWave} Incoming!!</div>
+        <>
+          <div className="incomingText">Wave {currentWave} Incoming!!</div>
+          <NextWaveSprings />
+        </>
       ) : null}
     </NextWaveStyles>
   );
@@ -97,10 +100,33 @@ const NextWaveStyles = styled.div`
 function NextWaveAssets() {
   const currentWave = useStore((s) => s.currentWave);
   const nextWave = WAVES[currentWave];
-  if (nextWave?.assets.length > 0) {
+
+  if (!nextWave) {
+    return;
+  }
+
+  const { assets } = nextWave;
+  if (assets.length > 0) {
     nextWave.assets.forEach((assetPath) => {
       useGLTF.preload(assetPath);
     });
   }
+
   return null;
+}
+
+function NextWaveSprings() {
+  const currentWave = useStore((s) => s.currentWave);
+  const nextWave = WAVES[currentWave - 1];
+  const { active } = useProgress();
+
+  if (!nextWave) {
+    return null;
+  }
+
+  const { Spring } = nextWave;
+
+  // some waves animate properties in the store
+  // like scale, wallHeight
+  return !active && Spring ? <Spring /> : null;
 }

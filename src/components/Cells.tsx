@@ -34,14 +34,16 @@ export default function Cells() {
   const worldRadius = useStore((s) => s.worldRadius);
   return (
     <>
-      {CELLS.filter((_, idx) => currentWave >= idx).map((cellProps, idx) => {
-        const position = [
-          2 * (idx - (CELLS.length - 1) / 2),
-          -Number(worldRadius) * 0.75,
-          Number(worldRadius) * 1,
-        ];
-        return <Cell {...{ ...cellProps, position, key: idx }} />;
-      })}
+      {CELLS.filter((_, idx) => idx === 0 || currentWave > idx).map(
+        (cellProps, idx) => {
+          const position = [
+            2 * (idx - (CELLS.length - 1) / 2),
+            -Number(worldRadius) * 0.75,
+            Number(worldRadius) * 1,
+          ];
+          return <Cell {...{ ...cellProps, position, key: idx }} />;
+        }
+      )}
     </>
   );
 }

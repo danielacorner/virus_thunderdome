@@ -41,10 +41,6 @@ function InteractiveParticle(props: ParticleProps) {
 
   const setSelectedProtein = useStore((s) => s.setSelectedProtein);
   const scale = useStore((s) => s.scale);
-  const isTooltipMaximized = useStore((s) => s.isTooltipMaximized);
-  const selectedProtein = useStore((s) => s.selectedProtein);
-  const isSelectedProtein =
-    selectedProtein && selectedProtein.name === props.name;
 
   // each virus has a polyhedron shape, usually icosahedron (20 faces)
   // this shape determines how it bumps into other particles

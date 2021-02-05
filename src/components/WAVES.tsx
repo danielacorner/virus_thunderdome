@@ -4,15 +4,17 @@ import { useSpringStoreImmediately } from "./useSpringAfterTimeout";
 type Wave = {
   virus: Protein;
   numViruses: number;
-  Spring: Function;
+  Spring?: Function;
   assets: string[];
 };
 
 export const WAVES: Wave[] = [
   {
+    // TODO: allow multiple virus types
     virus: PROTEINS.viruses.find((v) => v.name === "Poliovirus"),
     numViruses: 6,
     assets: [
+      "/models/cells/lymphocyte.glb",
       "/models/viruses/poliovirus_50.glb",
       "/models/antibodies/antibody_poliovirus_10.glb",
     ],
@@ -46,6 +48,7 @@ export const WAVES: Wave[] = [
     ),
     numViruses: 9,
     assets: [
+      "/models/cells/monocyte.glb",
       "/models/viruses/hpv_100.glb",
       "/models/antibodies/antibody_hpv_10.glb",
     ],
