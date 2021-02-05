@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useStore } from "../store";
+import React from "react";
+import { INITIAL_PLAYER_HP, useStore } from "../store";
 import { PROTEINS } from "../utils/PROTEINS";
 import { Plane } from "./Shapes/Plane";
 import { useScalePercent } from "./useScalePercent";
@@ -111,8 +111,8 @@ function InteractiveFloorWithHPIndicator({
   reflect = false,
   ...rest
 }) {
-  const initialPlayerHp = 10000;
-  const [playerHp, setPlayerHp] = useState(initialPlayerHp);
+  const set = useStore((s) => s.set);
+  const playerHp = useStore((s) => s.playerHp);
   const [ref] = usePlane(() => ({
     // rotation: [-Math.PI / 2, 0, 0],
     ...rest,
@@ -123,12 +123,12 @@ function InteractiveFloorWithHPIndicator({
         collidingBody?.name &&
         PROTEINS.viruses.find((v) => v.name === collidingBody.name);
       if (virusCollisionTarget) {
-        setPlayerHp((prev) => prev - virusCollisionTarget.radius);
+        set({ playerHp: playerHp - virusCollisionTarget.radius });
       }
     },
     // position: [-100, -100, -100],
   }));
-  const playerHpPct = playerHp / initialPlayerHp;
+  const playerHpPct = playerHp / INITIAL_PLAYER_HP;
   return (
     <mesh ref={ref}>
       <planeGeometry

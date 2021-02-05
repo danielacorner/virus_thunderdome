@@ -14,6 +14,7 @@ type GlobalStateType = {
   incrementNumDefeatedViruses: () => any;
   temperature: number;
   isTooltipMaximized: boolean;
+  playerHp: number;
   showHp: boolean;
   loading: boolean;
   started: boolean;
@@ -27,12 +28,15 @@ type GlobalStateType = {
 
 const startsStarted = /* false && */ process.env.NODE_ENV === "development";
 
+export const INITIAL_PLAYER_HP = 10000;
+
 // zustand https://github.com/pmndrs/zustand
 // with typescript https://react-tracked.js.org/docs/tutorial-zustand-01/
 export const useStore = create<GlobalStateType>(
   (set): GlobalStateType => ({
     isTooltipMaximized: false,
     paused: false,
+    playerHp: INITIAL_PLAYER_HP,
     showHp: true,
     started: startsStarted,
     loading: !startsStarted,

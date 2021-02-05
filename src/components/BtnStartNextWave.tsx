@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useStore } from "../store";
+import { INITIAL_PLAYER_HP, useStore } from "../store";
 import styled from "styled-components/macro";
 import { Button } from "@material-ui/core";
 import { WAVES } from "./WAVES";
@@ -22,8 +22,11 @@ export function BtnStartNextWave() {
     if (numDefeatedViruses === totalVirusesSoFar && !isWaveComplete) {
       setTimeout(() => {
         setIsWaveComplete(true);
+        // restore full HP
+        set({ playerHp: INITIAL_PLAYER_HP });
       }, 1000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [numDefeatedViruses, totalVirusesSoFar, isWaveComplete]);
 
   // stop showing "incoming!!" after a bit
