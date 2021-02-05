@@ -97,7 +97,6 @@ const NextWaveStyles = styled.div`
 function NextWaveAssets() {
   const currentWave = useStore((s) => s.currentWave);
   const nextWave = WAVES[currentWave];
-  console.log("🌟🚨 ~ NextWaveAssets ~ nextWave", nextWave);
   if (nextWave?.assets.length > 0) {
     nextWave.assets.forEach((assetPath) => {
       useGLTF.preload(assetPath);
