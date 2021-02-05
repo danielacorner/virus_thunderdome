@@ -3,6 +3,7 @@ import { INITIAL_PLAYER_HP, useStore } from "../store";
 import styled from "styled-components/macro";
 import { Button } from "@material-ui/core";
 import { WAVES } from "./WAVES";
+import { useGLTF } from "@react-three/drei";
 
 export function BtnStartNextWave() {
   const set = useStore((s) => s.set);
@@ -43,17 +44,20 @@ export function BtnStartNextWave() {
   return !started ? null : (
     <NextWaveStyles>
       {isWaveComplete ? (
-        <Button
-          style={{ padding: "0.25em 3em", pointerEvents: "auto" }}
-          onClick={() => {
-            set({ currentWave: currentWave + 1 });
-            setIsWaveComplete(false);
-            setIsWaveIncoming(true);
-          }}
-          variant="outlined"
-        >
-          Next Wave
-        </Button>
+        <>
+          <NextWaveAssets />
+          <Button
+            style={{ padding: "0.25em 3em", pointerEvents: "auto" }}
+            onClick={() => {
+              set({ currentWave: currentWave + 1 });
+              setIsWaveComplete(false);
+              setIsWaveIncoming(true);
+            }}
+            variant="outlined"
+          >
+            Next Wave
+          </Button>
+        </>
       ) : isWaveIncoming ? (
         <div className="incomingText">Wave {currentWave} Incoming!!</div>
       ) : null}
@@ -89,3 +93,15 @@ const NextWaveStyles = styled.div`
     }
   }
 `;
+
+function NextWaveAssets() {
+  const currentWave = useStore((s) => s.currentWave);
+  const nextWave = WAVES[currentWave];
+  console.log("🌟🚨 ~ NextWaveAssets ~ nextWave", nextWave);
+  if (nextWave.assets.length > 0) {
+    nextWave.assets.forEach((assetPath) => {
+      useGLTF.preload(assetPath);
+    });
+  }
+  return null;
+}

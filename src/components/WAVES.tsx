@@ -5,12 +5,17 @@ type Wave = {
   virus: Protein;
   numViruses: number;
   Spring: Function;
+  assets: string[];
 };
 
 export const WAVES: Wave[] = [
   {
     virus: PROTEINS.viruses.find((v) => v.name === "Poliovirus"),
     numViruses: 6,
+    assets: [
+      "/models/viruses/poliovirus_50.glb",
+      "/models/antibodies/antibody_poliovirus_10.glb",
+    ],
     Spring: () => {
       useSpringStoreImmediately({
         property: "scale",
@@ -40,6 +45,10 @@ export const WAVES: Wave[] = [
       (v) => v.name === "Human Papillomavirus (HPV)"
     ),
     numViruses: 9,
+    assets: [
+      "/models/viruses/hpv_100.glb",
+      "/models/antibodies/antibody_hpv_10.glb",
+    ],
     Spring: () => {
       useSpringStoreImmediately({
         property: "scale",
