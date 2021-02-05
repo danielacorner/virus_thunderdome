@@ -11,14 +11,13 @@ export function BtnStartNextWave() {
 
   // when the wave ends, show the "next wave" button,
   const [isWaveComplete, setIsWaveComplete] = useState(true);
-  // TODO: detect wave complete (num viruses === 0)
 
-  const wavesSoFar = WAVES.slice(0, currentWave + 1);
+  // complete the wave when we've defeated all viruses so far
+  const wavesSoFar = WAVES.slice(0, currentWave);
   const totalVirusesSoFar = wavesSoFar.reduce(
     (acc, cur) => acc + cur.numViruses,
     0
   );
-
   useEffect(() => {
     if (numDefeatedViruses === totalVirusesSoFar && !isWaveComplete) {
       setTimeout(() => {
@@ -27,30 +26,35 @@ export function BtnStartNextWave() {
     }
   }, [numDefeatedViruses, totalVirusesSoFar, isWaveComplete]);
 
-  // when the wave changes, show "incoming!!",
-  // then stop after a bit
+  // stop showing "incoming!!" after a bit
   const [isWaveIncoming, setIsWaveIncoming] = useState(false);
   useEffect(() => {
-    if (currentWave) {
-      setIsWaveIncoming(true);
+    if (isWaveIncoming) {
+      setTimeout(() => {
+        setIsWaveIncoming(false);
+      }, 3 * 1000);
     }
-  }, [currentWave]);
+  }, [isWaveIncoming]);
 
-  return isWaveComplete ? (
+  return (
     <NextWaveStyles>
-      {isWaveIncoming ? (
-        <div className="incomingText">Wave {currentWave + 1} Incoming!!</div>
-      ) : (
+      {isWaveComplete ? (
         <Button
           style={{ padding: "0.25em 3em", pointerEvents: "auto" }}
-          onClick={() => set({ currentWave: currentWave + 1 })}
+          onClick={() => {
+            set({ currentWave: currentWave + 1 });
+            setIsWaveComplete(false);
+            setIsWaveIncoming(true);
+          }}
           variant="outlined"
         >
           Next Wave
         </Button>
-      )}
+      ) : isWaveIncoming ? (
+        <div className="incomingText">Wave {currentWave + 1} Incoming!!</div>
+      ) : null}
     </NextWaveStyles>
-  ) : null;
+  );
 }
 const NextWaveStyles = styled.div`
   font-size: 2em;
