@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import { PROTEINS } from "../utils/PROTEINS";
-import { useSpringAfterTimeout } from "./useSpringAfterTimeout";
 import { SingleParticleMounted } from "./particle/SingleParticleMounted";
 import { useStore } from "../store";
 import { useMount } from "../utils/utils";
-import { IncomingWarning } from "./IncomingWarning";
+import { WAVES } from "./WAVES";
 
 export function StorylineAndIncomingViruses() {
   const [viruses, setViruses] = useState([]);
   const position = [0, 5 * 2, 0];
   return (
     <>
-      <StorylineSequence {...{ setViruses }} />
+      {/* <StorylineSequence {...{ setViruses }} /> */}
+      <WavesOfViruses {...{ setViruses }} />
       {viruses.map((ab, idx) => (
         <SingleParticleMounted
           {...{
@@ -25,20 +24,35 @@ export function StorylineAndIncomingViruses() {
   );
 }
 
-const WAVES = [
-  {
-    startTime: 5 * 1000,
-    virus: PROTEINS.viruses.find((v) => v.name === "Poliovirus"),
-    numViruses: 10,
-  },
-  {
-    startTime: 24 * 1000,
-    virus: PROTEINS.viruses.find(
-      (v) => v.name === "Human Papillomavirus (HPV)"
-    ),
-    numViruses: 12,
-  },
-];
+function WavesOfViruses({ setViruses }) {
+  const currentWave = useStore((s) => s.currentWave);
+  const wavesSoFar = WAVES.slice(0, currentWave);
+
+  return (
+    <>
+      {wavesSoFar.map((waveProps) => (
+        <SingleWave {...{ ...waveProps, setViruses }} />
+      ))}
+    </>
+  );
+}
+
+function SingleWave({ numViruses, virus, setViruses, Spring }) {
+  const addVirus = (newVirus) => setViruses((p) => [...p, newVirus]);
+
+  const APPEAR_INTERVAL = 1000;
+  useMount(() => {
+    [...Array(numViruses)].forEach((_, idx2) => {
+      setTimeout(() => {
+        addVirus(virus);
+      }, (idx2 + 1) * APPEAR_INTERVAL);
+    });
+  });
+
+  // some waves animate properties in the store
+  // like scale, wallHeight
+  return Spring ? <Spring /> : null;
+}
 
 /**
  * 1. the game starts at the antibody scale (0.03)
@@ -57,38 +71,17 @@ const WAVES = [
  *
  */
 export function StorylineSequence({ setViruses }) {
-  const set = useStore((s) => s.set);
-  const addVirus = (newVirus) => setViruses((p) => [...p, newVirus]);
-
   // 1. first, animate the scale to 0.01
-  useSpringAfterTimeout({
-    startTime: WAVES[0].startTime,
-    // startTime: 60 * 1000,
-    property: "scale",
-    target: 0.01,
-    springConfig: { mass: 1, tension: 170, friction: 50, precision: 0.0001 },
-  });
-
-  // viruses appear from the top
-  // 2. each wave of viruses appears in sequence!
-  // they appear one at a time, over a period of 1 minute
-  const APPEAR_INTERVAL = 2000;
-  useMount(() => {
-    WAVES.forEach((wave, idx) => {
-      setTimeout(() => {
-        set({ currentWave: idx+1 });
-      }, wave.startTime);
-
-      [...Array(wave.numViruses)].forEach((_, idx2) => {
-        setTimeout(() => {
-          addVirus(wave.virus);
-        }, wave.startTime + (idx2 + 1) * APPEAR_INTERVAL);
-      });
-    });
-  });
+  // useSpringStoreAfterTimeout({
+  //   startTime: WAVES[0].startTime,
+  //   // startTime: 60 * 1000,
+  //   property: "scale",
+  //   target: 0.01,
+  //   springConfig: { mass: 1, tension: 170, friction: 50, precision: 0.0001 },
+  // });
 
   // 2.1. animate the scale to 0.01
-  // useSpringAfterTimeout({
+  // useSpringStoreAfterTimeout({
   //   startTime: WAVES[1].startTime,
   //   // startTime: 60 * 1000,
   //   property: "scale",

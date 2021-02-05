@@ -28,39 +28,72 @@ import { useMount } from "../utils/utils";
 //   });
 // }
 /** animate a value to a target value over a certain time */
-export function useSpringAfterTimeout({
-	target,
-	startTime,
-	property,
-	springConfig,
+export function useSpringStoreAfterTimeout({
+  target,
+  startTime,
+  property,
+  springConfig,
 }: {
-	target: number;
-	startTime: number;
-	property: string;
-	springConfig: any;
+  target: number;
+  startTime: number;
+  property: string;
+  springConfig: any;
 }) {
-	const set = useStore((s) => s.set);
-	const current = useStore((s) => s[property]);
-	const firstValue = useRef(current).current;
-	const delta = target - firstValue;
+  const set = useStore((s) => s.set);
+  const current = useStore((s) => s[property]);
+  const firstValue = useRef(current).current;
+  const delta = target - firstValue;
 
-	const [animating, setAnimating] = useState(0);
+  const [animating, setAnimating] = useState(0);
 
-	// https://codesandbox.io/s/react-spring-v9-rc-6hi1y?file=/src/index.js:983-1012
-	// set up a spring to bounce from 0 to 1
-	// set the stored value based on this progress %
-	useSpring({
-		progress: animating,
-		config: springConfig,
-		onChange({ progress }) {
-			set({ [property]: firstValue + delta * progress });
-		},
-	});
+  // https://codesandbox.io/s/react-spring-v9-rc-6hi1y?file=/src/index.js:983-1012
+  // set up a spring to bounce from 0 to 1
+  // set the stored value based on this progress %
+  useSpring({
+    progress: animating,
+    config: springConfig,
+    onChange({ progress }) {
+      set({ [property]: firstValue + delta * progress });
+    },
+  });
 
-	// start the timer
-	useMount(() => {
-		setTimeout(() => {
-			setAnimating(1);
-		}, startTime);
-	});
+  // start the timer
+  useMount(() => {
+    setTimeout(() => {
+      setAnimating(1);
+    }, startTime);
+  });
+}
+
+export function useSpringStoreImmediately({
+  target,
+  property,
+  springConfig,
+}: {
+  target: number;
+  property: string;
+  springConfig: any;
+}) {
+  const set = useStore((s) => s.set);
+  const current = useStore((s) => s[property]);
+  const firstValue = useRef(current).current;
+  const delta = target - firstValue;
+
+  const [animating, setAnimating] = useState(0);
+
+  // https://codesandbox.io/s/react-spring-v9-rc-6hi1y?file=/src/index.js:983-1012
+  // set up a spring to bounce from 0 to 1
+  // set the stored value based on this progress %
+  useSpring({
+    progress: animating,
+    config: springConfig,
+    onChange({ progress }) {
+      set({ [property]: firstValue + delta * progress });
+    },
+  });
+
+  // start the timer
+  useMount(() => {
+    setAnimating(1);
+  });
 }

@@ -54,7 +54,7 @@ function InteractiveParticle(props: ParticleProps) {
   const mockMass = 10 ** -5 * volumeOfSphere;
 
   // virus hp scales with radius (~= number of antibodies required to cover its surface)
-  const initialHp = props.radius;
+  const initialHp = props.radius / 4;
   const [virusHp, setVirusHp] = useState(initialHp);
   const [isDecaying, setIsDecaying] = useState(false);
 
@@ -93,6 +93,10 @@ function InteractiveParticle(props: ParticleProps) {
     };
   });
 
+  const incrementNumDefeatedViruses = useStore(
+    (s) => s.incrementNumDefeatedViruses
+  );
+
   const springProps = useSpring({
     scale: [
       scale * (isDecaying ? 0 : 1),
@@ -111,6 +115,9 @@ function InteractiveParticle(props: ParticleProps) {
       // TODO: if type === PROTEIN_TYPES.antibody
       // TODO: else if type === PROTEIN_TYPES.virus
       if (isDecayed) {
+        if (type === PROTEIN_TYPES.virus) {
+          incrementNumDefeatedViruses();
+        }
         unmount();
       }
     },

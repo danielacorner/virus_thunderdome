@@ -10,13 +10,15 @@ type SelectedProtein = Protein & {
 type GlobalStateType = {
   worldRadius: number;
   currentWave: number;
+  numDefeatedViruses: number;
+  incrementNumDefeatedViruses: () => any;
   temperature: number;
   isTooltipMaximized: boolean;
   showHp: boolean;
   loading: boolean;
   started: boolean;
   paused: boolean;
-  shuffled: number; // random number to trigger useEffect
+  wallHeight: number;
   scale: number;
   selectedProtein: null | SelectedProtein;
   setSelectedProtein: (newSelectedProtein: null | SelectedProtein) => void;
@@ -35,10 +37,12 @@ export const useStore = create<GlobalStateType>(
     started: startsStarted,
     loading: !startsStarted,
     worldRadius: 5,
-    currentWave: 1,
-
+    currentWave: 0,
+    numDefeatedViruses: 0,
+    incrementNumDefeatedViruses: () =>
+      set((state) => ({ numDefeatedViruses: state.numDefeatedViruses + 1 })),
     temperature: 1,
-    shuffled: 0,
+    wallHeight: 10,
     scale: MAX_SCALE,
     selectedProtein: null as null | SelectedProtein,
     setSelectedProtein: (selectedProtein) => set(() => ({ selectedProtein })),

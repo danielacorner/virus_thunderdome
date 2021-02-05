@@ -8,7 +8,7 @@ import { LoadingIndicator } from "./components/LoadingIndicator";
 import { useMount } from "./utils/utils";
 import { render } from "react-dom";
 import MemoryStats from "react-memorystats";
-import { IncomingWarning } from "./components/IncomingWarning";
+import { BtnStartNextWave } from "./components/BtnStartNextWave";
 
 function App() {
   useMount(() => {
@@ -23,7 +23,7 @@ function App() {
       <LazyLoadedScene />
       <div id="memoryStats"></div>
       <Tooltip />
-      <IncomingWarning />
+      <BtnStartNextWave />
       {/* <GuidedTour /> */}
       {/* <SaveControlsSettingsToLocalStorage /> */}
     </div>
@@ -61,11 +61,9 @@ function LazyLoadedScene() {
         }}
       >
         <Typography style={{ textAlign: "center" }} variant="h3">
-          Virus{" "}
-          <span role="img" aria-label="">
-            🦠
-          </span>{" "}
-          Terrarium
+          <div>Virus</div>
+          <div>ThunderDome</div>
+          <div>⚡🦠⚡</div>
         </Typography>
         <div
           style={{
