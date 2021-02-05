@@ -211,6 +211,9 @@ function handleCollide(
       thisComponentVirus && collisionTargetAntibody
     );
 
+    // TODO: if it's a virus hitting the bottom-most wall,
+    // TODO: unmount the virus (freeze its position and decay downwards?)
+
     if (!isAntibodyHittingItsVirus && !isVirusHittingItsAntibody) {
       return;
     }
