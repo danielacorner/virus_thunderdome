@@ -9,7 +9,7 @@ import { useMount } from "./utils/utils";
 import { render } from "react-dom";
 import MemoryStats from "react-memorystats";
 import { BtnStartNextWave } from "./components/BtnStartNextWave";
-
+import { CellClickListeners } from "./components/CellClickListeners";
 function App() {
   useMount(() => {
     render(
@@ -24,6 +24,7 @@ function App() {
       <div id="memoryStats"></div>
       <Tooltip />
       <BtnStartNextWave />
+      <CellClickListeners />
       {/* <GuidedTour /> */}
       {/* <SaveControlsSettingsToLocalStorage /> */}
     </div>

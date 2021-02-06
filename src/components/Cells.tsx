@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useStore } from "../store";
-import { Html, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { PROTEINS } from "../utils/PROTEINS";
-import { SingleParticleMounted } from "./particle/SingleParticleMounted";
 import HUD from "./HUD";
-import { useWindowSize } from "../utils/hooks";
-import { useControl } from "react-three-gui";
-import styled from "styled-components/macro";
+import { useCellsFiltered } from "./useCellsFiltered";
 
 const antibody_hiv = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-HIV Antibody"
@@ -21,7 +18,7 @@ const antibody_poliovirus = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-Poliovirus Antibody"
 );
 
-const CELLS = [
+export const CELLS = [
   { Component: Lymphocyte, antibody: antibody_poliovirus },
   { Component: Monocyte, antibody: antibody_hpv },
   // { Component: DendriticCell, antibody: antibody_hiv },
@@ -33,28 +30,8 @@ const SCALE = 0.2;
 
 /** onClick, generates an antibody? */
 export default function Cells() {
-  const currentWave = useStore((s) => s.currentWave);
-  console.log("🌟🚨 ~ {CELLS.map ~ CELLS", CELLS);
+  const cellsFiltered = useCellsFiltered();
 
-  const { width, height } = useWindowSize();
-  // const x = useControl("HUDx", {
-  //   type: "number",
-  //   min: -100,
-  //   max: 100,
-  //   value: 0,
-  // });
-  // const y = useControl("HUDy", {
-  //   type: "number",
-  //   min: -100,
-  //   max: 100,
-  //   value: 0,
-  // });
-  // const z = useControl("HUDz", {
-  //   type: "number",
-  //   min: -100,
-  //   max: 100,
-  //   value: 0,
-  // });
   // const cx = useControl("CELLSx", {
   //   type: "number",
   //   min: -Math.PI,
@@ -73,10 +50,6 @@ export default function Cells() {
   //   max: Math.PI,
   //   value: 0,
   // });
-
-  const cellsFiltered = CELLS.filter(
-    (_, idx) => idx === 0 || currentWave > idx
-  );
 
   return (
     <>
@@ -100,24 +73,11 @@ export default function Cells() {
     </>
   );
 }
-const ClickListenerStyles = styled.div`
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  top: -100px;
-  left: -50px;
-`;
 
 function Cell({ Component: CellComponent, antibody, position }) {
   return (
     <>
-      <CreatesAntibodies
-        {...{
-          CellComponent,
-          antibody,
-        }}
-        position={position}
-      />
+      <CellComponent scale={[SCALE, SCALE, SCALE]} position={position} />
       <spotLight
         position={[position[0], position[1] + 2, position[2]]}
         angle={0.2}
@@ -127,45 +87,6 @@ function Cell({ Component: CellComponent, antibody, position }) {
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
         shadow-bias={-0.0001}
-      />
-    </>
-  );
-}
-
-function CreatesAntibodies({ CellComponent, position, antibody }) {
-  const [isPointerDown, setIsPointerDown] = useState(false);
-  const createAntibody = useStore((s) => s.createAntibody);
-
-  useEffect(() => {
-    let intervalCreateABs;
-    if (isPointerDown) {
-      createAntibody(antibody);
-      intervalCreateABs = window.setInterval(() => {
-        createAntibody(antibody);
-      }, 100);
-    }
-    return () => {
-      if (intervalCreateABs) {
-        window.clearInterval(intervalCreateABs);
-      }
-    };
-  }, [isPointerDown, createAntibody, antibody]);
-
-  return (
-    <>
-      <Html>
-        <ClickListenerStyles
-          onPointerDown={() => setIsPointerDown(true)}
-          onPointerLeave={() => setIsPointerDown(false)}
-          onPointerUp={() => setIsPointerDown(false)}
-        />
-      </Html>
-      <CellComponent
-        onPointerDown={() => setIsPointerDown(true)}
-        onPointerLeave={() => setIsPointerDown(false)}
-        onPointerUp={() => setIsPointerDown(false)}
-        scale={[SCALE, SCALE, SCALE]}
-        {...{ position }}
       />
     </>
   );

@@ -26,10 +26,10 @@ export function CanvasAndSceneEmpty({
         gl.shadowMap.type = THREE.PCFShadowMap;
       }}
       gl={{ antialias: false, alpha: false }}
+      style={{ height: windowSize.height, width: windowSize.width }}
       {...(isLoadingIndicator
         ? { camera: { fov: 75, position: [0, 0, 15] } }
         : {})}
-      style={{ height: windowSize.height, width: windowSize.width }}
     >
       <Lighting />
       <SpinIfLoadingIndicator>

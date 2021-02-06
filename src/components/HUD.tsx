@@ -36,6 +36,7 @@ const HUD = ({ children, position }) => {
         raycast={useCamera(virtualCam)}
         position={meshPosition}
         scale={[70, 70, 70]}
+        renderOrder={2}
       >
         {children}
       </mesh>
