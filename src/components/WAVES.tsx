@@ -55,7 +55,7 @@ export const WAVES: Wave[] = [
     Spring: () => {
       useSpringStoreImmediately({
         property: "scale",
-        target: 0.005,
+        target: 0.004,
         springConfig: {
           mass: 1,
           tension: 170,
