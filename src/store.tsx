@@ -21,6 +21,8 @@ type GlobalStateType = {
   paused: boolean;
   ceilingHeight: number;
   scale: number;
+  antibodies: Protein[];
+  createAntibody: (newAb: Protein) => any;
   selectedProtein: null | SelectedProtein;
   setSelectedProtein: (newSelectedProtein: null | SelectedProtein) => void;
   set: (newState: any) => any;
@@ -36,6 +38,9 @@ export const useStore = create<GlobalStateType>(
   (set): GlobalStateType => ({
     isTooltipMaximized: false,
     paused: false,
+    antibodies: [],
+    createAntibody: (newAb) =>
+      set((state) => ({ antibodies: [...state.antibodies, newAb] })),
     playerHp: INITIAL_PLAYER_HP,
     showHp: true,
     started: startsStarted,

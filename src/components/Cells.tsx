@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useStore } from "../store";
-import { useGLTF } from "@react-three/drei";
+import { Html, useGLTF } from "@react-three/drei";
 import { PROTEINS } from "../utils/PROTEINS";
 import { SingleParticleMounted } from "./particle/SingleParticleMounted";
 import HUD from "./HUD";
 import { useWindowSize } from "../utils/hooks";
 import { useControl } from "react-three-gui";
+import styled from "styled-components/macro";
 
 const antibody_hiv = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-HIV Antibody"
@@ -32,85 +33,88 @@ const SCALE = 0.2;
 
 /** onClick, generates an antibody? */
 export default function Cells() {
-  // const currentWave = useStore((s) => s.currentWave);
-  /* CELLS.filter((_, idx) => idx === 0 || currentWave > idx) */
+  const currentWave = useStore((s) => s.currentWave);
   console.log("🌟🚨 ~ {CELLS.map ~ CELLS", CELLS);
 
   const { width, height } = useWindowSize();
-  const x = useControl("HUDx", {
-    type: "number",
-    min: -100,
-    max: 100,
-    value: 0,
-  });
-  const y = useControl("HUDy", {
-    type: "number",
-    min: -100,
-    max: 100,
-    value: 0,
-  });
-  const z = useControl("HUDz", {
-    type: "number",
-    min: -100,
-    max: 100,
-    value: 0,
-  });
-  const cx = useControl("CELLSx", {
-    type: "number",
-    min: -Math.PI,
-    max: Math.PI,
-    value: 0,
-  });
-  const cy = useControl("CELLSy", {
-    type: "number",
-    min: -Math.PI,
-    max: Math.PI,
-    value: 0,
-  });
-  const cz = useControl("CELLSz", {
-    type: "number",
-    min: -Math.PI,
-    max: Math.PI,
-    value: 0,
-  });
+  // const x = useControl("HUDx", {
+  //   type: "number",
+  //   min: -100,
+  //   max: 100,
+  //   value: 0,
+  // });
+  // const y = useControl("HUDy", {
+  //   type: "number",
+  //   min: -100,
+  //   max: 100,
+  //   value: 0,
+  // });
+  // const z = useControl("HUDz", {
+  //   type: "number",
+  //   min: -100,
+  //   max: 100,
+  //   value: 0,
+  // });
+  // const cx = useControl("CELLSx", {
+  //   type: "number",
+  //   min: -Math.PI,
+  //   max: Math.PI,
+  //   value: 0,
+  // });
+  // const cy = useControl("CELLSy", {
+  //   type: "number",
+  //   min: -Math.PI,
+  //   max: Math.PI,
+  //   value: 0,
+  // });
+  // const cz = useControl("CELLSz", {
+  //   type: "number",
+  //   min: -Math.PI,
+  //   max: Math.PI,
+  //   value: 0,
+  // });
+
+  const cellsFiltered = CELLS.filter(
+    (_, idx) => idx === 0 || currentWave > idx
+  );
 
   return (
     <>
-      <HUD position={[x, y, z]}>
-        {CELLS.map((cellProps, idx) => {
+      <HUD position={[0, 0, 0]}>
+        {cellsFiltered.map((cellProps, idx) => {
           // const y = height * 0.75;
           // const z = 15;
           const CELLS_GAP = 3;
-          const position = [CELLS_GAP * (idx - CELLS.length / 2), 0, 0];
-          console.log("🌟🚨 ~ {CELLS.map ~ position", position);
-          return <Cell {...{ ...cellProps, position, key: idx }} />;
+          const position = [
+            CELLS_GAP * (idx - (cellsFiltered.length - 1) / 2),
+            0,
+            0,
+          ];
+          return (
+            <>
+              <Cell {...{ ...cellProps, position, key: idx }} />
+            </>
+          );
         })}
       </HUD>
     </>
   );
 }
+const ClickListenerStyles = styled.div`
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: -100px;
+  left: -50px;
+`;
 
 function Cell({ Component: CellComponent, antibody, position }) {
-  const [antibodies, setAntibodies] = useState([]);
-
   return (
     <>
-      {antibodies.map((ab, idx) => (
-        <SingleParticleMounted
-          {...{
-            ...ab,
-            position,
-            key: idx,
-            // each antibody decomposes after a set amount of time
-            lifespan: 5 * 1000,
-          }}
-        />
-      ))}
       <CreatesAntibodies
         {...{
           CellComponent,
           antibody,
-          setAntibodies,
         }}
         position={position}
       />
@@ -128,21 +132,16 @@ function Cell({ Component: CellComponent, antibody, position }) {
   );
 }
 
-function CreatesAntibodies({
-  CellComponent,
-  position,
-  antibody,
-  setAntibodies,
-}) {
+function CreatesAntibodies({ CellComponent, position, antibody }) {
   const [isPointerDown, setIsPointerDown] = useState(false);
+  const createAntibody = useStore((s) => s.createAntibody);
 
   useEffect(() => {
-    const createAntibody = () => setAntibodies((prev) => [...prev, antibody]);
     let intervalCreateABs;
     if (isPointerDown) {
-      createAntibody();
+      createAntibody(antibody);
       intervalCreateABs = window.setInterval(() => {
-        createAntibody();
+        createAntibody(antibody);
       }, 100);
     }
     return () => {
@@ -150,16 +149,25 @@ function CreatesAntibodies({
         window.clearInterval(intervalCreateABs);
       }
     };
-  }, [isPointerDown, setAntibodies, antibody]);
+  }, [isPointerDown, createAntibody, antibody]);
 
   return (
-    <CellComponent
-      onPointerDown={() => setIsPointerDown(true)}
-      onPointerLeave={() => setIsPointerDown(false)}
-      onPointerUp={() => setIsPointerDown(false)}
-      scale={[SCALE, SCALE, SCALE]}
-      {...{ position }}
-    />
+    <>
+      <Html>
+        <ClickListenerStyles
+          onPointerDown={() => setIsPointerDown(true)}
+          onPointerLeave={() => setIsPointerDown(false)}
+          onPointerUp={() => setIsPointerDown(false)}
+        />
+      </Html>
+      <CellComponent
+        onPointerDown={() => setIsPointerDown(true)}
+        onPointerLeave={() => setIsPointerDown(false)}
+        onPointerUp={() => setIsPointerDown(false)}
+        scale={[SCALE, SCALE, SCALE]}
+        {...{ position }}
+      />
+    </>
   );
 }
 
