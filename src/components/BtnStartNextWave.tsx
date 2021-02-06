@@ -12,6 +12,7 @@ export function BtnStartNextWave() {
   const started = useStore((s) => s.started);
   const currentWave = useStore((s) => s.currentWave);
   const numDefeatedViruses = useStore((s) => s.numDefeatedViruses);
+  const { active: loadingAssets } = useProgress();
 
   // when the wave ends, show the "next wave" button,
   const [isWaveComplete, setIsWaveComplete] = useState(true);
@@ -43,7 +44,7 @@ export function BtnStartNextWave() {
     }
   }, [isWaveIncoming]);
 
-  return !started ? null : (
+  return !started || loadingAssets ? null : (
     <NextWaveStyles>
       {isWaveComplete ? (
         <>
