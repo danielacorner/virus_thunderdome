@@ -7,9 +7,9 @@ import { WAVE_START_DELAY } from "./BtnStartNextWave";
 
 export function StorylineAndIncomingViruses() {
   const [viruses, setViruses] = useState([]);
+  const worldRadius = useStore((s) => s.worldRadius);
   const antibodies = useStore((s) => s.antibodies);
 
-  const position = [0, 5 * 2, 0];
   return (
     <>
       {/* <StorylineSequence {...{ setViruses }} /> */}
@@ -18,7 +18,7 @@ export function StorylineAndIncomingViruses() {
         <SingleParticleMounted
           {...{
             ...ab,
-            position,
+            position: [0, worldRadius * 2, 0],
             key: idx,
           }}
         />
@@ -27,7 +27,7 @@ export function StorylineAndIncomingViruses() {
         <SingleParticleMounted
           {...{
             ...ab,
-            position,
+            position: [0, -worldRadius, 0],
             key: idx,
             // each antibody decomposes after a set amount of time
             lifespan: 5 * 1000,
