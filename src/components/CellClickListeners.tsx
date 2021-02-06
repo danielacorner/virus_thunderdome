@@ -45,7 +45,7 @@ function CellClickListener({ cell, idx, cellsFilteredLength }) {
   );
 }
 
-const CELLS_GAP = 3;
+const CELLS_GAP = 205;
 
 const ClickListenerStyles = styled.div`
   position: absolute;

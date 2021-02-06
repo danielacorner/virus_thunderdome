@@ -6,14 +6,14 @@ import { WAVES } from "./WAVES";
 import { WAVE_START_DELAY } from "./BtnStartNextWave";
 
 export function StorylineAndIncomingViruses() {
-  const [viruses, setViruses] = useState([]);
+  const viruses = useStore((s) => s.viruses);
   const worldRadius = useStore((s) => s.worldRadius);
   const antibodies = useStore((s) => s.antibodies);
 
   return (
     <>
       {/* <StorylineSequence {...{ setViruses }} /> */}
-      <WavesOfViruses {...{ setViruses }} />
+      <WavesOfViruses />
       {viruses.map((ab, idx) => (
         <SingleParticleMounted
           {...{
@@ -38,27 +38,27 @@ export function StorylineAndIncomingViruses() {
   );
 }
 
-function WavesOfViruses({ setViruses }) {
+function WavesOfViruses() {
   const currentWave = useStore((s) => s.currentWave);
   const wavesSoFar = WAVES.slice(0, currentWave);
 
   return (
     <>
       {wavesSoFar.map((waveProps, idx) => (
-        <SingleWave key={idx} {...{ ...waveProps, setViruses }} />
+        <SingleWave key={idx} {...{ ...waveProps }} />
       ))}
     </>
   );
 }
 
-function SingleWave({ numViruses, virus, setViruses }) {
-  const addVirus = (newVirus) => setViruses((p) => [...p, newVirus]);
+function SingleWave({ numViruses, virus }) {
+  const createVirus = useStore((s) => s.createVirus);
 
   const APPEAR_INTERVAL = 1000;
   useMount(() => {
     [...Array(numViruses)].forEach((_, idx2) => {
       setTimeout(() => {
-        addVirus(virus);
+        createVirus(virus);
       }, (idx2 + 1) * APPEAR_INTERVAL + WAVE_START_DELAY);
     });
   });
