@@ -5,6 +5,7 @@ import { PROTEINS } from "../utils/PROTEINS";
 import { SingleParticleMounted } from "./particle/SingleParticleMounted";
 import HUD from "./HUD";
 import { useWindowSize } from "../utils/hooks";
+import { useControl } from "react-three-gui";
 
 const antibody_hiv = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-HIV Antibody"
@@ -36,14 +37,51 @@ export default function Cells() {
   console.log("🌟🚨 ~ {CELLS.map ~ CELLS", CELLS);
 
   const { width, height } = useWindowSize();
+  const x = useControl("HUDx", {
+    type: "number",
+    min: -100,
+    max: 100,
+    value: 0,
+  });
+  const y = useControl("HUDy", {
+    type: "number",
+    min: -100,
+    max: 100,
+    value: 0,
+  });
+  const z = useControl("HUDz", {
+    type: "number",
+    min: -100,
+    max: 100,
+    value: 0,
+  });
+  const cx = useControl("CELLSx", {
+    type: "number",
+    min: -Math.PI,
+    max: Math.PI,
+    value: 0,
+  });
+  const cy = useControl("CELLSy", {
+    type: "number",
+    min: -Math.PI,
+    max: Math.PI,
+    value: 0,
+  });
+  const cz = useControl("CELLSz", {
+    type: "number",
+    min: -Math.PI,
+    max: Math.PI,
+    value: 0,
+  });
+
   return (
     <>
-      <HUD position={[0, 0, 0]}>
+      <HUD position={[x, y, z]}>
         {CELLS.map((cellProps, idx) => {
-          const x = width * 0.2 * idx;
-          const y = height * 0.75;
-          const z = width / 2;
-          const position = [x, y, z];
+          // const y = height * 0.75;
+          // const z = 15;
+          const position = [cx, cy, cz];
+          console.log("🌟🚨 ~ {CELLS.map ~ position", position);
           return <Cell {...{ ...cellProps, position, key: idx }} />;
         })}
       </HUD>

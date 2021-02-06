@@ -32,9 +32,7 @@ export default function CanvasAndScene({ renderProteins = true }) {
         >
           <Scene />
         </Controls.Canvas>
-        {process.env.NODE_ENV === "development" ? (
-          <Controls anchor={"top_right"} style={{ marginTop: -64 }} />
-        ) : null}
+        {process.env.NODE_ENV === "development" ? <Controls /> : null}
       </Controls.Provider>
       <HideHpControls />
       <SideControls />
