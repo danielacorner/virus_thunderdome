@@ -1,0 +1,33 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "formulahendry.auto-rename-tag",
+    "mgmcdermott.vscode-language-babel",
+    "VisualStudioExptTeam.vscodeintellicode",
+    "aaron-bond.better-comments",
+    "coenraads.bracket-pair-colorizer-2",
+    "pustelto.bracketeer",
+    "wmaurer.change-case",
+    "naumovs.color-highlight",
+    "idbartosz.darkpp-italic",
+    "mikestead.dotenv",
+    "dsznajder.es7-react-js-snippets",
+    "eamodio.gitlens",
+    "bradgashler.htmltagwrap",
+    "kisstkondoros.vscode-gutter-preview",
+    "oderwat.indent-rainbow",
+    "atlassian.atlascode",
+    "ms-vsliveshare.vsliveshare-pack",
+    "eg2.vscode-npm-script",
+    "christian-kohler.path-intellisense",
+    "mlewand.select-part-of-word",
+    "britesnow.vscode-toggle-quotes",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "chakrounanas.turbo-console-log",
+    "planbcoding.vscode-react-refactor",
+    "vscode-icons-team.vscode-icons",
+    "jpoissonnier.vscode-styled-components",
+    "tabnine.tabnine-vscode"
+  ]
+}

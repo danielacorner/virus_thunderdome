@@ -7,14 +7,13 @@ import * as THREE from "three";
 // import { useFrame } from "react-three-fiber";
 import BottomControls from "./BottomControls";
 import { ScaleControls } from "./ScaleControls";
-import { IconButton, useMediaQuery } from "@material-ui/core";
-import { BREAKPOINT_TABLET } from "./utils/constants";
+import { IconButton } from "@material-ui/core";
 import { useStore } from "./store";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import SideControls from "./SideControls";
 
 export default function CanvasAndScene({ renderProteins = true }) {
   const windowSize = useWindowSize();
-  const isTabletOrLarger = useMediaQuery(`(min-width: ${BREAKPOINT_TABLET}px)`);
   //  // This one makes the camera move in and out
   //  useFrame(({ clock, camera }) => {
   //   camera.position.z = 50 + Math.sin(clock.getElapsedTime()) * 30
@@ -33,12 +32,12 @@ export default function CanvasAndScene({ renderProteins = true }) {
         >
           <Scene />
         </Controls.Canvas>
-        {process.env.NODE_ENV === "development" && isTabletOrLarger ? (
+        {process.env.NODE_ENV === "development" ? (
           <Controls anchor={"top_right"} style={{ marginTop: -64 }} />
         ) : null}
       </Controls.Provider>
       <HideHpControls />
-      <ScaleControls />
+      <SideControls />
       <BottomControls />
     </>
   );

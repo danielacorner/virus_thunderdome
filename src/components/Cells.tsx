@@ -3,6 +3,8 @@ import { useStore } from "../store";
 import { useGLTF } from "@react-three/drei";
 import { PROTEINS } from "../utils/PROTEINS";
 import { SingleParticleMounted } from "./particle/SingleParticleMounted";
+import HUD from "./HUD";
+import { useWindowSize } from "../utils/hooks";
 
 const antibody_hiv = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-HIV Antibody"
@@ -29,21 +31,22 @@ const SCALE = 0.2;
 
 /** onClick, generates an antibody? */
 export default function Cells() {
-  const currentWave = useStore((s) => s.currentWave);
+  // const currentWave = useStore((s) => s.currentWave);
+  /* CELLS.filter((_, idx) => idx === 0 || currentWave > idx) */
+  console.log("🌟🚨 ~ {CELLS.map ~ CELLS", CELLS);
 
-  const worldRadius = useStore((s) => s.worldRadius);
+  const { width, height } = useWindowSize();
   return (
     <>
-      {CELLS.filter((_, idx) => idx === 0 || currentWave > idx).map(
-        (cellProps, idx) => {
-          const position = [
-            2 * (idx - (CELLS.length - 1) / 2),
-            -Number(worldRadius) * 0.75,
-            Number(worldRadius) * 1,
-          ];
+      <HUD position={[0, 0, 0]}>
+        {CELLS.map((cellProps, idx) => {
+          const x = width * 0.2 * idx;
+          const y = height * 0.75;
+          const z = width / 2;
+          const position = [x, y, z];
           return <Cell {...{ ...cellProps, position, key: idx }} />;
-        }
-      )}
+        })}
+      </HUD>
     </>
   );
 }
@@ -64,7 +67,7 @@ function Cell({ Component: CellComponent, antibody, position }) {
           }}
         />
       ))}
-      <CellCreatesAntibodies
+      <CreatesAntibodies
         {...{
           CellComponent,
           antibody,
@@ -86,7 +89,7 @@ function Cell({ Component: CellComponent, antibody, position }) {
   );
 }
 
-function CellCreatesAntibodies({
+function CreatesAntibodies({
   CellComponent,
   position,
   antibody,

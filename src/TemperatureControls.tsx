@@ -36,10 +36,11 @@ export function TemperatureControls() {
       </Typography>
       <div className="grid">
         <div className="grid-item">
-          <AcUnit />
+          <Whatshot />
         </div>
-        <div className="grid-item">
+        <div className="grid-item slider">
           <Slider
+            orientation="vertical"
             aria-labelledby="volume-slider"
             onChange={(event, newValue) => {
               // pause when temperature is moved to 0
@@ -59,17 +60,28 @@ export function TemperatureControls() {
           />
         </div>
         <div className="grid-item">
-          <Whatshot />
+          <AcUnit />
         </div>
       </div>
     </TemperatureControlsStyles>
   );
 }
 const TemperatureControlsStyles = styled.div`
+  height: 100%;
+  width: 100%;
   .grid {
+    height: 100%;
+    width: 100%;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto 1fr auto;
     align-items: center;
     grid-gap: 1em;
+    .grid-item {
+      width: fit-content;
+      margin: auto;
+    }
+    .slider {
+      height: 100%;
+    }
   }
 `;

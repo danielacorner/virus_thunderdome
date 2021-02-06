@@ -1,7 +1,6 @@
 import React from "react";
-import { TemperatureControls } from "./TemperatureControls";
-import { PauseControls } from "./PauseControls";
 import styled from "styled-components/macro";
+import { ScaleControls } from "./ScaleControls";
 
 const StyledDiv = styled.div``;
 export default function BottomControls() {
@@ -18,9 +17,9 @@ export default function BottomControls() {
         grid-gap: 2em;
       `}
     >
+      <ScaleControls />
       {/* <ShuffleControls /> */}
-      <TemperatureControls />
-      <PauseControls />
+      {/* <PauseControls /> */}
     </StyledDiv>
   );
 }
