@@ -6,7 +6,6 @@ import * as THREE from "three";
 
 // import { useFrame } from "react-three-fiber";
 import BottomControls from "./BottomControls";
-import { ScaleControls } from "./ScaleControls";
 import { IconButton } from "@material-ui/core";
 import { useStore } from "./store";
 import { Visibility, VisibilityOff } from "@material-ui/icons";

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useStore } from "../store";
+import React from "react";
 import { useGLTF } from "@react-three/drei";
 import { PROTEINS } from "../utils/PROTEINS";
 import HUD from "./HUD";

@@ -927,8 +927,3 @@ export const PROTEINS: { [type: string]: Protein[] } = {
 //   pathToImage: "/models/cells/cell_membrane.jpg",
 //   interactive: true,
 // },
-
-// console.log(
-//   "🌟🚨 ~ PROTEINS.viruses.sort((a,b)=>b.radius-a.radius)",
-//   PROTEINS.viruses.sort((a, b) => b.radius - a.radius)
-// );

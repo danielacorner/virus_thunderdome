@@ -22,7 +22,6 @@ const HUD = ({ children, position }) => {
   }, 1);
 
   const meshPosition: Vector3 = [0, -size.height / 2 + 80, -size.width / 2];
-  console.log("🌟🚨 ~ HUD ~ meshPosition", meshPosition);
 
   return createPortal(
     <>

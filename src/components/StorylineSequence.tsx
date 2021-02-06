@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { SingleParticleMounted } from "./particle/SingleParticleMounted";
 import { useStore } from "../store";
 import { useMount } from "../utils/utils";
