@@ -75,12 +75,9 @@ function LazyLoadedScene() {
         >
           <WarningOutlined />
           <Typography variant="body2">
-            Requirements: {">"}200MB download, 1GB memory
+            Requirements: 20MB download, 1GB memory
           </Typography>
         </div>
-        <Typography variant="subtitle2">
-          ( this could take a while... )
-        </Typography>
         <Button
           style={{ padding: "0.25em 3em", pointerEvents: "auto" }}
           onClick={() => set({ started: true })}
