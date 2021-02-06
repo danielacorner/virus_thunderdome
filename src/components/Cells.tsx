@@ -80,7 +80,8 @@ export default function Cells() {
         {CELLS.map((cellProps, idx) => {
           // const y = height * 0.75;
           // const z = 15;
-          const position = [cx, cy, cz];
+          const CELLS_GAP = 3;
+          const position = [CELLS_GAP * (idx - CELLS.length / 2), 0, 0];
           console.log("🌟🚨 ~ {CELLS.map ~ position", position);
           return <Cell {...{ ...cellProps, position, key: idx }} />;
         })}

@@ -21,11 +21,7 @@ const HUD = ({ children, position }) => {
     gl.render(virtualScene, virtualCam.current);
   }, 1);
 
-  const meshPosition: Vector3 = [
-    size.width / 2 - 80,
-    size.height / 2 - 80,
-    -size.width / 2,
-  ];
+  const meshPosition: Vector3 = [0, -size.height / 2 + 80, -size.width / 2];
 
   return createPortal(
     <>

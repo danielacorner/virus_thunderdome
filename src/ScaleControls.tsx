@@ -60,6 +60,7 @@ export function ScaleControls() {
 const ScaleControlsStyles = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
+  grid-gap: 1em;
   place-items: center;
   height: 100%;
   width: 100%;

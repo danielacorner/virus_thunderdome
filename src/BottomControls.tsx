@@ -8,9 +8,9 @@ export default function BottomControls() {
     <StyledDiv
       css={`
         position: fixed;
-        bottom: 16px;
+        top: 16px;
         left: 30vw;
-        right: 16px;
+        right: 30vw;
         display: grid;
         grid-template-columns: 1fr auto;
         align-items: center;
