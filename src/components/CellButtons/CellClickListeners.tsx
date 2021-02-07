@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useStore } from "../../store";
 import { useCellsFiltered } from "../useCellsFiltered";
 import styled from "styled-components/macro";
+import { WAVES } from "../WAVES";
 
 export function CellClickListeners() {
   const cellsFiltered = useCellsFiltered();
@@ -10,22 +11,27 @@ export function CellClickListeners() {
     <>
       {cellsFiltered.map((cell, idx) => (
         <CellClickListener
-          {...{ cell, idx, cellsFilteredLength: cellsFiltered.length }}
+          key={idx}
+          {...{
+            idx,
+            cellsFilteredLength: cellsFiltered.length,
+          }}
         />
       ))}
     </>
   );
 }
-function CellClickListener({ cell, idx, cellsFilteredLength }) {
+function CellClickListener({ idx, cellsFilteredLength }) {
   const [isPointerDown, setIsPointerDown] = useState(false);
   const createAntibody = useStore((s) => s.createAntibody);
 
   useEffect(() => {
+    const antibody = WAVES[idx].antibody;
     let intervalCreateABs;
     if (isPointerDown) {
-      createAntibody(cell.antibody);
+      createAntibody(antibody);
       intervalCreateABs = window.setInterval(() => {
-        createAntibody(cell.antibody);
+        createAntibody(antibody);
       }, 100);
     }
     return () => {
@@ -33,7 +39,7 @@ function CellClickListener({ cell, idx, cellsFilteredLength }) {
         window.clearInterval(intervalCreateABs);
       }
     };
-  }, [isPointerDown, createAntibody, cell]);
+  }, [isPointerDown, createAntibody, idx]);
 
   return (
     <ClickListenerStyles

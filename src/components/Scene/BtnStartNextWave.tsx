@@ -10,11 +10,11 @@ export const WAVE_START_DELAY = 1 * 1000;
 export function BtnStartNextWave() {
   const set = useStore((s) => s.set);
   const started = useStore((s) => s.started);
-  const currentWave = useStore((s) => s.currentWave);
   const numDefeatedViruses = useStore((s) => s.numDefeatedViruses);
   const { active: loadingAssets } = useProgress();
 
   // when the wave ends, show the "next wave" button,
+  const currentWave = useStore((s) => s.currentWave);
   const [isWaveComplete, setIsWaveComplete] = useState(true);
 
   // complete the wave when we've defeated all viruses so far

@@ -5,13 +5,11 @@ import styled from "styled-components/macro";
 import { ZoomOut, ZoomIn } from "@material-ui/icons";
 import { getIsTouchDevice } from "./getIsTouchDevice";
 import { MIN_SCALE, MAX_SCALE } from "./utils/constants";
-import { useProgress } from "@react-three/drei";
 
 export function ScaleControls() {
   const scale = useStore((s) => s.scale);
-  const set = useStore((s) => s.set);
   const isTouchDevice = getIsTouchDevice();
-  const { active: loading } = useProgress();
+  // const { active: loading } = useProgress();
 
   const isLandscape =
     useMediaQuery(`(orientation: landscape)`) && isTouchDevice;
@@ -23,7 +21,7 @@ export function ScaleControls() {
   }, [scale]);
   return (
     <ScaleControlsStyles isLandscape={isLandscape}>
-      <Typography align="center" id="volume-slider" gutterBottom>
+      <Typography align="center" id="scale-slider" gutterBottom>
         Scale
       </Typography>
       <div className="grid">
@@ -32,17 +30,17 @@ export function ScaleControls() {
         </div>
         <div className="grid-item">
           <Slider
-            disabled={true}
-            valueLabelDisplay="auto"
-            aria-labelledby="volume-slider"
-            onChange={(event, newValue) => {
-              // prevent going any lower while loading (can still go higher)
-              // because we start small and scale up, this ensures we load the minimum number of assets each time
-              if (loading && newValue < lowestSoFar.current) {
-                return;
-              }
-              set({ scale: newValue });
-            }}
+            // disabled={true}
+            valueLabelDisplay="off"
+            aria-labelledby="scale-slider"
+            // onChange={(event, newValue) => {
+            //   // prevent going any lower while loading (can still go higher)
+            //   // because we start small and scale up, this ensures we load the minimum number of assets each time
+            //   if (loading && newValue < lowestSoFar.current) {
+            //     return;
+            //   }
+            //   set({ scale: newValue });
+            // }}
             min={MIN_SCALE}
             step={0.00000001}
             scale={(x) => x ** 2}
@@ -64,7 +62,9 @@ const ScaleControlsStyles = styled.div`
   place-items: center;
   height: 100%;
   width: 100%;
+  pointer-events: none;
   .grid {
+    opacity: 0.3;
     display: grid;
     place-items: center;
     width: 100%;

@@ -1,29 +1,15 @@
 import React from "react";
 import { useGLTF } from "@react-three/drei";
-import { PROTEINS } from "../../utils/PROTEINS";
 import HUD from "./HUD";
 import { useCellsFiltered } from "../useCellsFiltered";
 
-const antibody_hiv = PROTEINS.antibodies.find(
-  (ab) => ab.name === "anti-HIV Antibody"
-);
-const antibody_hpv = PROTEINS.antibodies.find(
-  (ab) => ab.name === "anti-HPV Antibody"
-);
-const antibody_herpes = PROTEINS.antibodies.find(
-  (ab) => ab.name === "anti-Herpes Antibody"
-);
-const antibody_poliovirus = PROTEINS.antibodies.find(
-  (ab) => ab.name === "anti-Poliovirus Antibody"
-);
-
 export const CELLS = [
-  { Component: Lymphocyte, antibody: antibody_poliovirus },
-  { Component: Monocyte, antibody: antibody_hpv },
-  // { Component: DendriticCell, antibody: antibody_hiv },
-  { Component: Eosinophil, antibody: antibody_herpes },
-  { Component: Basophil, antibody: antibody_hiv },
-  // { Component: Macrophages, antibody: antibody_herpes },
+  { Component: Lymphocyte },
+  { Component: Monocyte },
+  // { Component: DendriticCell },
+  { Component: Eosinophil },
+  { Component: Basophil },
+  // { Component: Macrophages },
 ];
 const SCALE = 0.2;
 
@@ -62,18 +48,14 @@ export default function Cells() {
             0,
             0,
           ];
-          return (
-            <>
-              <Cell {...{ ...cellProps, position, key: idx }} />
-            </>
-          );
+          return <Cell key={idx} {...{ ...cellProps, position }} />;
         })}
       </HUD>
     </>
   );
 }
 
-function Cell({ Component: CellComponent, antibody, position }) {
+function Cell({ Component: CellComponent, position }) {
   return (
     <>
       <CellComponent scale={[SCALE, SCALE, SCALE]} position={position} />

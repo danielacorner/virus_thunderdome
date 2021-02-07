@@ -89,11 +89,15 @@ export function useSpringStoreImmediately({
     config: springConfig,
     onChange({ progress }) {
       set({ [property]: firstValue + delta * progress });
+      if (progress === 1) {
+        set({ isPropertyAnimating: false });
+      }
     },
   });
 
   // start the timer
   useMount(() => {
     setAnimating(1);
+    set({ isPropertyAnimating: true });
   });
 }

@@ -19,6 +19,7 @@ type GlobalStateType = {
   loading: boolean;
   started: boolean;
   paused: boolean;
+  isPropertyAnimating: boolean;
   ceilingHeight: number;
   scale: number;
   viruses: Protein[];
@@ -40,6 +41,7 @@ export const useStore = create<GlobalStateType>(
   (set): GlobalStateType => ({
     isTooltipMaximized: false,
     paused: false,
+    isPropertyAnimating: false,
     viruses: [],
     antibodies: [],
     createVirus: (newVir) =>

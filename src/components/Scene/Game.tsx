@@ -50,7 +50,7 @@ function Antibodies() {
       {antibodies.map((ab, idx) => {
         const jitter = 1 * worldRadius;
         const x = randBetween(-jitter, jitter);
-        const y = -worldRadius + randBetween(0, jitter);
+        const y = -worldRadius + randBetween(worldRadius * 0.1, jitter);
         const z = randBetween(-jitter, jitter);
         return (
           <SingleParticleMounted

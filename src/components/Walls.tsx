@@ -16,6 +16,7 @@ const colors = ["#69d2e7", "#a7dbd8", "#e0e4cc", "#f38630", "#fa6900"];
 export function Walls() {
   const worldRadius = useStore((state) => state.worldRadius);
   const ceilingHeight = useStore((state) => state.ceilingHeight);
+  const isPropertyAnimating = useStore((state) => state.isPropertyAnimating);
   const walls = [
     {
       name: "in front",
@@ -75,20 +76,22 @@ export function Walls() {
       {walls.map((props, idx) => (
         <Plane {...props} key={JSON.stringify(props.position)} />
       ))}
-      <mesh>
-        <icosahedronBufferGeometry args={[scalePct * 100, 5]} />
-        <meshPhysicalMaterial
-          color="rebeccapurple"
-          opacity={0.018}
-          transparent={true}
-          depthTest={false}
-          flatShading={true}
-          roughness={0.4}
-          vertexColors={true}
-          reflectivity={1}
-          wireframe={true}
-        />
-      </mesh>
+      {isPropertyAnimating ? null : (
+        <mesh>
+          <icosahedronBufferGeometry args={[scalePct * 100, 5]} />
+          <meshPhysicalMaterial
+            color="rebeccapurple"
+            opacity={0.018}
+            transparent={true}
+            depthTest={false}
+            flatShading={true}
+            roughness={0.4}
+            vertexColors={true}
+            reflectivity={1}
+            wireframe={true}
+          />
+        </mesh>
+      )}
       <InteractiveFloorWithHPIndicator
         {...{
           name: "floor",
