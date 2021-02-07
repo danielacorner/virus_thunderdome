@@ -40,14 +40,11 @@ export default function Cells() {
     <>
       <HUD position={[0, 0, 0]}>
         {cellsFiltered.map((cellProps, idx) => {
+          const numCells = cellsFiltered.length;
           // const y = height * 0.75;
           // const z = 15;
-          const CELLS_GAP = 3;
-          const position = [
-            CELLS_GAP * (idx - (cellsFiltered.length - 1) / 2),
-            0,
-            0,
-          ];
+          const CELLS_GAP = 6 / numCells;
+          const position = [CELLS_GAP * (idx - (numCells - 1) / 2), 0, 0];
           return <Cell key={idx} {...{ ...cellProps, position }} />;
         })}
       </HUD>

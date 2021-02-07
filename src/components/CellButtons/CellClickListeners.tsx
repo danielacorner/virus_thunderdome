@@ -15,14 +15,16 @@ export function CellClickListeners() {
           key={idx}
           {...{
             idx,
-            cellsFilteredLength: cellsFiltered.length,
+            numCells: cellsFiltered.length,
           }}
         />
       ))}
     </>
   );
 }
-function CellClickListener({ idx, cellsFilteredLength }) {
+const CELLS_GAP = 205;
+
+function CellClickListener({ idx, numCells }) {
   const [isPointerDown, setIsPointerDown] = useState(false);
   const createAntibody = useStore((s) => s.createAntibody);
   const Icon = ICONS[idx];
@@ -45,8 +47,9 @@ function CellClickListener({ idx, cellsFilteredLength }) {
 
   return (
     <ClickListenerStyles
+      cellsGap={(CELLS_GAP * 2) / numCells}
       className={isPointerDown ? "active" : ""}
-      {...{ idx, cellsFilteredLength }}
+      {...{ idx, numCells }}
       onPointerDown={() => setIsPointerDown(true)}
       onPointerLeave={() => setIsPointerDown(false)}
       onPointerUp={() => setIsPointerDown(false)}
@@ -60,8 +63,6 @@ function CellClickListener({ idx, cellsFilteredLength }) {
     </ClickListenerStyles>
   );
 }
-
-const CELLS_GAP = 205;
 
 const ClickListenerStyles = styled.div`
   position: absolute;
@@ -99,7 +100,6 @@ const ClickListenerStyles = styled.div`
   background: #68d0cb2e;
 
   left: calc(
-    50vw - 50px -
-      ${(p) => CELLS_GAP * (-p.idx + (p.cellsFilteredLength - 1) / 2)}px
+    50vw - 50px - ${(p) => p.cellsGap * (-p.idx + (p.numCells - 1) / 2)}px
   );
 `;
