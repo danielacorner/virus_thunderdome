@@ -126,7 +126,7 @@ function InteractiveFloorWithHPIndicator({
         collidingBody?.name &&
         PROTEINS.viruses.find((v) => v.name === collidingBody.name);
       if (virusCollisionTarget) {
-        set({ playerHp: playerHp - virusCollisionTarget.radius });
+        set({ playerHp: Math.max(0, playerHp - virusCollisionTarget.radius) });
       }
     },
     // position: [-100, -100, -100],
@@ -142,6 +142,7 @@ function InteractiveFloorWithHPIndicator({
         <HPIndicatorStyles {...{ playerHpPct }}>
           <div className="hpBar">
             <div className="hp" />
+            {playerHpPct === 0 ? "😢" : ""}
           </div>
         </HPIndicatorStyles>
       </Html>
