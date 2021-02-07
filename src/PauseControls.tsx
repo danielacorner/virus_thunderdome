@@ -41,6 +41,7 @@ export function PauseControls() {
   );
 }
 const PauseControlsStyles = styled.div`
+  width: fit-content;
   cursor: pointer;
 `;
 

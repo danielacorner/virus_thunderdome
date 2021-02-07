@@ -5,7 +5,7 @@ import { useWindowSize } from "./utils/hooks";
 import * as THREE from "three";
 
 // import { useFrame } from "react-three-fiber";
-import BottomControls from "./BottomControls";
+import TopControls from "./TopControls";
 import { IconButton } from "@material-ui/core";
 import { useStore } from "./store";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
@@ -35,7 +35,7 @@ export default function CanvasAndScene({ renderProteins = true }) {
       </Controls.Provider>
       <HideHpControls />
       <SideControls />
-      <BottomControls />
+      <TopControls />
     </>
   );
 }

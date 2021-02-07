@@ -1,6 +1,12 @@
 import { Protein, PROTEINS } from "../utils/PROTEINS";
 import { useSpringStoreImmediately } from "./useSpringAfterTimeout";
 
+const Polio = PROTEINS.viruses.find((v) => v.name === "Poliovirus");
+const HPV = PROTEINS.viruses.find(
+  (v) => v.name === "Human Papillomavirus (HPV)"
+);
+const HIV = PROTEINS.viruses.find((v) => v.name === "HIV");
+
 type Wave = {
   virus: Protein;
   numViruses: number;
@@ -11,7 +17,7 @@ type Wave = {
 export const WAVES: Wave[] = [
   {
     // TODO: allow multiple virus types
-    virus: PROTEINS.viruses.find((v) => v.name === "Poliovirus"),
+    virus: Polio,
     numViruses: 6,
     assets: [
       "/models/cells/lymphocyte.glb",
@@ -43,9 +49,7 @@ export const WAVES: Wave[] = [
     },
   },
   {
-    virus: PROTEINS.viruses.find(
-      (v) => v.name === "Human Papillomavirus (HPV)"
-    ),
+    virus: HPV,
     numViruses: 9,
     assets: [
       "/models/cells/monocyte.glb",
@@ -67,7 +71,7 @@ export const WAVES: Wave[] = [
     },
   },
   {
-    virus: PROTEINS.viruses.find((v) => v.name === "HIV"),
+    virus: HIV,
     numViruses: 2,
     assets: [
       "/models/cells/monocyte.glb",

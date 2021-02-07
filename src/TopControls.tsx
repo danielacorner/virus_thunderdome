@@ -3,7 +3,7 @@ import styled from "styled-components/macro";
 import { ScaleControls } from "./ScaleControls";
 
 const StyledDiv = styled.div``;
-export default function BottomControls() {
+export default function TopControls() {
   return (
     <StyledDiv
       css={`
@@ -19,7 +19,6 @@ export default function BottomControls() {
     >
       <ScaleControls />
       {/* <ShuffleControls /> */}
-      {/* <PauseControls /> */}
     </StyledDiv>
   );
 }
