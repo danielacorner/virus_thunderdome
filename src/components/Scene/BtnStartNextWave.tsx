@@ -20,7 +20,7 @@ export function BtnStartNextWave() {
   // complete the wave when we've defeated all viruses so far
   const wavesSoFar = WAVES.slice(0, currentWave);
   const totalVirusesSoFar = wavesSoFar.reduce(
-    (acc, cur) => acc + cur.numViruses,
+    (acc, cur) => acc + cur.viruses.reduce((a, c) => c.numViruses + a, 0),
     0
   );
   useEffect(() => {

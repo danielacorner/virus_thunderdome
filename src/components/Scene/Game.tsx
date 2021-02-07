@@ -81,15 +81,17 @@ function WavesOfVirusCreation() {
   );
 }
 
-function SingleWave({ numViruses, virus }) {
+function SingleWave({ viruses }) {
   const createVirus = useStore((s) => s.createVirus);
 
   const APPEAR_INTERVAL = 1000;
   useMount(() => {
-    [...Array(numViruses)].forEach((_, idx2) => {
-      setTimeout(() => {
-        createVirus(virus);
-      }, (idx2 + 1) * APPEAR_INTERVAL + WAVE_START_DELAY);
+    viruses.forEach(({ virus, numViruses }, virusIdx) => {
+      [...Array(numViruses)].forEach((_, idx2) => {
+        setTimeout(() => {
+          createVirus(virus);
+        }, virusIdx * 500 + (idx2 + 1) * APPEAR_INTERVAL + WAVE_START_DELAY);
+      });
     });
   });
 

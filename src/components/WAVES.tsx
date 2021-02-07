@@ -13,27 +13,28 @@ const antibody_herpes = PROTEINS.antibodies.find(
 const antibody_poliovirus = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-Poliovirus Antibody"
 );
+const antibody_faustovirus = PROTEINS.antibodies.find(
+  (ab) => ab.name === "anti-Faustovirus Antibody"
+);
 const Polio = PROTEINS.viruses.find((v) => v.name === "Poliovirus");
 const HPV = PROTEINS.viruses.find(
   (v) => v.name === "Human Papillomavirus (HPV)"
 );
 const HIV = PROTEINS.viruses.find((v) => v.name === "HIV");
 const Herpes = PROTEINS.viruses.find((v) => v.name === "Herpes");
+const Faustovirus = PROTEINS.viruses.find((v) => v.name === "Faustovirus");
 
 type Wave = {
-  virus: Protein;
+  viruses: { virus: Protein; numViruses: number }[];
   antibody: Protein;
-  numViruses: number;
   Spring?: Function;
   assets: string[];
 };
 
 export const WAVES: Wave[] = [
   {
-    // TODO: allow multiple virus types in a wave
-    virus: Polio,
+    viruses: [{ numViruses: 8, virus: Polio }],
     antibody: antibody_poliovirus,
-    numViruses: 8,
     assets: [
       "/models/cells/lymphocyte.glb",
       "/models/viruses/poliovirus_50.glb",
@@ -64,9 +65,11 @@ export const WAVES: Wave[] = [
     },
   },
   {
-    virus: HPV,
+    viruses: [
+      { numViruses: 4, virus: Polio },
+      { numViruses: 8, virus: HPV },
+    ],
     antibody: antibody_hpv,
-    numViruses: 9,
     assets: [
       "/models/cells/monocyte.glb",
       "/models/viruses/hpv_100.glb",
@@ -75,7 +78,33 @@ export const WAVES: Wave[] = [
     Spring: () => {
       useSpringStoreImmediately({
         property: "scale",
-        target: 0.004,
+        target: 0.006,
+        springConfig: {
+          mass: 1,
+          tension: 340,
+          friction: 50,
+          precision: 0.0001,
+        },
+      });
+      return null;
+    },
+  },
+  {
+    viruses: [
+      { numViruses: 4, virus: Polio },
+      { numViruses: 4, virus: HPV },
+      { numViruses: 8, virus: Herpes },
+    ],
+    antibody: antibody_herpes,
+    assets: [
+      "/models/cells/monocyte.glb",
+      "/models/viruses/hpv_100.glb",
+      "/models/antibodies/antibody_hpv_10.glb",
+    ],
+    Spring: () => {
+      useSpringStoreImmediately({
+        property: "scale",
+        target: 0.0045,
         springConfig: {
           mass: 1,
           tension: 170,
@@ -87,22 +116,13 @@ export const WAVES: Wave[] = [
     },
   },
   {
-    virus: Herpes,
-    antibody: antibody_herpes,
-    numViruses: 6,
-    assets: [
-      "/models/cells/monocyte.glb",
-      "/models/viruses/hpv_100.glb",
-      "/models/antibodies/antibody_hpv_10.glb",
+    viruses: [
+      { numViruses: 2, virus: Polio },
+      { numViruses: 4, virus: HPV },
+      { numViruses: 6, virus: Herpes },
+      { numViruses: 8, virus: HIV },
     ],
-    Spring: () => {
-      return null;
-    },
-  },
-  {
-    virus: HIV,
     antibody: antibody_hiv,
-    numViruses: 2,
     assets: [
       "/models/cells/monocyte.glb",
       "/models/viruses/HIV_200.glb",
@@ -111,7 +131,7 @@ export const WAVES: Wave[] = [
     Spring: () => {
       useSpringStoreImmediately({
         property: "scale",
-        target: 0.002,
+        target: 0.003,
         springConfig: {
           mass: 1,
           tension: 170,
@@ -121,7 +141,42 @@ export const WAVES: Wave[] = [
       });
       useSpringStoreImmediately({
         property: "ceilingHeight",
-        target: 32,
+        target: 24,
+        springConfig: {
+          mass: 1,
+          tension: 170,
+          friction: 10,
+          precision: 0.0001,
+        },
+      });
+      return null;
+    },
+  },
+  {
+    viruses: [
+      { numViruses: 8, virus: HIV },
+      { numViruses: 8, virus: Faustovirus },
+    ],
+    antibody: antibody_faustovirus,
+    assets: [
+      "/models/cells/monocyte.glb",
+      "/models/viruses/HIV_200.glb",
+      "/models/antibodies/antibody_hiv_10.glb",
+    ],
+    Spring: () => {
+      useSpringStoreImmediately({
+        property: "scale",
+        target: 0.003,
+        springConfig: {
+          mass: 1,
+          tension: 170,
+          friction: 50,
+          precision: 0.0001,
+        },
+      });
+      useSpringStoreImmediately({
+        property: "ceilingHeight",
+        target: 24,
         springConfig: {
           mass: 1,
           tension: 170,
