@@ -17,6 +17,7 @@ export type ParticleProps = Protein & {
   radius: number;
   interactive: boolean;
   unmount: Function;
+  iconIdx?: number;
   lifespan?: number | null;
 };
 /** Particle which can interact with others, or not (passes right through them) */
@@ -37,6 +38,7 @@ function InteractiveParticle(props: ParticleProps) {
     unmount = () => null,
     name,
     type,
+    iconIdx = null,
   } = props;
 
   const setSelectedProtein = useStore((s) => s.setSelectedProtein);
@@ -163,6 +165,7 @@ function InteractiveParticle(props: ParticleProps) {
           lifespan,
           type,
           virusHpPct,
+          iconIdx,
         }}
       />
     </a.mesh>

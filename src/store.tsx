@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import create from "zustand";
 import { MAX_SCALE } from "./utils/constants";
 import { Protein } from "./utils/PROTEINS";
@@ -22,10 +23,10 @@ type GlobalStateType = {
   isPropertyAnimating: boolean;
   ceilingHeight: number;
   scale: number;
-  viruses: Protein[];
-  antibodies: Protein[];
-  createVirus: (newVir: Protein) => any;
-  createAntibody: (newAb: Protein) => any;
+  viruses: { virusData: Protein; iconIdx: number }[];
+  antibodies: { abData: Protein; iconIdx: number }[];
+  createVirus: (newVir: { virusData: Protein; iconIdx: number }) => any;
+  createAntibody: (newAb: { abData: Protein; iconIdx: number }) => any;
   selectedProtein: null | SelectedProtein;
   setSelectedProtein: (newSelectedProtein: null | SelectedProtein) => void;
   set: (newState: any) => any;

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useStore } from "../../store";
 import { useCellsFiltered } from "../useCellsFiltered";
 import styled from "styled-components/macro";
-import { WAVES } from "../WAVES";
+import { ICONS, WAVES } from "../Game/WAVES";
+import { Block } from "@material-ui/icons";
 
 export function CellClickListeners() {
   const cellsFiltered = useCellsFiltered();
@@ -24,14 +25,15 @@ export function CellClickListeners() {
 function CellClickListener({ idx, cellsFilteredLength }) {
   const [isPointerDown, setIsPointerDown] = useState(false);
   const createAntibody = useStore((s) => s.createAntibody);
+  const Icon = ICONS[idx];
 
   useEffect(() => {
     const antibody = WAVES[idx].antibody;
     let intervalCreateABs;
     if (isPointerDown) {
-      createAntibody(antibody);
+      createAntibody({ abData: antibody, iconIdx: idx });
       intervalCreateABs = window.setInterval(() => {
-        createAntibody(antibody);
+        createAntibody({ abData: antibody, iconIdx: idx });
       }, 100);
     }
     return () => {
@@ -48,7 +50,14 @@ function CellClickListener({ idx, cellsFilteredLength }) {
       onPointerDown={() => setIsPointerDown(true)}
       onPointerLeave={() => setIsPointerDown(false)}
       onPointerUp={() => setIsPointerDown(false)}
-    />
+    >
+      <div className="svgIcon">
+        <Icon />
+        <div className="blockIcon">
+          <Block />
+        </div>
+      </div>
+    </ClickListenerStyles>
   );
 }
 
@@ -60,6 +69,25 @@ const ClickListenerStyles = styled.div`
   box-shadow: 0px 2px 5px 1px #000000bd;
   transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   border-radius: 16px;
+  .svgIcon {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    svg {
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 36px;
+      height: 36px;
+    }
+    .blockIcon {
+      opacity: 0.3;
+      svg {
+        transform: scale(1.8);
+      }
+      color: red;
+    }
+  }
   &.active {
     box-shadow: 0px 2px 1px 1px #000000bd;
     transform: translateY(4px);

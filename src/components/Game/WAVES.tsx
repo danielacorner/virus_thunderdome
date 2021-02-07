@@ -1,5 +1,12 @@
-import { Protein, PROTEINS } from "../utils/PROTEINS";
-import { useSpringStoreImmediately } from "./useSpringAfterTimeout";
+import { Protein, PROTEINS } from "../../utils/PROTEINS";
+import { useSpringStoreImmediately } from "../useSpringAfterTimeout";
+import { ReactComponent as Icon1 } from "./icons/virus_1.svg";
+import { ReactComponent as Icon2 } from "./icons/virus_2.svg";
+import { ReactComponent as Icon3 } from "./icons/virus_3.svg";
+import { ReactComponent as Icon4 } from "./icons/virus_4.svg";
+import { ReactComponent as Icon5 } from "./icons/virus_5.svg";
+
+export const ICONS = [Icon1, Icon2, Icon3, Icon4, Icon5];
 
 const antibody_hiv = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-HIV Antibody"
@@ -16,16 +23,34 @@ const antibody_poliovirus = PROTEINS.antibodies.find(
 const antibody_faustovirus = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-Faustovirus Antibody"
 );
-const Polio = PROTEINS.viruses.find((v) => v.name === "Poliovirus");
-const HPV = PROTEINS.viruses.find(
-  (v) => v.name === "Human Papillomavirus (HPV)"
-);
-const HIV = PROTEINS.viruses.find((v) => v.name === "HIV");
-const Herpes = PROTEINS.viruses.find((v) => v.name === "Herpes");
-const Faustovirus = PROTEINS.viruses.find((v) => v.name === "Faustovirus");
+const Polio = {
+  iconIdx: 0,
+  virusData: PROTEINS.viruses.find((v) => v.name === "Poliovirus"),
+};
+const HPV = {
+  iconIdx: 1,
+  virusData: PROTEINS.viruses.find(
+    (v) => v.name === "Human Papillomavirus (HPV)"
+  ),
+};
+const HIV = {
+  iconIdx: 2,
+  virusData: PROTEINS.viruses.find((v) => v.name === "HIV"),
+};
+const Herpes = {
+  iconIdx: 3,
+  virusData: PROTEINS.viruses.find((v) => v.name === "Herpes"),
+};
+const Faustovirus = {
+  iconIdx: 4,
+  virusData: PROTEINS.viruses.find((v) => v.name === "Faustovirus"),
+};
 
 type Wave = {
-  viruses: { virus: Protein; numViruses: number }[];
+  viruses: {
+    virus: { virusData: Protein; iconIdx: number };
+    numViruses: number;
+  }[];
   antibody: Protein;
   Spring?: Function;
   assets: string[];

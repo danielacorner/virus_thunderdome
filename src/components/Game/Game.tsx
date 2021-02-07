@@ -2,8 +2,8 @@ import React from "react";
 import { SingleParticleMounted } from "../particle/SingleParticleMounted";
 import { useStore } from "../../store";
 import { randBetween, useMount } from "../../utils/utils";
-import { WAVES } from "../WAVES";
-import { WAVE_START_DELAY } from "./BtnStartNextWave";
+import { WAVES } from "./WAVES";
+import { WAVE_START_DELAY } from "../Scene/BtnStartNextWave";
 
 /** Generates waves of viruses, and you click to create antibodies to defend against them */
 export default function Game() {
@@ -23,7 +23,7 @@ function Viruses() {
 
   return (
     <>
-      {viruses.map((ab, idx) => {
+      {viruses.map(({ virusData, iconIdx }, idx) => {
         const jitter = 1 * worldRadius;
         const x = randBetween(-jitter, jitter);
         const y = worldRadius * 2 - randBetween(0, jitter);
@@ -31,7 +31,8 @@ function Viruses() {
         return (
           <SingleParticleMounted
             {...{
-              ...ab,
+              ...virusData,
+              iconIdx,
               position: [x, y, z],
               key: idx,
             }}
@@ -47,7 +48,7 @@ function Antibodies() {
 
   return (
     <>
-      {antibodies.map((ab, idx) => {
+      {antibodies.map(({ abData, iconIdx }, idx) => {
         const jitter = 1 * worldRadius;
         const x = randBetween(-jitter, jitter);
         const y = -worldRadius + randBetween(worldRadius * 0.1, jitter);
@@ -55,7 +56,8 @@ function Antibodies() {
         return (
           <SingleParticleMounted
             {...{
-              ...ab,
+              ...abData,
+              iconIdx,
               position: [x, y, z],
               key: idx,
               // each antibody decomposes after a set amount of time
@@ -86,13 +88,15 @@ function SingleWave({ viruses }) {
 
   const APPEAR_INTERVAL = 1000;
   useMount(() => {
-    viruses.forEach(({ virus, numViruses }, virusIdx) => {
-      [...Array(numViruses)].forEach((_, idx2) => {
-        setTimeout(() => {
-          createVirus(virus);
-        }, virusIdx * 500 + (idx2 + 1) * APPEAR_INTERVAL + WAVE_START_DELAY);
-      });
-    });
+    viruses.forEach(
+      ({ virus: { virusData, iconIdx }, numViruses }, virusIdx) => {
+        [...Array(numViruses)].forEach((_, idx2) => {
+          setTimeout(() => {
+            createVirus({ virusData, iconIdx });
+          }, virusIdx * 500 + (idx2 + 1) * APPEAR_INTERVAL + WAVE_START_DELAY);
+        });
+      }
+    );
   });
 
   return null;

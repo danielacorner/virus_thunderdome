@@ -9,7 +9,7 @@ import { Water } from "../Water";
 import { ScaleIndicator } from "../Sliders/ScaleIndicator";
 import { SelectedParticleDisplay } from "../SelectedParticle/SelectedParticleDisplay";
 import Cells from "../CellButtons/Cells";
-import Game from "./Game";
+import Game from "../Game/Game";
 
 const Scene = () => {
   // audio track
@@ -20,9 +20,6 @@ const Scene = () => {
       <OrbitControls />
       <Lighting />
       <Physics {...PHYSICS_PROPS}>
-        {/* {PROTEINS.viruses.map((protein) => {
-          return <ProteinGroup key={protein.name} {...protein} />;
-        })} */}
         <Water />
         <Walls />
         <SelectedParticleDisplay />
