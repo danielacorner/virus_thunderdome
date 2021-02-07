@@ -1,7 +1,7 @@
 import React from "react";
 import { SingleParticleMounted } from "../particle/SingleParticleMounted";
 import { useStore } from "../../store";
-import { useMount } from "../../utils/utils";
+import { randBetween, useMount } from "../../utils/utils";
 import { WAVES } from "../WAVES";
 import { WAVE_START_DELAY } from "./BtnStartNextWave";
 
@@ -23,15 +23,21 @@ function Viruses() {
 
   return (
     <>
-      {viruses.map((ab, idx) => (
-        <SingleParticleMounted
-          {...{
-            ...ab,
-            position: [0, worldRadius * 2, 0],
-            key: idx,
-          }}
-        />
-      ))}
+      {viruses.map((ab, idx) => {
+        const jitter = 1 * worldRadius;
+        const x = randBetween(-jitter, jitter);
+        const y = worldRadius * 2 - randBetween(0, jitter);
+        const z = randBetween(-jitter, jitter);
+        return (
+          <SingleParticleMounted
+            {...{
+              ...ab,
+              position: [x, y, z],
+              key: idx,
+            }}
+          />
+        );
+      })}
     </>
   );
 }
@@ -41,17 +47,23 @@ function Antibodies() {
 
   return (
     <>
-      {antibodies.map((ab, idx) => (
-        <SingleParticleMounted
-          {...{
-            ...ab,
-            position: [0, -worldRadius, 0],
-            key: idx,
-            // each antibody decomposes after a set amount of time
-            lifespan: 5 * 1000,
-          }}
-        />
-      ))}
+      {antibodies.map((ab, idx) => {
+        const jitter = 1 * worldRadius;
+        const x = randBetween(-jitter, jitter);
+        const y = -worldRadius + randBetween(0, jitter);
+        const z = randBetween(-jitter, jitter);
+        return (
+          <SingleParticleMounted
+            {...{
+              ...ab,
+              position: [x, y, z],
+              key: idx,
+              // each antibody decomposes after a set amount of time
+              lifespan: 5 * 1000,
+            }}
+          />
+        );
+      })}
     </>
   );
 }
