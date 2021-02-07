@@ -5,7 +5,7 @@ import styled from "styled-components/macro";
 import { PROTEIN_TYPES } from "../../utils/PROTEINS";
 import { useStore } from "../../store";
 import { ICONS } from "../Game/WAVES";
-import Block from "@material-ui/icons/Block";
+import Block from "@material-ui/icons/GpsFixed";
 
 export function FloatingHtmlOverlay({
   name,

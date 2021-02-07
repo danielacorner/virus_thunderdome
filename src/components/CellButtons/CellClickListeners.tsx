@@ -3,7 +3,7 @@ import { useStore } from "../../store";
 import { useCellsFiltered } from "../useCellsFiltered";
 import styled from "styled-components/macro";
 import { ICONS, WAVES } from "../Game/WAVES";
-import { Block } from "@material-ui/icons";
+import Block from "@material-ui/icons/GpsFixed";
 
 export function CellClickListeners() {
   const cellsFiltered = useCellsFiltered();
