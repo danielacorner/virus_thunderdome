@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { INITIAL_PLAYER_HP, useStore } from "../store";
+import { INITIAL_PLAYER_HP, useStore } from "../../store";
 import styled from "styled-components/macro";
 import { Button } from "@material-ui/core";
-import { WAVES } from "./WAVES";
+import { WAVES } from "../WAVES";
 import { useGLTF, useProgress } from "@react-three/drei";
 
 export const WAVE_START_DELAY = 1 * 1000;

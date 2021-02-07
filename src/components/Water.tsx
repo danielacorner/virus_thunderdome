@@ -3,7 +3,7 @@ import { useSphere } from "@react-three/cannon";
 import * as THREE from "three";
 import { getRandStartPosition } from "./Shapes/particleUtils";
 import { useStore } from "../store";
-import { useChangeVelocityWhenTemperatureChanges } from "./Shapes/useChangeVelocityWhenTemperatureChanges";
+import { useChangeVelocityWhenTemperatureChanges } from "./Physics/useChangeVelocityWhenTemperatureChanges";
 const RADIUS = 0.05;
 const NUM_INSTANCES = 50;
 

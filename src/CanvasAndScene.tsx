@@ -1,6 +1,6 @@
 import React from "react";
 import { Controls } from "react-three-gui";
-import Scene from "./components/Scene";
+import Scene from "./components/Scene/Scene";
 import { useWindowSize } from "./utils/hooks";
 import * as THREE from "three";
 

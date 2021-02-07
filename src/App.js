@@ -1,15 +1,16 @@
 import React, { Suspense } from "react";
-import Tooltip from "./components/SelectedParticleTooltip";
+import Tooltip from "./components/SelectedParticle/SelectedParticleTooltip";
 import { Button, Typography } from "@material-ui/core";
 import WarningOutlined from "@material-ui/icons/WarningOutlined";
 import { CanvasAndSceneEmpty } from "./CanvasAndSceneEmpty";
 import { useStore } from "./store";
-import { LoadingIndicator } from "./components/LoadingIndicator";
+import { LoadingIndicator } from "./components/Scene/LoadingIndicator";
 import { useMount } from "./utils/utils";
 import { render } from "react-dom";
 import MemoryStats from "react-memorystats";
-import { BtnStartNextWave } from "./components/BtnStartNextWave";
-import { CellClickListeners } from "./components/CellClickListeners";
+import { BtnStartNextWave } from "./components/Scene/BtnStartNextWave";
+import { CellClickListeners } from "./components/CellButtons/CellClickListeners";
+
 function App() {
   useMount(() => {
     render(

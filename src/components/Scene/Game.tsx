@@ -1,19 +1,28 @@
 import React from "react";
-import { SingleParticleMounted } from "./particle/SingleParticleMounted";
-import { useStore } from "../store";
-import { useMount } from "../utils/utils";
-import { WAVES } from "./WAVES";
+import { SingleParticleMounted } from "../particle/SingleParticleMounted";
+import { useStore } from "../../store";
+import { useMount } from "../../utils/utils";
+import { WAVES } from "../WAVES";
 import { WAVE_START_DELAY } from "./BtnStartNextWave";
 
-export function StorylineAndIncomingViruses() {
-  const viruses = useStore((s) => s.viruses);
-  const worldRadius = useStore((s) => s.worldRadius);
-  const antibodies = useStore((s) => s.antibodies);
-
+/** Generates waves of viruses, and you click to create antibodies to defend against them */
+export default function Game() {
   return (
     <>
       {/* <StorylineSequence {...{ setViruses }} /> */}
-      <WavesOfViruses />
+      <WavesOfVirusCreation />
+      <Viruses />
+      <Antibodies />
+    </>
+  );
+}
+
+function Viruses() {
+  const viruses = useStore((s) => s.viruses);
+  const worldRadius = useStore((s) => s.worldRadius);
+
+  return (
+    <>
       {viruses.map((ab, idx) => (
         <SingleParticleMounted
           {...{
@@ -23,6 +32,15 @@ export function StorylineAndIncomingViruses() {
           }}
         />
       ))}
+    </>
+  );
+}
+function Antibodies() {
+  const antibodies = useStore((s) => s.antibodies);
+  const worldRadius = useStore((s) => s.worldRadius);
+
+  return (
+    <>
       {antibodies.map((ab, idx) => (
         <SingleParticleMounted
           {...{
@@ -38,7 +56,7 @@ export function StorylineAndIncomingViruses() {
   );
 }
 
-function WavesOfViruses() {
+function WavesOfVirusCreation() {
   const currentWave = useStore((s) => s.currentWave);
   const wavesSoFar = WAVES.slice(0, currentWave);
 

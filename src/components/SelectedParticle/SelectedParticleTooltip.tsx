@@ -1,5 +1,5 @@
 import React from "react";
-import { useStore } from "../store";
+import { useStore } from "../../store";
 import styled from "styled-components/macro";
 import { Close, Fullscreen, FullscreenExit } from "@material-ui/icons";
 import {
@@ -16,7 +16,7 @@ import {
   BREAKPOINT_MOBILE,
   BREAKPOINT_TABLET,
   CUSTOM_SCROLLBAR_CSS,
-} from "../utils/constants";
+} from "../../utils/constants";
 
 const TOOLTIP = {
   height: 442,

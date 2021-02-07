@@ -66,4 +66,26 @@ export const WAVES: Wave[] = [
       return null;
     },
   },
+  {
+    virus: PROTEINS.viruses.find((v) => v.name === "HIV"),
+    numViruses: 2,
+    assets: [
+      "/models/cells/monocyte.glb",
+      "/models/viruses/HIV_200.glb",
+      "/models/antibodies/antibody_hiv_10.glb",
+    ],
+    Spring: () => {
+      useSpringStoreImmediately({
+        property: "scale",
+        target: 0.004,
+        springConfig: {
+          mass: 1,
+          tension: 170,
+          friction: 50,
+          precision: 0.0001,
+        },
+      });
+      return null;
+    },
+  },
 ];

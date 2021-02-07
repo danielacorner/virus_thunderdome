@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useStore } from "../store";
-import { useCellsFiltered } from "./useCellsFiltered";
+import { useStore } from "../../store";
+import { useCellsFiltered } from "../useCellsFiltered";
 import styled from "styled-components/macro";
 
 export function CellClickListeners() {

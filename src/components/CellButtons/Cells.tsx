@@ -1,8 +1,8 @@
 import React from "react";
 import { useGLTF } from "@react-three/drei";
-import { PROTEINS } from "../utils/PROTEINS";
+import { PROTEINS } from "../../utils/PROTEINS";
 import HUD from "./HUD";
-import { useCellsFiltered } from "./useCellsFiltered";
+import { useCellsFiltered } from "../useCellsFiltered";
 
 const antibody_hiv = PROTEINS.antibodies.find(
   (ab) => ab.name === "anti-HIV Antibody"

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useSphere } from "@react-three/cannon";
 import { useSpring, a } from "react-spring/three";
-import { useJitterInstanceParticle } from "./useJitterParticle";
+import { useJitterInstanceParticle } from "../Physics/useJitterParticle";
 // https://discourse.threejs.org/t/there-is-no-gltfloader-in-three-module/16117/4
 import { useGLTF } from "@react-three/drei";
 import { getRandStartPosition } from "./particleUtils";

@@ -1,5 +1,5 @@
 import { useStore } from "../store";
-import { CELLS } from "./Cells";
+import { CELLS } from "./CellButtons/Cells";
 
 export function useCellsFiltered() {
   const currentWave = useStore((s) => s.currentWave);

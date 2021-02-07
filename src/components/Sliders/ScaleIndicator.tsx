@@ -1,7 +1,7 @@
 import React from "react";
 import { Line, Text } from "@react-three/drei";
-import { useStore } from "../store";
-import { useIsTabletOrLarger } from "../utils/constants";
+import { useStore } from "../../store";
+import { useIsTabletOrLarger } from "../../utils/constants";
 
 type Tick = {
   name: string;

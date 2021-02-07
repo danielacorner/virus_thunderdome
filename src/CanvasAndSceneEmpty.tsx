@@ -3,12 +3,12 @@ import { useWindowSize } from "./utils/hooks";
 import * as THREE from "three";
 import { Canvas, useFrame } from "react-three-fiber";
 import { OrbitControls } from "@react-three/drei";
-import { Lighting } from "./components/Lighting";
+import { Lighting } from "./components/Scene/Lighting";
 import { Physics } from "@react-three/cannon";
 import { Water } from "./components/Water";
 import { PHYSICS_PROPS } from "./utils/PHYSICS_PROPS";
 import { Walls } from "./components/Walls";
-import { ScaleIndicator } from "./components/ScaleIndicator";
+import { ScaleIndicator } from "./components/Sliders/ScaleIndicator";
 
 export function CanvasAndSceneEmpty({
   children = null,

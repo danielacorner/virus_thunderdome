@@ -1,9 +1,9 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useConvexPolyhedron } from "@react-three/cannon";
-import { useJitterParticle } from "../Shapes/useJitterParticle";
+import { useJitterParticle } from "../Physics/useJitterParticle";
 import { useStore } from "../../store";
 import * as THREE from "three";
-import { useChangeVelocityWhenTemperatureChanges } from "../Shapes/useChangeVelocityWhenTemperatureChanges";
+import { useChangeVelocityWhenTemperatureChanges } from "../Physics/useChangeVelocityWhenTemperatureChanges";
 import { useMount } from "../../utils/utils";
 import { useSpring, a } from "react-spring/three";
 import { Protein, PROTEINS, PROTEIN_TYPES } from "../../utils/PROTEINS";

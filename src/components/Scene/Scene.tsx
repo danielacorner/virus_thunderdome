@@ -2,14 +2,14 @@ import React from "react";
 import { Physics } from "@react-three/cannon";
 import { OrbitControls } from "@react-three/drei";
 import { Lighting } from "./Lighting";
-import { Walls } from "./Walls";
+import { Walls } from "../Walls";
 // import ProteinGroup from "./ProteinGroup";
-import { PHYSICS_PROPS } from "../utils/PHYSICS_PROPS";
-import { Water } from "./Water";
-import { ScaleIndicator } from "./ScaleIndicator";
-import { SelectedParticleDisplay } from "./SelectedParticleDisplay";
-import Cells from "./Cells";
-import { StorylineAndIncomingViruses } from "./StorylineSequence";
+import { PHYSICS_PROPS } from "../../utils/PHYSICS_PROPS";
+import { Water } from "../Water";
+import { ScaleIndicator } from "../Sliders/ScaleIndicator";
+import { SelectedParticleDisplay } from "../SelectedParticle/SelectedParticleDisplay";
+import Cells from "../CellButtons/Cells";
+import Game from "./Game";
 
 const Scene = () => {
   // audio track
@@ -28,7 +28,7 @@ const Scene = () => {
         <SelectedParticleDisplay />
         <ScaleIndicator />
         <Cells />
-        <StorylineAndIncomingViruses />
+        <Game />
       </Physics>
       {/* <Effects /> */}
     </>

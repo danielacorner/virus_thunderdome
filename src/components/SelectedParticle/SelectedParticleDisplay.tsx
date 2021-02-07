@@ -1,4 +1,4 @@
-import { useStore } from "../store";
+import { useStore } from "../../store";
 import { Scene, Matrix4 } from "three";
 import React, { useRef, useMemo } from "react";
 import { useFrame, useThree, createPortal } from "react-three-fiber";
