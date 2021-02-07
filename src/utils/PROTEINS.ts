@@ -136,6 +136,9 @@ const Tetrahedral_nanoparticle_20 = React.lazy(
 const Icosahedral_nanoparticle_20 = React.lazy(
   () => import("../components/GLTFs/nanotech/Icosahedral_nanoparticle_20")
 );
+const MlaFEDB_in_nanodiscs_20 = React.lazy(
+  () => import("../components/GLTFs/other/MlaFEDB_in_nanodiscs_20")
+);
 // // cells
 // const Eosinophil = React.lazy(
 //   () => import("../components/GLTFs/cells/Eosinophil")
@@ -868,6 +871,26 @@ export const PROTEINS: { [type: string]: Protein[] } = {
         "Ueda, G., Antanasijevic, A., Fallas, J.A., Sheffler, W., Copps, J., Ellis, D., Hutchinson, G.B., Moyer, A., Yasmeen, A., Tsybovsky, Y., Park, Y.J., Bick, M.J., Sankaran, B., Gillespie, R.A., Brouwer, P.J., Zwart, P.H., Veesler, D., Kanekiyo, M., Graham, B.S., Sanders, R.W., Moore, J.P., Klasse, P.J., Ward, A.B., King, N.P., Baker, D.",
       pubmedAbstract:
         "Multivalent presentation of viral glycoproteins can substantially increase the elicitation of antigen-specific antibodies. To enable a new generation of anti-viral vaccines, we designed self-assembling protein nanoparticles with geometries tailored to present the ectodomains of influenza, HIV, and RSV viral glycoprotein trimers. We first de novo designed trimers tailored for antigen fusion, featuring N-terminal helices positioned to match the C termini of the viral glycoproteins. Trimers that experimentally adopted their designed configurations were incorporated as components of tetrahedral, octahedral, and icosahedral nanoparticles, which were characterized by cryo-electron microscopy and assessed for their ability to present viral glycoproteins. Electron microscopy and antibody binding experiments demonstrated that the designed nanoparticles presented antigenically intact prefusion HIV-1 Env, influenza hemagglutinin, and RSV F trimers in the predicted geometries. This work demonstrates that antigen-displaying protein nanoparticles can be designed from scratch, and provides a systematic way to investigate the influence of antigen presentation geometry on the immune response to vaccination.",
+    },
+  ],
+  other: [
+    {
+      Component: MlaFEDB_in_nanodiscs_20,
+      name: "MlaFEDB in nanodiscs with phospholipid substrates",
+      type: PROTEIN_TYPES.other,
+      PDBUrl: "https://www.rcsb.org/structure/6XBD",
+      mass: 296.37,
+      atomCount: 17433,
+      radius: 50,
+      numIcosahedronFaces: 5,
+      numAsymmetricUnits: 1,
+      pathToGLTF: "/models/other/MlaFEDB_in_nanodiscs_20.glb",
+      pathToImage: "/models/other/MlaFEDB.webp",
+      interactive: true,
+      authors:
+        "Coudray, N., Isom, G.L., MacRae, M.R., Saiduddin, M.N., Bhabha, G., Ekiert, D.C.",
+      pubmedAbstract:
+        "In double-membraned bacteria, phospholipid transport across the cell envelope is critical to maintain the outer membrane barrier, which plays a key role in virulence and antibiotic resistance. An MCE transport system called Mla has been implicated in phospholipid trafficking and outer membrane integrity, and includes an ABC transporter, MlaFEDB. The transmembrane subunit, MlaE, has minimal sequence similarity to other transporters, and the structure of the entire inner-membrane MlaFEDB complex remains unknown. Here, we report the cryo-EM structure of MlaFEDB at 3.05 Å resolution, revealing distant relationships to the LPS and MacAB transporters, as well as the eukaryotic ABCA/ABCG families. A continuous transport pathway extends from the MlaE substrate-binding site, through the channel of MlaD, and into the periplasm. Unexpectedly, two phospholipids are bound to MlaFEDB, suggesting that multiple lipid substrates may be transported each cycle. Our structure provides mechanistic insight into substrate recognition and transport by MlaFEDB.",
     },
   ],
 };
