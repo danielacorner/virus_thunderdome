@@ -72,6 +72,6 @@ const ClickListenerStyles = styled.div`
 
   left: calc(
     50vw - 50px -
-      ${(p) => CELLS_GAP * (p.idx - (p.cellsFilteredLength - 1) / 2)}px
+      ${(p) => CELLS_GAP * (-p.idx + (p.cellsFilteredLength - 1) / 2)}px
   );
 `;
