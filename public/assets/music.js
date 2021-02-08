@@ -1,2 +1,2 @@
-import music from "./music.mp3";
+import music from "./aqiral_nopi.mp3";
 export default music;

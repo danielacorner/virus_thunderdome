@@ -10,10 +10,11 @@ import { ScaleIndicator } from "../Sliders/ScaleIndicator";
 import { SelectedParticleDisplay } from "../SelectedParticle/SelectedParticleDisplay";
 import Cells from "../CellButtons/Cells";
 import Game from "../Game/Game";
+import { useAudioTrack } from "../unused/useAudioTrack";
 
 const Scene = () => {
   // audio track
-  // useAudioTrack();
+  useAudioTrack();
 
   return (
     <>
