@@ -220,6 +220,7 @@ export const SHOT_TYPES = [
 ];
 
 function CellClickListener({ idx, numCells }) {
+  const [enabled, setEnabled] = useState(true);
   const [isPointerDown, setIsPointerDown] = useState(false);
   const createAntibody = useStore((s) => s.createAntibody);
   const targetVirusIdx = useStore((s) => s.targetVirusIdx);
@@ -229,10 +230,19 @@ function CellClickListener({ idx, numCells }) {
 
   const { absPerShot, speed } = SHOT_TYPES[cellButtonIdx];
 
+  // disable button on pointerup so we can't spam clicks
+  useEffect(() => {
+    if (!enabled) {
+      setTimeout(() => {
+        setEnabled(true);
+      }, 1 / speed);
+    }
+  }, [enabled, speed]);
+
   useEffect(() => {
     const antibody = WAVES[targetVirusIdx].antibody;
     let intervalCreateABs;
-    if (isPointerDown) {
+    if (isPointerDown && enabled) {
       [...Array(absPerShot)].forEach(() => {
         createAntibody({ abData: antibody, iconIdx: targetVirusIdx });
       });
@@ -247,15 +257,28 @@ function CellClickListener({ idx, numCells }) {
         window.clearInterval(intervalCreateABs);
       }
     };
-  }, [isPointerDown, createAntibody, targetVirusIdx, idx, absPerShot, speed]);
+  }, [
+    isPointerDown,
+    createAntibody,
+    targetVirusIdx,
+    idx,
+    absPerShot,
+    speed,
+    enabled,
+  ]);
 
   const buttonGap = (CELLS_BTN_GAP * 2) / numCells;
   const buttonPosition = -idx + (numCells - 1) / 2;
   return (
     <ClickListenerStyles
+      speed={speed}
       offsetLeft={buttonGap * buttonPosition}
       className={
-        isPropertyAnimating ? "disabled" : isPointerDown ? "active" : ""
+        isPropertyAnimating || !enabled
+          ? "disabled"
+          : isPointerDown
+          ? "active"
+          : ""
       }
       {...{ idx, numCells }}
       onPointerDown={() => {
@@ -263,7 +286,10 @@ function CellClickListener({ idx, numCells }) {
         setIsPointerDown(true);
       }}
       onPointerLeave={() => setIsPointerDown(false)}
-      onPointerUp={() => setIsPointerDown(false)}
+      onPointerUp={() => {
+        setEnabled(false);
+        setIsPointerDown(false);
+      }}
     ></ClickListenerStyles>
   );
 }
@@ -281,9 +307,28 @@ const ClickListenerStyles = styled.div`
   width: ${CELL_BTN_WIDTH}px;
   height: ${CELL_BTN_WIDTH}px;
   background: #68d0cb2e;
-  &.disabled {
+  overflow: hidden;
+  &:after {
+    content: "";
+    position: absolute;
+    top: -12px;
+    bottom: -12px;
+    right: 0;
+    left: 0;
     background: #70908f;
+    transition: none;
+  }
+  &.disabled {
     opacity: 0.5;
+    &:after {
+      transition: all ${(p) => 1 / p.speed}ms linear;
+    }
+  }
+  &:not(.disabled) {
+    &:after {
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
   }
   &:hover {
     transform: scale(1.1);

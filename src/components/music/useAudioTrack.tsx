@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useControl } from "react-three-gui";
 import { useMount } from "../../utils/utils";
 import useSound from "use-sound";
-import music from "../../../public/assets/music";
+import music from "./music";
 
 export function useAudioTrack() {
   const [play, { isPlaying, pause }] = useSound(music, { volume: 1 });
