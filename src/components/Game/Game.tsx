@@ -3,7 +3,8 @@ import { SingleParticleMounted } from "../particle/SingleParticleMounted";
 import { useStore } from "../../store";
 import { randBetween, useMount } from "../../utils/utils";
 import { WAVES } from "./WAVES";
-import { WAVE_START_DELAY } from "../Scene/BtnStartNextWave";
+
+const VIRUS_SPAWN_START_DELAY = 1 * 1000;
 
 /** Generates waves of viruses, and you click to create antibodies to defend against them */
 export default function Game() {
@@ -119,7 +120,7 @@ function SingleWave({ viruses }) {
         [...Array(numViruses)].forEach((_, idx2) => {
           setTimeout(() => {
             createVirus({ virusData, iconIdx });
-          }, virusIdx * 500 + (idx2 + 1) * APPEAR_INTERVAL + WAVE_START_DELAY);
+          }, virusIdx * 500 + (idx2 + 1) * APPEAR_INTERVAL + VIRUS_SPAWN_START_DELAY);
         });
       }
     );

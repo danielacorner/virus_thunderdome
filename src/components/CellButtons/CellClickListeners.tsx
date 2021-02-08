@@ -129,6 +129,7 @@ function CellClickListener({ idx, numCells }) {
   const [isPointerDown, setIsPointerDown] = useState(false);
   const createAntibody = useStore((s) => s.createAntibody);
   const targetVirusIdx = useStore((s) => s.targetVirusIdx);
+  const isPropertyAnimating = useStore((s) => s.isPropertyAnimating);
   const set = useStore((s) => s.set);
 
   useEffect(() => {
@@ -152,7 +153,9 @@ function CellClickListener({ idx, numCells }) {
   return (
     <ClickListenerStyles
       offsetLeft={buttonGap * buttonPosition}
-      className={isPointerDown ? "active" : ""}
+      className={
+        isPropertyAnimating ? "disabled" : isPointerDown ? "active" : ""
+      }
       {...{ idx, numCells }}
       onPointerDown={() => {
         set({ cellButtonIdx: idx });
@@ -176,6 +179,10 @@ const ClickListenerStyles = styled.div`
   width: ${CELL_BTN_WIDTH}px;
   height: ${CELL_BTN_WIDTH}px;
   background: #68d0cb2e;
+  &.disabled {
+    background: #70908f;
+    opacity: 0.5;
+  }
   &.active {
     box-shadow: 0px 2px 1px 1px #000000bd;
     transform: translateY(4px);

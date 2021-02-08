@@ -5,7 +5,7 @@ import { Button } from "@material-ui/core";
 import { WAVES } from "../Game/WAVES";
 import { useGLTF, useProgress } from "@react-three/drei";
 
-export const WAVE_START_DELAY = 1 * 1000;
+const WAVE_START_DELAY = 1 * 1000;
 
 export function BtnStartNextWave() {
   const set = useStore((s) => s.set);
