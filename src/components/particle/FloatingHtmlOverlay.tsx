@@ -24,10 +24,13 @@ export function FloatingHtmlOverlay({
     }, 1);
   });
   const isAntibody = type === PROTEIN_TYPES.antibody;
+  const isVirus = type === PROTEIN_TYPES.virus;
 
   return showHp ? (
     <Html>
-      <HtmlOverlayStyles {...{ mounted, lifespan, type, virusHpPct }}>
+      <HtmlOverlayStyles
+        {...{ mounted, lifespan, type, virusHpPct, isAntibody, isVirus }}
+      >
         {Icon ? (
           <div className="icon">
             <Icon />
@@ -52,6 +55,8 @@ type HtmlOverlayProps = {
   virusHpPct: number;
   lifespan: number;
   mounted: boolean;
+  isVirus: boolean;
+  isAntibody: boolean;
 };
 
 const HtmlOverlayStyles = styled.div<HtmlOverlayProps>`
@@ -73,7 +78,8 @@ const HtmlOverlayStyles = styled.div<HtmlOverlayProps>`
       color: red;
     }
   }
-  transform: translateY(16px);
+  transform: translateY(16px)
+    scale(${(p) => (p.isAntibody ? 0.9 : p.isVirus ? 1.5 : 1)});
   pointer-events: none;
   display: flex;
   flex-direction: column;
