@@ -47,3 +47,32 @@ export const usePrevious = (value) => {
   // Return previous value (happens before update in useEffect above)
   return ref.current;
 };
+
+/**
+ * Run an effect, only once, when a condition is met
+ * @param callback callback to fire when shouldRun = true
+ * @param shouldRun whether we should fire the callback
+ * @param dependencies when these change, check again if shouldRun = true
+ */
+export function useEffectOnce({
+  callback,
+  shouldRun,
+  dependencies,
+}: {
+  callback: Function;
+  shouldRun: boolean;
+  dependencies: any[];
+}) {
+  const didRun = useRef(false);
+  let dependenciesToUse = dependencies;
+
+  useEffect(() => {
+    if (shouldRun && !didRun.current) {
+      // once we fire, cancel the useEffect
+      callback();
+      didRun.current = true;
+      // eslint-disable-next-line
+      dependenciesToUse = []; // this line cancels the effect
+    }
+  }, dependenciesToUse);
+}

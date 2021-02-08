@@ -78,7 +78,7 @@ export function Walls() {
       ))}
       {isPropertyAnimating ? null : (
         <mesh>
-          <icosahedronBufferGeometry args={[scalePct * 100, 5]} />
+          {/* <icosahedronBufferGeometry args={[scalePct * 100, 5]} />
           <meshPhysicalMaterial
             color="rebeccapurple"
             opacity={0.018}
@@ -89,7 +89,7 @@ export function Walls() {
             vertexColors={true}
             reflectivity={1}
             wireframe={true}
-          />
+          /> */}
         </mesh>
       )}
       <InteractiveFloorWithHPIndicator

@@ -2,6 +2,7 @@ import React from "react";
 import { SingleParticleMounted } from "../particle/SingleParticleMounted";
 import { useStore } from "../../store";
 import { randBetween, useMount } from "../../utils/utils";
+import { useEffectOnce } from "../../utils/hooks";
 import { WAVES } from "./WAVES";
 
 const VIRUS_SPAWN_START_DELAY = 1 * 1000;
@@ -98,8 +99,8 @@ function getPosition({ worldRadius, cellButtonIdx }) {
 }
 
 function WavesOfVirusCreation() {
-  const currentWave = useStore((s) => s.currentWave);
-  const wavesSoFar = WAVES.slice(0, currentWave);
+  const currentWaveIdx = useStore((s) => s.currentWaveIdx);
+  const wavesSoFar = WAVES.slice(0, currentWaveIdx);
 
   return (
     <>
@@ -110,20 +111,34 @@ function WavesOfVirusCreation() {
   );
 }
 
+const APPEAR_INTERVAL = 1000;
+
 function SingleWave({ viruses }) {
   const createVirus = useStore((s) => s.createVirus);
+  const started = useStore((s) => s.started);
+  const scale = useStore((s) => s.scale);
+  const loading = useStore((s) => s.loading);
+  const currentWaveIdx = useStore((s) => s.currentWaveIdx);
+  const scaleTarget = WAVES[currentWaveIdx].scaleTarget;
+  const isScaleTarget = scale === scaleTarget;
 
-  const APPEAR_INTERVAL = 1000;
-  useMount(() => {
-    viruses.forEach(
-      ({ virus: { virusData, iconIdx }, numViruses }, virusIdx) => {
-        [...Array(numViruses)].forEach((_, idx2) => {
-          setTimeout(() => {
-            createVirus({ virusData, iconIdx });
-          }, virusIdx * 500 + (idx2 + 1) * APPEAR_INTERVAL + VIRUS_SPAWN_START_DELAY);
-        });
-      }
-    );
+  const isPropertyAnimating = useStore((s) => s.isPropertyAnimating);
+
+  // start spawning the viruses when the wave and all animations are done
+  useEffectOnce({
+    callback: () => {
+      viruses.forEach(
+        ({ virus: { virusData, iconIdx }, numViruses }, virusIdx) => {
+          [...Array(numViruses)].forEach((_, idx2) => {
+            setTimeout(() => {
+              createVirus({ virusData, iconIdx });
+            }, virusIdx * 500 + (idx2 + 1) * APPEAR_INTERVAL + VIRUS_SPAWN_START_DELAY);
+          });
+        }
+      );
+    },
+    shouldRun: started && !isPropertyAnimating && isScaleTarget && !loading,
+    dependencies: [],
   });
 
   return null;

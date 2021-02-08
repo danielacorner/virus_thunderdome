@@ -1,6 +1,6 @@
 import React from "react";
 import { Line, Text } from "@react-three/drei";
-import { useStore } from "../../store";
+import { INITIAL_CEILING_HEIGHT, useStore } from "../../store";
 import { useIsTabletOrLarger } from "../../utils/constants";
 
 type Tick = {
@@ -10,12 +10,18 @@ type Tick = {
 };
 
 export function ScaleIndicator() {
+  const ceilingHeight = useStore((s) => s.ceilingHeight);
+  const ceilingHeightMultiplier = ceilingHeight / INITIAL_CEILING_HEIGHT;
+  console.log("🌟🚨 ~ ScaleIndicator ~ ceilingHeight", ceilingHeight);
   const wr = useStore((s) => s.worldRadius * 0.999);
+  console.log("🌟🚨 ~ ScaleIndicator ~ wr", wr);
   const wd = 2 * wr;
   const scale = useStore((s) => s.scale);
   const worldRadius = useStore((s) => s.worldRadius);
   const commonProps = { color: "hsla(0,0%,80%)" };
   const scaled = scale / 0.002 / 4;
+  console.log("🌟🚨 ~ ScaleIndicator ~ scale", scale);
+  console.log("🌟🚨 ~ ScaleIndicator ~ scaled", scaled);
   // create 10 big ticks
   const ticksLeft: Tick[] = [...new Array(10)]
     .map((_, idx) => ({
@@ -79,6 +85,8 @@ export function ScaleIndicator() {
       side: "right",
     }))
     .slice(1) as Tick[];
+  console.log("🌟🚨 ~ ScaleIndicator ~ ticksRightSmaller", ticksRightSmaller);
+
   const isTabletOrLarger = useIsTabletOrLarger();
   return (
     <>
@@ -93,32 +101,41 @@ export function ScaleIndicator() {
         ...ticksRightSmall,
         ...ticksLeftSmaller,
         ...ticksRightSmaller,
-      ].map((t) =>
-        t.position[1] > worldRadius ||
-        t.position[1] < -worldRadius * 0.97 ? null : (
-          <React.Fragment key={t.name}>
+      ]
+        .filter(({ position: [x, y, z] }) => {
+          const areAllNumbers = [x, y, z].reduce(
+            (tru, cur) => tru && typeof cur === "number",
+            true
+          );
+          const isTickBelowCeiling = y < worldRadius * ceilingHeightMultiplier;
+          const isTickAboveFloor = y > -worldRadius * 0.97;
+
+          return areAllNumbers && isTickBelowCeiling && isTickAboveFloor;
+        })
+        .map(({ name, position, side }) => (
+          <React.Fragment key={name}>
             <group>
               <Line
                 {...commonProps}
                 points={[
-                  t.position,
+                  position,
                   [
-                    t.position[0] * (t.side === "left" ? 0.97 : 1),
-                    t.position[1],
-                    t.position[2] * (t.side === "right" ? 0.97 : 1),
+                    position[0] * (side === "left" ? 0.97 : 1),
+                    position[1],
+                    position[2] * (side === "right" ? 0.97 : 1),
                   ],
                 ]}
               ></Line>
               <Text
-                rotation={[0, t.side === "left" ? 0 : Math.PI / 2, 0]}
+                rotation={[0, side === "left" ? 0 : Math.PI / 2, 0]}
                 {...{
                   position: [
-                    t.position[0] *
-                      (t.side === "left"
+                    position[0] *
+                      (side === "left"
                         ? 0.91 - (isTabletOrLarger ? 0 : 0.02)
                         : 1),
-                    t.position[1],
-                    t.position[2] * (t.side === "right" ? 0.91 : 1),
+                    position[1],
+                    position[2] * (side === "right" ? 0.91 : 1),
                   ],
                   // color: t.side === "left" ? "hsl(0,0%,0%)" : "hsl(0,0%,70%)",
                   color: "hsl(0,0%,20%)",
@@ -131,17 +148,16 @@ export function ScaleIndicator() {
                   },
                 }}
               >
-                {t.name}
+                {name}
               </Text>
             </group>
           </React.Fragment>
-        )
-      )}
+        ))}
     </>
   );
 }
 function EdgeLines({ commonProps }) {
-  const wr = useStore((s) => s.worldRadius * 0.999);
+  const wr = useStore((s) => s.worldRadius * 0.99);
 
   return (
     <>

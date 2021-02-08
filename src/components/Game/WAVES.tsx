@@ -52,6 +52,7 @@ type Wave = {
     numViruses: number;
   }[];
   antibody: Protein;
+  scaleTarget?: number;
   Spring?: Function;
   assets: string[];
 };
@@ -60,22 +61,13 @@ export const WAVES: Wave[] = [
   {
     viruses: [{ numViruses: 8, virus: Polio }],
     antibody: antibody_poliovirus,
+    scaleTarget: 0.01,
     assets: [
       "/models/cells/lymphocyte.glb",
       "/models/viruses/poliovirus_50.glb",
       "/models/antibodies/antibody_poliovirus_10.glb",
     ],
     Spring: () => {
-      useSpringStoreImmediately({
-        property: "scale",
-        target: 0.01,
-        springConfig: {
-          mass: 1,
-          tension: 170,
-          friction: 50,
-          precision: 0.0001,
-        },
-      });
       useSpringStoreImmediately({
         property: "ceilingHeight",
         target: 16,
@@ -100,17 +92,8 @@ export const WAVES: Wave[] = [
       "/models/viruses/hpv_100.glb",
       "/models/antibodies/antibody_hpv_10.glb",
     ],
+    scaleTarget: 0.006,
     Spring: () => {
-      useSpringStoreImmediately({
-        property: "scale",
-        target: 0.006,
-        springConfig: {
-          mass: 1,
-          tension: 340,
-          friction: 50,
-          precision: 0.0001,
-        },
-      });
       return null;
     },
   },
@@ -126,17 +109,8 @@ export const WAVES: Wave[] = [
       "/models/viruses/hpv_100.glb",
       "/models/antibodies/antibody_hpv_10.glb",
     ],
+    scaleTarget: 0.0045,
     Spring: () => {
-      useSpringStoreImmediately({
-        property: "scale",
-        target: 0.0045,
-        springConfig: {
-          mass: 1,
-          tension: 170,
-          friction: 50,
-          precision: 0.0001,
-        },
-      });
       return null;
     },
   },
@@ -153,17 +127,8 @@ export const WAVES: Wave[] = [
       "/models/viruses/HIV_200.glb",
       "/models/antibodies/antibody_hiv_10.glb",
     ],
+    scaleTarget: 0.003,
     Spring: () => {
-      useSpringStoreImmediately({
-        property: "scale",
-        target: 0.003,
-        springConfig: {
-          mass: 1,
-          tension: 170,
-          friction: 50,
-          precision: 0.0001,
-        },
-      });
       useSpringStoreImmediately({
         property: "ceilingHeight",
         target: 24,
@@ -188,17 +153,8 @@ export const WAVES: Wave[] = [
       "/models/viruses/HIV_200.glb",
       "/models/antibodies/antibody_hiv_10.glb",
     ],
+    scaleTarget: 0.003,
     Spring: () => {
-      useSpringStoreImmediately({
-        property: "scale",
-        target: 0.003,
-        springConfig: {
-          mass: 1,
-          tension: 170,
-          friction: 50,
-          precision: 0.0001,
-        },
-      });
       useSpringStoreImmediately({
         property: "ceilingHeight",
         target: 24,
@@ -213,3 +169,17 @@ export const WAVES: Wave[] = [
     },
   },
 ];
+
+export function SpringScaleToTarget({ target }) {
+  useSpringStoreImmediately({
+    property: "scale",
+    target: target,
+    springConfig: {
+      mass: 1,
+      tension: 170,
+      friction: 50,
+      // precision: 0.0001,
+    },
+  });
+  return null;
+}

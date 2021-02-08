@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { INITIAL_PLAYER_HP, useStore } from "../../store";
 import styled from "styled-components/macro";
 import { Button } from "@material-ui/core";
-import { WAVES } from "../Game/WAVES";
+import { SpringScaleToTarget, WAVES } from "../Game/WAVES";
 import { useGLTF, useProgress } from "@react-three/drei";
 
 const WAVE_START_DELAY = 1 * 1000;
@@ -14,11 +14,11 @@ export function BtnStartNextWave() {
   const { active: loadingAssets } = useProgress();
 
   // when the wave ends, show the "next wave" button,
-  const currentWave = useStore((s) => s.currentWave);
+  const currentWaveIdx = useStore((s) => s.currentWaveIdx);
   const [isWaveComplete, setIsWaveComplete] = useState(true);
 
   // complete the wave when we've defeated all viruses so far
-  const wavesSoFar = WAVES.slice(0, currentWave);
+  const wavesSoFar = WAVES.slice(0, currentWaveIdx);
   const totalVirusesSoFar = wavesSoFar.reduce(
     (acc, cur) => acc + cur.viruses.reduce((a, c) => c.numViruses + a, 0),
     0
@@ -52,18 +52,18 @@ export function BtnStartNextWave() {
           <Button
             style={{ padding: "0.25em 3em", pointerEvents: "auto" }}
             onClick={() => {
-              set({ currentWave: currentWave + 1 });
+              set({ currentWaveIdx: currentWaveIdx + 1 });
               setIsWaveComplete(false);
               setIsWaveIncoming(true);
             }}
             variant="outlined"
           >
-            {currentWave === 0 ? "Ready" : "Next Wave"}
+            {currentWaveIdx === 0 ? "Ready" : "Next Wave"}
           </Button>
         </>
       ) : isWaveIncoming ? (
         <>
-          <div className="incomingText">Wave {currentWave} Incoming!!</div>
+          <div className="incomingText">Wave {currentWaveIdx} Incoming!!</div>
           <NextWaveSprings />
         </>
       ) : null}
@@ -101,8 +101,8 @@ const NextWaveStyles = styled.div`
 `;
 
 function NextWaveAssets() {
-  const currentWave = useStore((s) => s.currentWave);
-  const nextWave = WAVES[currentWave];
+  const currentWaveIdx = useStore((s) => s.currentWaveIdx);
+  const nextWave = WAVES[currentWaveIdx];
 
   if (!nextWave) {
     return;
@@ -119,8 +119,8 @@ function NextWaveAssets() {
 }
 
 function NextWaveSprings() {
-  const currentWave = useStore((s) => s.currentWave);
-  const nextWave = WAVES[currentWave - 1];
+  const currentWaveIdx = useStore((s) => s.currentWaveIdx);
+  const nextWave = WAVES[currentWaveIdx - 1];
   const { active: loadingAssets } = useProgress();
 
   // when assets are done loading, launch the spring after a short timeout (otherwise it gets blocked in production?)
@@ -137,9 +137,16 @@ function NextWaveSprings() {
     return null;
   }
 
-  const { Spring } = nextWave;
+  const { Spring, scaleTarget } = nextWave;
 
   // some waves animate properties in the store
   // like scale, wallHeight
-  return ready && Spring ? <Spring /> : null;
+  return (
+    <>
+      {ready && Spring ? <Spring /> : null}
+      {ready && scaleTarget ? (
+        <SpringScaleToTarget target={scaleTarget} />
+      ) : null}
+    </>
+  );
 }

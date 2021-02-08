@@ -12,7 +12,7 @@ type GlobalStateType = {
   /** radius of the cube container */
   worldRadius: number;
   /** number of the wave we're currently on */
-  currentWave: number;
+  currentWaveIdx: number;
   /** to track whether the wave is completed */
   numDefeatedViruses: number;
   /** to track whether the wave is completed */
@@ -59,6 +59,7 @@ type GlobalStateType = {
 const startsStarted = /* false && */ process.env.NODE_ENV === "development";
 
 export const INITIAL_PLAYER_HP = 10000;
+export const INITIAL_CEILING_HEIGHT = 10;
 
 // zustand https://github.com/pmndrs/zustand
 // with typescript https://react-tracked.js.org/docs/tutorial-zustand-01/
@@ -80,12 +81,12 @@ export const useStore = create<GlobalStateType>(
     started: startsStarted,
     loading: !startsStarted,
     worldRadius: 5,
-    currentWave: 0,
+    currentWaveIdx: 0,
     numDefeatedViruses: 0,
     incrementNumDefeatedViruses: () =>
       set((state) => ({ numDefeatedViruses: state.numDefeatedViruses + 1 })),
     temperature: 1,
-    ceilingHeight: 10,
+    ceilingHeight: INITIAL_CEILING_HEIGHT,
     scale: MAX_SCALE,
     selectedProtein: null as null | SelectedProtein,
     setSelectedProtein: (selectedProtein) => set(() => ({ selectedProtein })),

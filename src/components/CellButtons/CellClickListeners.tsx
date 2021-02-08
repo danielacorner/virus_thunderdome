@@ -125,18 +125,25 @@ const VirusTargetIconsStyles = styled.div`
   }
 `;
 
+const ABS_PER_SHOT = [1, 2, 3, 4];
+
 function CellClickListener({ idx, numCells }) {
   const [isPointerDown, setIsPointerDown] = useState(false);
   const createAntibody = useStore((s) => s.createAntibody);
   const targetVirusIdx = useStore((s) => s.targetVirusIdx);
+  const cellButtonIdx = useStore((s) => s.cellButtonIdx);
   const isPropertyAnimating = useStore((s) => s.isPropertyAnimating);
   const set = useStore((s) => s.set);
+
+  const antibodiesPerShot = ABS_PER_SHOT[cellButtonIdx];
 
   useEffect(() => {
     const antibody = WAVES[targetVirusIdx].antibody;
     let intervalCreateABs;
     if (isPointerDown) {
-      createAntibody({ abData: antibody, iconIdx: targetVirusIdx });
+      [...Array(antibodiesPerShot)].forEach(() => {
+        createAntibody({ abData: antibody, iconIdx: targetVirusIdx });
+      });
       intervalCreateABs = window.setInterval(() => {
         createAntibody({ abData: antibody, iconIdx: targetVirusIdx });
       }, 100);
