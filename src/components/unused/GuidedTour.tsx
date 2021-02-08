@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Tour from "reactour";
 import { useLocalStorageState } from "../../utils/useLocalStorageState";
 import styled from "styled-components/macro";
-import { getIsTouchDevice } from "../../getIsTouchDevice";
+import { getIsTouchDevice } from "../../utils/getIsTouchDevice";
 import { useStore } from "../../store";
 
 // https://github.com/elrumordelaluz/reactour
