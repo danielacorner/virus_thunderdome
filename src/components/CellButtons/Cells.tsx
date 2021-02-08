@@ -45,9 +45,7 @@ export default function Cells() {
           // const y = height * 0.75;
           // const z = 15;
           const cellsGap = CELLS_GAP / numCells;
-          console.log("🌟🚨 ~ {cellsFiltered.map ~ cellsGap", cellsGap);
           const cellPosition = idx - (numCells - 1) / 2;
-          console.log("🌟🚨 ~ {cellsFiltered.map ~ cellPosition", cellPosition);
           const position = [cellsGap * cellPosition, -0.35, 0];
           return <Cell key={idx} {...{ ...cellProps, position }} />;
         })}

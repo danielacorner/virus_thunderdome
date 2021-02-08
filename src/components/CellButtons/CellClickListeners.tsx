@@ -100,10 +100,11 @@ const VirusTargetIconStyles = styled.div`
   .container {
     width: 100%;
     height: 100%;
+    display: grid;
+    place-items: center;
     svg {
-      position: absolute;
-      width: 100%;
-      height: 100%;
+      width: 36px;
+      height: 36px;
     }
   }
 `;
@@ -127,6 +128,7 @@ function CellClickListener({ idx, numCells }) {
   const [isPointerDown, setIsPointerDown] = useState(false);
   const createAntibody = useStore((s) => s.createAntibody);
   const targetVirusIdx = useStore((s) => s.targetVirusIdx);
+  const set = useStore((s) => s.set);
 
   useEffect(() => {
     const antibody = WAVES[targetVirusIdx].antibody;
@@ -145,15 +147,16 @@ function CellClickListener({ idx, numCells }) {
   }, [isPointerDown, createAntibody, targetVirusIdx, idx]);
 
   const buttonGap = (CELLS_BTN_GAP * 2) / numCells;
-  console.log("🌟🚨 ~ CellClickListener ~ buttonGap", buttonGap);
   const buttonPosition = -idx + (numCells - 1) / 2;
-  console.log("🌟🚨 ~ CellClickListener ~ buttonPosition", buttonPosition);
   return (
     <ClickListenerStyles
       offsetLeft={buttonGap * buttonPosition}
       className={isPointerDown ? "active" : ""}
       {...{ idx, numCells }}
-      onPointerDown={() => setIsPointerDown(true)}
+      onPointerDown={() => {
+        set({ cellButtonIdx: idx });
+        setIsPointerDown(true);
+      }}
       onPointerLeave={() => setIsPointerDown(false)}
       onPointerUp={() => setIsPointerDown(false)}
     />

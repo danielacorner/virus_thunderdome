@@ -39,6 +39,8 @@ type GlobalStateType = {
   scale: number;
   /** which virus do the produced antibodies target? */
   targetVirusIdx: number;
+  /** which cell was clicked? determines how the antibodies spawn */
+  cellButtonIdx: number;
   /** the viruses currently in the game (or already defeated/unmounted) */
   viruses: { virusData: Protein; iconIdx: number }[];
   /** the antibodies currently in the game (or already defeated/unmounted) */
@@ -66,6 +68,7 @@ export const useStore = create<GlobalStateType>(
     paused: false,
     isPropertyAnimating: false,
     targetVirusIdx: 0,
+    cellButtonIdx: 0,
     viruses: [],
     antibodies: [],
     createVirus: (newVir) =>
