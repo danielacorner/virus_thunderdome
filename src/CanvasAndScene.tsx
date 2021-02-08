@@ -5,11 +5,11 @@ import { useWindowSize } from "./utils/hooks";
 import * as THREE from "three";
 
 // import { useFrame } from "react-three-fiber";
-import TopControls from "./TopControls";
+import TopControls from "./components/Controls/TopControls";
 import { IconButton } from "@material-ui/core";
 import { useStore } from "./store";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import SideControls from "./SideControls";
+import SideControls from "./components/Controls/SideControls";
 
 export default function CanvasAndScene({ renderProteins = true }) {
   const windowSize = useWindowSize();

@@ -6,5 +6,5 @@ export function useCellsFiltered() {
   const cellsFiltered = CELLS.filter(
     (_, idx) => idx === 0 || currentWaveIdx > idx
   );
-  return CELLS;
+  return process.env.NODE_ENV === "production" ? cellsFiltered : CELLS;
 }
