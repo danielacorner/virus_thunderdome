@@ -17,12 +17,13 @@ export function CellClickListeners() {
   const numCells = cellsFiltered.length;
   const targetVirusIdx = useStore((s) => s.targetVirusIdx);
   const started = useStore((s) => s.started);
-  const buttonGap = ANTIBODY_BTN_GAP / numCells;
+  const absButtonGap = ANTIBODY_BTN_GAP / numCells;
+  const cellsButtonGap = (CELLS_BTN_GAP * 2) / numCells;
 
   const springLeftRight = useSpring({
     left: `calc(
       50vw - ${ANTIBODY_BTN_WIDTH / 4}px -
-        ${buttonGap * (-targetVirusIdx + (numCells - 1) / 2)}px
+        ${absButtonGap * (-targetVirusIdx + (numCells - 1) / 2)}px
     )`,
     config: {
       tension: 270,
@@ -32,11 +33,12 @@ export function CellClickListeners() {
   });
 
   return !started ? null : (
-    <>
+    <Styles {...{ numCells, absButtonGap, cellsButtonGap }}>
       <VirusTargetIconsStyles numCells={numCells}>
         <animated.div style={springLeftRight} className="blockIcon">
           <Block />
         </animated.div>
+        <div className="label top">Antibodies</div>
         {cellsFiltered.map((cell, idx) => (
           <VirusTargetIconButton
             key={idx}
@@ -47,6 +49,7 @@ export function CellClickListeners() {
           />
         ))}
       </VirusTargetIconsStyles>
+      <div className="label bottom">Immune Cells</div>
       {cellsFiltered.map((cell, idx) => (
         <CellClickListener
           key={idx}
@@ -56,24 +59,47 @@ export function CellClickListeners() {
           }}
         />
       ))}
-    </>
+    </Styles>
   );
 }
+const Styles = styled.div`
+  .label {
+    pointer-events: none;
+    position: fixed;
+    transform: rotate(312deg);
+    height: 1em;
+    bottom: 128px;
+    left: calc(
+      50vw - ${88}px - ${(p) => p.absButtonGap * ((p.numCells - 1) / 2)}px
+    );
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    &.bottom {
+      bottom: 58px;
+      width: 8ch;
+      left: calc(
+        50vw - ${96}px - ${(p) => p.cellsButtonGap * ((p.numCells - 1) / 2)}px
+      );
+    }
+  }
+`;
 
 function VirusTargetIconButton({ idx, numCells }) {
   const Icon = ICONS[idx];
   const targetVirusIdx = useStore((s) => s.targetVirusIdx);
   const set = useStore((s) => s.set);
   const active = targetVirusIdx === idx;
+  const buttonGap = ANTIBODY_BTN_GAP / numCells;
+
   return (
     <VirusTargetIconStyles
       onClick={() => (active ? null : set({ targetVirusIdx: idx }))}
       className={`svgIcon${active ? " active" : ""}`}
-      buttonGap={ANTIBODY_BTN_GAP / numCells}
+      buttonGap={buttonGap}
       numCells={numCells}
       idx={idx}
     >
-      {idx === 0 ? <div className="label">Antibodies</div> : null}
       <div className="container">
         <Icon />
       </div>
@@ -89,28 +115,24 @@ const VirusTargetIconStyles = styled.div`
   position: absolute;
   bottom: 0px;
   border: 1px solid #737373;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+  &:hover {
+    transform: scale(1.1);
+  }
   &.active {
+    transform: scale(1.1) translateY(4px);
+    pointer-events: none;
     border: 1px solid #bbbbbb;
     box-shadow: 0px 2px 1px 1px #00000073;
-    transform: translateY(4px);
   }
   box-shadow: 0px 2px 5px 1px #000000bd;
-  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   border-radius: 16px;
   background: #68d0cb2e;
   width: ${ANTIBODY_BTN_WIDTH}px;
   height: ${ANTIBODY_BTN_WIDTH}px;
-  .label {
-    pointer-events: none;
-    position: absolute;
-    transform: rotate(312deg);
-    top: -3px;
-    right: 45px;
-    height: 100%;
-    display: grid;
-    place-items: center;
-    font-size: 14px;
-  }
+
   .container {
     width: 100%;
     height: 100%;
@@ -127,12 +149,13 @@ const VirusTargetIconsStyles = styled.div`
   position: relative;
   bottom: 112px;
   .blockIcon {
+    pointer-events: none;
     bottom: 4px;
     z-index: 1;
     position: absolute;
     opacity: 0.4;
     svg {
-      transform: scale(3.2);
+      transform: scale(4);
     }
     color: red;
   }
@@ -241,13 +264,12 @@ function CellClickListener({ idx, numCells }) {
       }}
       onPointerLeave={() => setIsPointerDown(false)}
       onPointerUp={() => setIsPointerDown(false)}
-    >
-      {idx === 0 ? <div className="label">Immune Cells</div> : null}
-    </ClickListenerStyles>
+    ></ClickListenerStyles>
   );
 }
 
 const ClickListenerStyles = styled.div`
+  cursor: pointer;
   position: absolute;
   bottom: 18px;
   left: calc(50vw - ${CELL_BTN_WIDTH / 2}px - ${(p) => p.offsetLeft}px);
@@ -263,19 +285,11 @@ const ClickListenerStyles = styled.div`
     background: #70908f;
     opacity: 0.5;
   }
-  &.active {
-    box-shadow: 0px 2px 1px 1px #000000bd;
-    transform: translateY(4px);
+  &:hover {
+    transform: scale(1.1);
   }
-  .label {
-    pointer-events: none;
-    position: absolute;
-    transform: rotate(312deg);
-    top: -3px;
-    right: 72px;
-    height: 100%;
-    display: grid;
-    place-items: center;
-    font-size: 14px;
+  &.active {
+    transform: scale(1.1) translateY(4px);
+    box-shadow: 0px 2px 1px 1px #000000bd;
   }
 `;

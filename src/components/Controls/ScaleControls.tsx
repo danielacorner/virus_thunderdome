@@ -53,6 +53,9 @@ const ScaleControlsStyles = styled.div`
     width: 100%;
     .grid-item {
       width: 100%;
+      svg {
+        transform: scale(1.2);
+      }
     }
     grid-template-columns: auto 1fr auto;
     place-items: center;
