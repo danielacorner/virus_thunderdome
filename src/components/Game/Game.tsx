@@ -1,7 +1,7 @@
 import React from "react";
 import { SingleParticleMounted } from "../particle/SingleParticleMounted";
 import { useStore } from "../../store";
-import { randBetween, useMount } from "../../utils/utils";
+import { randBetween } from "../../utils/utils";
 import { useEffectOnce } from "../../utils/hooks";
 import { WAVES } from "./WAVES";
 
@@ -119,10 +119,13 @@ function SingleWave({ viruses }) {
   const scale = useStore((s) => s.scale);
   const loading = useStore((s) => s.loading);
   const currentWaveIdx = useStore((s) => s.currentWaveIdx);
-  const scaleTarget = WAVES[currentWaveIdx].scaleTarget;
-  const isScaleTarget = scale === scaleTarget;
+  const scaleTarget = WAVES[Math.max(0, currentWaveIdx - 1)].scaleTarget;
+  const isScaleTarget = scale - scaleTarget <= 0.000000000000000002; // seems to be the final value for scale
 
   const isPropertyAnimating = useStore((s) => s.isPropertyAnimating);
+
+  const readyToCreateViruses =
+    started && !isPropertyAnimating && isScaleTarget && !loading;
 
   // start spawning the viruses when the wave and all animations are done
   useEffectOnce({
@@ -137,8 +140,8 @@ function SingleWave({ viruses }) {
         }
       );
     },
-    shouldRun: started && !isPropertyAnimating && isScaleTarget && !loading,
-    dependencies: [],
+    shouldRun: readyToCreateViruses,
+    dependencies: [readyToCreateViruses],
   });
 
   return null;

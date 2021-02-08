@@ -12,16 +12,12 @@ type Tick = {
 export function ScaleIndicator() {
   const ceilingHeight = useStore((s) => s.ceilingHeight);
   const ceilingHeightMultiplier = ceilingHeight / INITIAL_CEILING_HEIGHT;
-  console.log("🌟🚨 ~ ScaleIndicator ~ ceilingHeight", ceilingHeight);
   const wr = useStore((s) => s.worldRadius * 0.999);
-  console.log("🌟🚨 ~ ScaleIndicator ~ wr", wr);
   const wd = 2 * wr;
   const scale = useStore((s) => s.scale);
   const worldRadius = useStore((s) => s.worldRadius);
   const commonProps = { color: "hsla(0,0%,80%)" };
   const scaled = scale / 0.002 / 4;
-  console.log("🌟🚨 ~ ScaleIndicator ~ scale", scale);
-  console.log("🌟🚨 ~ ScaleIndicator ~ scaled", scaled);
   // create 10 big ticks
   const ticksLeft: Tick[] = [...new Array(10)]
     .map((_, idx) => ({
@@ -85,7 +81,6 @@ export function ScaleIndicator() {
       side: "right",
     }))
     .slice(1) as Tick[];
-  console.log("🌟🚨 ~ ScaleIndicator ~ ticksRightSmaller", ticksRightSmaller);
 
   const isTabletOrLarger = useIsTabletOrLarger();
   return (
