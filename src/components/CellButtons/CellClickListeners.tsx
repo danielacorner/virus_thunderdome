@@ -15,6 +15,7 @@ export function CellClickListeners() {
   const cellsFiltered = useCellsFiltered();
   const numCells = cellsFiltered.length;
   const targetVirusIdx = useStore((s) => s.targetVirusIdx);
+  const started = useStore((s) => s.started);
   const buttonGap = ANTIBODY_BTN_GAP / numCells;
 
   const springLeftRight = useSpring({
@@ -29,7 +30,7 @@ export function CellClickListeners() {
     },
   });
 
-  return (
+  return !started ? null : (
     <>
       <VirusTargetIconsStyles numCells={numCells}>
         <animated.div style={springLeftRight} className="blockIcon">
