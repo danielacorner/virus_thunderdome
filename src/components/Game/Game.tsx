@@ -4,6 +4,7 @@ import { useStore } from "../../store";
 import { randBetween } from "../../utils/utils";
 import { useEffectOnce } from "../../utils/hooks";
 import { WAVES } from "./WAVES";
+import { SHOT_TYPES } from "../CellButtons/CellClickListeners";
 
 const VIRUS_SPAWN_START_DELAY = 1 * 1000;
 
@@ -48,11 +49,12 @@ function Antibodies() {
   const antibodies = useStore((s) => s.antibodies);
   const worldRadius = useStore((s) => s.worldRadius);
   const cellButtonIdx = useStore((s) => s.cellButtonIdx);
+  const { getPosition } = SHOT_TYPES[cellButtonIdx];
 
   return (
     <>
       {antibodies.map(({ abData, iconIdx }, idx) => {
-        const [x, y, z] = getPosition({ worldRadius, cellButtonIdx });
+        const [x, y, z] = getPosition(worldRadius);
         return (
           <SingleParticleMounted
             {...{
@@ -61,41 +63,13 @@ function Antibodies() {
               position: [x, y, z],
               key: idx,
               // each antibody decomposes after a set amount of time
-              lifespan: 5 * 1000,
+              lifespan: 3.5 * 1000,
             }}
           />
         );
       })}
     </>
   );
-}
-
-function getPosition({ worldRadius, cellButtonIdx }) {
-  let [x, y, z] = [0, 0, 0];
-
-  if (cellButtonIdx === 0) {
-    // first cell: spawns at completely random x z in the lower y section
-    const jitter = 1 * worldRadius;
-    x = randBetween(-jitter, jitter);
-    z = randBetween(-jitter, jitter);
-    y = -worldRadius + randBetween(worldRadius * 0.1, jitter);
-  } else if (cellButtonIdx === 1) {
-    // second cell: shoots up quickly
-    // (spawns at smaller random x z in y=bottom, intersecting with floor to cause immediate jump)
-    const jitter = 0.25 * worldRadius;
-    x = randBetween(-jitter, jitter);
-    z = randBetween(-jitter, jitter);
-    y = -worldRadius;
-  } else if (cellButtonIdx === 2) {
-    // third cell: spawns in the corners => shoots towards the center
-    x = worldRadius * (Math.random() > 0.5 ? 1 : -1);
-    z = worldRadius * (Math.random() > 0.5 ? 1 : -1);
-    y = -worldRadius;
-  } else if (cellButtonIdx === 3) {
-    // ? leaving 0,0,0 for now
-  }
-
-  return [x, y, z];
 }
 
 function WavesOfVirusCreation() {

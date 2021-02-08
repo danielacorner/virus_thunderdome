@@ -5,6 +5,7 @@ import styled from "styled-components/macro";
 import { ICONS, WAVES } from "../Game/WAVES";
 import Block from "@material-ui/icons/GpsFixedTwoTone";
 import { useSpring, animated } from "react-spring";
+import { randBetween } from "../../utils/utils";
 
 const ANTIBODY_BTN_WIDTH = 48;
 const ANTIBODY_BTN_GAP = 240;
@@ -72,6 +73,7 @@ function VirusTargetIconButton({ idx, numCells }) {
       numCells={numCells}
       idx={idx}
     >
+      {idx === 0 ? <div className="label">Antibodies</div> : null}
       <div className="container">
         <Icon />
       </div>
@@ -80,11 +82,11 @@ function VirusTargetIconButton({ idx, numCells }) {
 }
 
 const VirusTargetIconStyles = styled.div`
-  position: absolute;
   left: calc(
     50vw - ${ANTIBODY_BTN_WIDTH / 2}px -
       ${(p) => p.buttonGap * (-p.idx + (p.numCells - 1) / 2)}px
   );
+  position: absolute;
   bottom: 0px;
   border: 1px solid #737373;
   &.active {
@@ -98,6 +100,17 @@ const VirusTargetIconStyles = styled.div`
   background: #68d0cb2e;
   width: ${ANTIBODY_BTN_WIDTH}px;
   height: ${ANTIBODY_BTN_WIDTH}px;
+  .label {
+    pointer-events: none;
+    position: absolute;
+    transform: rotate(312deg);
+    top: -3px;
+    right: 45px;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+  }
   .container {
     width: 100%;
     height: 100%;
@@ -125,7 +138,63 @@ const VirusTargetIconsStyles = styled.div`
   }
 `;
 
-const ABS_PER_SHOT = [1, 2, 3, 4];
+const SPEED = 150;
+
+export const SHOT_TYPES = [
+  {
+    absPerShot: 1,
+    speed: 1 / SPEED,
+    // quality: 1 / 1 == 1,
+    getPosition: (worldRadius) => {
+      // first cell: spawns at completely random x z in the lower y section
+      const jitter = 1 * worldRadius;
+      const x = randBetween(-jitter, jitter);
+      const z = randBetween(-jitter, jitter);
+      const y = -worldRadius + randBetween(worldRadius * 0.1, jitter);
+      return [x, y, z];
+    },
+  },
+  {
+    absPerShot: 6,
+    speed: 1 / (SPEED * 5.5),
+    // quality: 6 / 5.5 == 1.09,
+    getPosition: (worldRadius) => {
+      // second cell: shoots up quickly
+      // (spawns at smaller random x z in y=bottom, intersecting with floor to cause immediate jump)
+      const jitter = 0.25 * worldRadius;
+      const x = randBetween(-jitter, jitter);
+      const z = randBetween(-jitter, jitter);
+      const y = -worldRadius;
+      return [x, y, z];
+    },
+  },
+  {
+    absPerShot: 2,
+    speed: 1 / (SPEED * 1.6),
+    // quality: 2 / 1.6 == 1.25,
+    getPosition: (worldRadius) => {
+      // third cell: spawns in the corners => shoots towards the center
+      const x =
+        worldRadius * (Math.random() > 0.5 ? 1 : -1) + randBetween(-0.1, 0.1);
+      const z =
+        worldRadius * (Math.random() > 0.5 ? 1 : -1) + randBetween(-0.1, 0.1);
+      const y = -worldRadius;
+      return [x, y, z];
+    },
+  },
+  {
+    absPerShot: 3,
+    speed: 1 / (SPEED * 2),
+    // quality: 3 / 2 == 1.5,
+    getPosition: (worldRadius) => {
+      const jitter = 0.3 * worldRadius;
+      const x = randBetween(-jitter, jitter);
+      const z = randBetween(-jitter, jitter);
+      const y = -worldRadius + randBetween(0, -0.1 * worldRadius);
+      return [x, y, z];
+    },
+  },
+];
 
 function CellClickListener({ idx, numCells }) {
   const [isPointerDown, setIsPointerDown] = useState(false);
@@ -135,25 +204,27 @@ function CellClickListener({ idx, numCells }) {
   const isPropertyAnimating = useStore((s) => s.isPropertyAnimating);
   const set = useStore((s) => s.set);
 
-  const antibodiesPerShot = ABS_PER_SHOT[cellButtonIdx];
+  const { absPerShot, speed } = SHOT_TYPES[cellButtonIdx];
 
   useEffect(() => {
     const antibody = WAVES[targetVirusIdx].antibody;
     let intervalCreateABs;
     if (isPointerDown) {
-      [...Array(antibodiesPerShot)].forEach(() => {
+      [...Array(absPerShot)].forEach(() => {
         createAntibody({ abData: antibody, iconIdx: targetVirusIdx });
       });
       intervalCreateABs = window.setInterval(() => {
-        createAntibody({ abData: antibody, iconIdx: targetVirusIdx });
-      }, 100);
+        [...Array(absPerShot)].forEach(() => {
+          createAntibody({ abData: antibody, iconIdx: targetVirusIdx });
+        });
+      }, 1 / speed);
     }
     return () => {
       if (intervalCreateABs) {
         window.clearInterval(intervalCreateABs);
       }
     };
-  }, [isPointerDown, createAntibody, targetVirusIdx, idx]);
+  }, [isPointerDown, createAntibody, targetVirusIdx, idx, absPerShot, speed]);
 
   const buttonGap = (CELLS_BTN_GAP * 2) / numCells;
   const buttonPosition = -idx + (numCells - 1) / 2;
@@ -170,7 +241,9 @@ function CellClickListener({ idx, numCells }) {
       }}
       onPointerLeave={() => setIsPointerDown(false)}
       onPointerUp={() => setIsPointerDown(false)}
-    />
+    >
+      {idx === 0 ? <div className="label">Immune Cells</div> : null}
+    </ClickListenerStyles>
   );
 }
 
@@ -193,5 +266,16 @@ const ClickListenerStyles = styled.div`
   &.active {
     box-shadow: 0px 2px 1px 1px #000000bd;
     transform: translateY(4px);
+  }
+  .label {
+    pointer-events: none;
+    position: absolute;
+    transform: rotate(312deg);
+    top: -3px;
+    right: 72px;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
   }
 `;
