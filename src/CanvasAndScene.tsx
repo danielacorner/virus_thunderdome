@@ -44,7 +44,7 @@ function HideHpControls() {
   const set = useStore((s) => s.set);
   const showHp = useStore((s) => s.showHp);
   return (
-    <div style={{ position: "fixed", top: 4, right: 4 }}>
+    <div style={{ position: "fixed", top: 6, right: 16 }}>
       <IconButton onClick={() => set({ showHp: !showHp })}>
         {showHp ? <Visibility /> : <VisibilityOff />}
       </IconButton>
