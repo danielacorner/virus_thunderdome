@@ -9,25 +9,47 @@ type SelectedProtein = Protein & {
 };
 
 type GlobalStateType = {
+  /** radius of the cube container */
   worldRadius: number;
+  /** number of the wave we're currently on */
   currentWave: number;
+  /** to track whether the wave is completed */
   numDefeatedViruses: number;
+  /** to track whether the wave is completed */
   incrementNumDefeatedViruses: () => any;
+  /** temperature = particle velocity */
   temperature: number;
+  /** modal version of tooltip */
   isTooltipMaximized: boolean;
+  /** player HP, shows in the playerHpBar */
   playerHp: number;
+  /** show/hide the HP bar & icons */
   showHp: boolean;
+  /** are assets loading? */
   loading: boolean;
+  /** has the app been started */
   started: boolean;
+  /** is the game paused / temperature === 0 */
   paused: boolean;
+  /** if a property in the store is animating e.g. scale, can turn things on/off */
   isPropertyAnimating: boolean;
+  /** how high is the 3d container's ceiling */
   ceilingHeight: number;
+  /** scale of the scene */
   scale: number;
+  /** which virus do the produced antibodies target? */
+  targetVirusIdx: number;
+  /** the viruses currently in the game (or already defeated/unmounted) */
   viruses: { virusData: Protein; iconIdx: number }[];
+  /** the antibodies currently in the game (or already defeated/unmounted) */
   antibodies: { abData: Protein; iconIdx: number }[];
+  /** the viruses currently in the game (or already defeated/unmounted) */
   createVirus: (newVir: { virusData: Protein; iconIdx: number }) => any;
+  /** the antibodies currently in the game (or already defeated/unmounted) */
   createAntibody: (newAb: { abData: Protein; iconIdx: number }) => any;
+  /** which protein was clicked on / displays the tooltip info */
   selectedProtein: null | SelectedProtein;
+  /** which protein was clicked on / displays the tooltip info */
   setSelectedProtein: (newSelectedProtein: null | SelectedProtein) => void;
   set: (newState: any) => any;
 };
@@ -43,6 +65,7 @@ export const useStore = create<GlobalStateType>(
     isTooltipMaximized: false,
     paused: false,
     isPropertyAnimating: false,
+    targetVirusIdx: 0,
     viruses: [],
     antibodies: [],
     createVirus: (newVir) =>

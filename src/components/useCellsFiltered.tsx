@@ -6,5 +6,5 @@ export function useCellsFiltered() {
   const cellsFiltered = CELLS.filter(
     (_, idx) => idx === 0 || currentWave > idx
   );
-  return cellsFiltered;
+  return CELLS;
 }

@@ -11,7 +11,8 @@ export const CELLS = [
   { Component: Basophil },
   // { Component: Macrophages },
 ];
-const SCALE = 0.2;
+const SCALE = 0.09;
+const CELLS_GAP = 5.7;
 
 /** onClick, generates an antibody? */
 export default function Cells() {
@@ -43,8 +44,11 @@ export default function Cells() {
           const numCells = cellsFiltered.length;
           // const y = height * 0.75;
           // const z = 15;
-          const CELLS_GAP = 6 / numCells;
-          const position = [CELLS_GAP * (idx - (numCells - 1) / 2), 0, 0];
+          const cellsGap = CELLS_GAP / numCells;
+          console.log("🌟🚨 ~ {cellsFiltered.map ~ cellsGap", cellsGap);
+          const cellPosition = idx - (numCells - 1) / 2;
+          console.log("🌟🚨 ~ {cellsFiltered.map ~ cellPosition", cellPosition);
+          const position = [cellsGap * cellPosition, -0.35, 0];
           return <Cell key={idx} {...{ ...cellProps, position }} />;
         })}
       </HUD>
