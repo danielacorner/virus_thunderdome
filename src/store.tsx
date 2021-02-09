@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import create from "zustand";
 import { MAX_SCALE } from "./utils/constants";
 import { Protein } from "./utils/PROTEINS";
