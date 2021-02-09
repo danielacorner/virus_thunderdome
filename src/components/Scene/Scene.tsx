@@ -13,12 +13,10 @@ import Game from "../Game/Game";
 import { useAudioTrack } from "../music/useAudioTrack";
 
 const Scene = () => {
-  // audio track
-  useAudioTrack();
-
   // useCameraWobble();
   return (
     <>
+      <AudioTrack />
       <OrbitControls />
       <Lighting />
       <Physics {...PHYSICS_PROPS}>
@@ -33,6 +31,12 @@ const Scene = () => {
     </>
   );
 };
+
+function AudioTrack() {
+  // audio track
+  useAudioTrack();
+  return null;
+}
 
 // PROTEINS.forEach(({ pathToGLTF }) => // useGLTF.preload(pathToGLTF));
 

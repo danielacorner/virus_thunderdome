@@ -1,20 +1,24 @@
-import { useEffect } from "react";
-import { useControl } from "react-three-gui";
-import { useMount } from "../../utils/utils";
+import { useEffect, useState } from "react";
 import useSound from "use-sound";
 import music from "./music";
+import { useStore } from "../../store";
 
 export function useAudioTrack() {
-  const [play, { isPlaying, pause }] = useSound(music, { volume: 1 });
-  const isAudioEnabled = useControl(`🎧 audio`, {
-    // group: "Environment",
-    type: "boolean",
-    value: false,
+  const started = useStore((s) => s.started);
+  const isWaveComplete = useStore((s) => s.isWaveComplete);
+  const currentWaveIdx = useStore((s) => s.currentWaveIdx);
+  const [play, { isPlaying, pause }] = useSound(music, {
+    volume: isWaveComplete ? 0.4 : 1,
   });
+  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
 
-  useMount(() => {
-    play();
-  });
+  // start the music when we click "ready" for the first time
+  useEffect(() => {
+    if (started && !isWaveComplete && currentWaveIdx >= 1 && !isAudioEnabled) {
+      setIsAudioEnabled(true);
+    }
+  }, [started, isWaveComplete, isAudioEnabled, currentWaveIdx]);
+
   useEffect(() => {
     if (isAudioEnabled && !isPlaying) {
       play();
@@ -24,5 +28,6 @@ export function useAudioTrack() {
     return () => {
       pause();
     };
-  }, [isAudioEnabled, isPlaying, play, pause]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAudioEnabled]);
 }

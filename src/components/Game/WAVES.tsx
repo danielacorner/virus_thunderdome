@@ -110,7 +110,7 @@ export const WAVES: Wave[] = [
       "/models/viruses/hpv_100.glb",
       "/models/antibodies/antibody_hpv_10.glb",
     ],
-    scaleTarget: 0.0045,
+    scaleTarget: 0.003,
     Spring: () => {
       return null;
     },
@@ -118,8 +118,8 @@ export const WAVES: Wave[] = [
   {
     viruses: [
       { numViruses: 2, virus: Polio },
-      { numViruses: 4, virus: HPV },
-      { numViruses: 6, virus: Herpes },
+      { numViruses: 3, virus: HPV },
+      { numViruses: 3, virus: Herpes },
       { numViruses: 8, virus: HIV },
     ],
     antibody: antibody_hiv,
@@ -128,7 +128,7 @@ export const WAVES: Wave[] = [
       "/models/viruses/HIV_200.glb",
       "/models/antibodies/antibody_hiv_10.glb",
     ],
-    scaleTarget: 0.003,
+    scaleTarget: 0.0025,
     Spring: () => {
       useSpringStoreImmediately({
         property: "ceilingHeight",
@@ -154,7 +154,7 @@ export const WAVES: Wave[] = [
       "/models/viruses/HIV_200.glb",
       "/models/antibodies/antibody_hiv_10.glb",
     ],
-    scaleTarget: 0.003,
+    scaleTarget: 0.0025,
     Spring: () => {
       useSpringStoreImmediately({
         property: "ceilingHeight",

@@ -4,7 +4,6 @@ import styled from "styled-components/macro";
 import { Button } from "@material-ui/core";
 import { SpringScaleToTarget, WAVES } from "../Game/WAVES";
 import { useGLTF, useProgress } from "@react-three/drei";
-import { set } from "react-ga";
 
 const WAVE_START_DELAY = 1 * 1000;
 
