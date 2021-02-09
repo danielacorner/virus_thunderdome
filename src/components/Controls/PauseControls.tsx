@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useStore } from "../../store";
-import { Grid, IconButton, Typography } from "@material-ui/core";
+import { Grid, IconButton } from "@material-ui/core";
 import styled from "styled-components/macro";
 import { Pause, PlayArrowOutlined } from "@material-ui/icons";
 import { usePrevious } from "../../utils/hooks";

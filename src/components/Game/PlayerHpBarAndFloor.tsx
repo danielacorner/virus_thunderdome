@@ -4,7 +4,6 @@ import { PROTEINS } from "../../utils/PROTEINS";
 import { usePlane } from "@react-three/cannon";
 import { Html } from "@react-three/drei";
 import styled from "styled-components/macro";
-
 export function PlayerHpBarAndFloor({
   width,
   height,

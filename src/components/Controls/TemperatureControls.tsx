@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useStore } from "../../store";
-import { Slider, Typography } from "@material-ui/core";
+import { Slider } from "@material-ui/core";
 import styled from "styled-components/macro";
 import { AcUnit, Whatshot } from "@material-ui/icons";
 

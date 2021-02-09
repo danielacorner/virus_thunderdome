@@ -1,5 +1,5 @@
 import { useStore } from "../store";
-import { CELLS } from "./CellButtons/CellsModels";
+import { CELLS } from "./CellAndAntibodyButtons/CellsModels";
 
 export function useCellsFiltered() {
   const currentWaveIdx = useStore((s) => s.currentWaveIdx + 1);
