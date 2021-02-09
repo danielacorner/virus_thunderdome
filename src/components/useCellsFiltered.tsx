@@ -8,7 +8,5 @@ export function useCellsFiltered() {
     0,
     Math.max(1, currentWaveIdx + (isWaveComplete ? 1 : 0))
   );
-  return process.env.NODE_ENV === "development"
-    ? CELLS.slice(0, 2)
-    : cellsFiltered;
+  return /* process.env.NODE_ENV === "development" ? CELLS.slice(0, 2) : */ cellsFiltered;
 }
