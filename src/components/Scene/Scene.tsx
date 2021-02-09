@@ -8,7 +8,7 @@ import { PHYSICS_PROPS } from "../../utils/PHYSICS_PROPS";
 import { Water } from "../Water";
 import { ScaleIndicator } from "../Sliders/ScaleIndicator";
 import { SelectedParticleDisplay } from "../SelectedParticle/SelectedParticleDisplay";
-import Cells from "../CellButtons/Cells";
+import CellsModels from "../CellButtons/CellsModels";
 import Game from "../Game/Game";
 import { useAudioTrack } from "../music/useAudioTrack";
 
@@ -25,7 +25,7 @@ const Scene = () => {
         <Walls />
         <SelectedParticleDisplay />
         <ScaleIndicator />
-        <Cells />
+        <CellsModels />
         <Game />
       </Physics>
       {/* <Effects /> */}

@@ -9,7 +9,7 @@ import { useMount } from "./utils/utils";
 import { render } from "react-dom";
 import MemoryStats from "react-memorystats";
 import { BtnStartNextWave } from "./components/Scene/BtnStartNextWave";
-import { CellClickListeners } from "./components/CellButtons/CellClickListeners";
+import { CellClickListeners } from "./components/CellButtons/CellButtons";
 
 function App() {
   useMount(() => {

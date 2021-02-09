@@ -4,7 +4,7 @@ import { useStore } from "../../store";
 import { randBetween } from "../../utils/utils";
 import { useEffectOnce } from "../../utils/hooks";
 import { WAVES } from "./WAVES";
-import { SHOT_TYPES } from "../CellButtons/CellClickListeners";
+import { SHOT_TYPES } from "../CellButtons/CellButtons";
 
 const VIRUS_SPAWN_START_DELAY = 1 * 1000;
 
