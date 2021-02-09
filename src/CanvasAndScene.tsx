@@ -10,6 +10,7 @@ import { IconButton } from "@material-ui/core";
 import { useStore } from "./store";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import SideControls from "./components/Controls/SideControls";
+import { BREAKPOINT_TABLET } from "./utils/constants";
 
 export default function CanvasAndScene({ renderProteins = true }) {
   const windowSize = useWindowSize();
@@ -17,6 +18,7 @@ export default function CanvasAndScene({ renderProteins = true }) {
   //  useFrame(({ clock, camera }) => {
   //   camera.position.z = 50 + Math.sin(clock.getElapsedTime()) * 30
   // })
+  const isTabletOrLarger = windowSize.width >= BREAKPOINT_TABLET;
   return (
     <>
       <Controls.Provider>
@@ -31,7 +33,9 @@ export default function CanvasAndScene({ renderProteins = true }) {
         >
           <Scene />
         </Controls.Canvas>
-        {process.env.NODE_ENV === "development" ? <Controls /> : null}
+        {process.env.NODE_ENV === "development" && isTabletOrLarger ? (
+          <Controls />
+        ) : null}
       </Controls.Provider>
       <HideHpControls />
       <SideControls />
