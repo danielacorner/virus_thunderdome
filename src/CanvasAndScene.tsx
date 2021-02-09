@@ -3,8 +3,6 @@ import { Controls } from "react-three-gui";
 import Scene from "./components/Scene/Scene";
 import { useWindowSize } from "./utils/hooks";
 import * as THREE from "three";
-
-// import { useFrame } from "react-three-fiber";
 import TopControls from "./components/Controls/TopControls";
 import { IconButton } from "@material-ui/core";
 import { useStore } from "./store";

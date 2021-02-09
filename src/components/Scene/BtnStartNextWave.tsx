@@ -4,6 +4,7 @@ import styled from "styled-components/macro";
 import { Button } from "@material-ui/core";
 import { SpringScaleToTarget, WAVES } from "../Game/WAVES";
 import { useGLTF, useProgress } from "@react-three/drei";
+import { set } from "react-ga";
 
 const WAVE_START_DELAY = 1 * 1000;
 
@@ -15,7 +16,7 @@ export function BtnStartNextWave() {
 
   // when the wave ends, show the "next wave" button,
   const currentWaveIdx = useStore((s) => s.currentWaveIdx);
-  const [isWaveComplete, setIsWaveComplete] = useState(true);
+  const isWaveComplete = useStore((s) => s.isWaveComplete);
 
   // complete the wave when we've defeated all viruses so far
   const wavesSoFar = WAVES.slice(0, currentWaveIdx);
@@ -26,13 +27,13 @@ export function BtnStartNextWave() {
   useEffect(() => {
     if (numDefeatedViruses === totalVirusesSoFar && !isWaveComplete) {
       setTimeout(() => {
-        setIsWaveComplete(true);
+        set({ isWaveComplete: true });
         // restore full HP
         set({ playerHp: INITIAL_PLAYER_HP });
       }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [numDefeatedViruses, totalVirusesSoFar, isWaveComplete]);
+  }, [numDefeatedViruses, totalVirusesSoFar, set]);
 
   // stop showing "incoming!!" after a bit
   const [isWaveIncoming, setIsWaveIncoming] = useState(false);
@@ -50,10 +51,14 @@ export function BtnStartNextWave() {
         <>
           <NextWaveAssets />
           <Button
-            style={{ padding: "0.25em 3em", pointerEvents: "auto" }}
+            style={{
+              padding: "0.5em 2em",
+              pointerEvents: "auto",
+              background: "#88fff914",
+            }}
             onClick={() => {
               set({ currentWaveIdx: currentWaveIdx + 1 });
-              setIsWaveComplete(false);
+              set({ isWaveComplete: false });
               setIsWaveIncoming(true);
             }}
             variant="outlined"

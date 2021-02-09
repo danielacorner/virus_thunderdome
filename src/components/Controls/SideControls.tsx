@@ -16,12 +16,12 @@ const SideControls = () => {
 const Styles = styled.div`
   position: fixed;
   right: 16px;
-  height: calc(100vh - 128px);
-  bottom: 36px;
+  height: calc(100vh - 176px);
+  bottom: 112px;
   min-height: 50vh;
   display: grid;
   grid-template-rows: 1fr auto;
-  grid-gap: 3em;
+  grid-gap: 1em;
   .pause {
     margin: auto;
   }

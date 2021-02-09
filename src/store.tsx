@@ -13,6 +13,8 @@ type GlobalStateType = {
   worldRadius: number;
   /** number of the wave we're currently on */
   currentWaveIdx: number;
+  /** are ya winning, son? */
+  isWaveComplete: boolean;
   /** to track whether the wave is completed */
   numDefeatedViruses: number;
   /** to track whether the wave is completed */
@@ -81,6 +83,7 @@ export const useStore = create<GlobalStateType>(
     started: startsStarted,
     loading: !startsStarted,
     worldRadius: 5,
+    isWaveComplete: false,
     currentWaveIdx: 0,
     numDefeatedViruses: 0,
     incrementNumDefeatedViruses: () =>
