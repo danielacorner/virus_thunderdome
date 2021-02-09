@@ -119,7 +119,8 @@ export const SHOT_TYPES = [
       const jitter = 1 * worldRadius;
       const x = randBetween(-jitter, jitter);
       const z = randBetween(-jitter, jitter);
-      const y = -worldRadius + randBetween(worldRadius * 0.1, jitter);
+      const y =
+        -worldRadius + randBetween(worldRadius * 0.1, worldRadius * 0.5);
       return [x, y, z];
     },
   },
@@ -138,16 +139,16 @@ export const SHOT_TYPES = [
     },
   },
   {
-    absPerShot: 2,
-    speed: 1 / (SPEED * 1.6),
-    // quality: 2 / 1.6 == 1.25,
+    absPerShot: () => (Math.random() > 0.5 ? 2 : 1),
+    speed: 1 / (SPEED * 1.2),
+    // quality: 1.5 / 1.2 == 1.25,
     getPosition: (worldRadius) => {
       // third cell: spawns in the corners => shoots towards the center
       const x =
         worldRadius * (Math.random() > 0.5 ? 1 : -1) + randBetween(-0.1, 0.1);
       const z =
         worldRadius * (Math.random() > 0.5 ? 1 : -1) + randBetween(-0.1, 0.1);
-      const y = -worldRadius;
+      const y = -worldRadius + randBetween(-0.1, 0.1);
       return [x, y, z];
     },
   },
@@ -189,11 +190,17 @@ function CellButton({ idx, numCells, cell }) {
     const antibody = WAVES[targetVirusIdx].antibody;
     let intervalCreateABs;
     if (isPointerDown && enabled) {
-      [...Array(absPerShot)].forEach(() => {
+      [
+        ...Array(typeof absPerShot === "function" ? absPerShot() : absPerShot),
+      ].forEach(() => {
         createAntibody({ abData: antibody, iconIdx: targetVirusIdx });
       });
       intervalCreateABs = window.setInterval(() => {
-        [...Array(absPerShot)].forEach(() => {
+        [
+          ...Array(
+            typeof absPerShot === "function" ? absPerShot() : absPerShot
+          ),
+        ].forEach(() => {
           createAntibody({ abData: antibody, iconIdx: targetVirusIdx });
         });
       }, 1 / speed);

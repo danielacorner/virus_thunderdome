@@ -56,11 +56,12 @@ type GlobalStateType = {
   /** which protein was clicked on / displays the tooltip info */
   setSelectedProtein: (newSelectedProtein: null | SelectedProtein) => void;
   set: (newState: any) => any;
+  setScale: (newScale: any) => any;
 };
 
 const startsStarted = /* false && */ process.env.NODE_ENV === "development";
 
-export const INITIAL_PLAYER_HP = 10000;
+export const INITIAL_PLAYER_HP = 4000;
 export const INITIAL_CEILING_HEIGHT = 10;
 
 // zustand https://github.com/pmndrs/zustand
@@ -91,6 +92,7 @@ export const useStore = create<GlobalStateType>(
     temperature: 1,
     ceilingHeight: INITIAL_CEILING_HEIGHT,
     scale: MAX_SCALE,
+    setScale: (newValue) => set(() => ({ scale: newValue })),
     selectedProtein: null as null | SelectedProtein,
     setSelectedProtein: (selectedProtein) => set(() => ({ selectedProtein })),
     set: (newState) => set((state) => ({ ...state, ...newState })),

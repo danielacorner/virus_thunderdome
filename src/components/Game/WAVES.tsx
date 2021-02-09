@@ -1,3 +1,4 @@
+import { useStore } from "../../store";
 import { Protein, PROTEINS } from "../../utils/PROTEINS";
 import { useSpringStoreImmediately } from "../useSpringAfterTimeout";
 import { ReactComponent as Icon1 } from "./icons/virus_1.svg";
@@ -33,13 +34,13 @@ const HPV = {
     (v) => v.name === "Human Papillomavirus (HPV)"
   ),
 };
-const HIV = {
-  iconIdx: 2,
-  virusData: PROTEINS.viruses.find((v) => v.name === "HIV"),
-};
 const Herpes = {
-  iconIdx: 3,
+  iconIdx: 2,
   virusData: PROTEINS.viruses.find((v) => v.name === "Herpes"),
+};
+const HIV = {
+  iconIdx: 3,
+  virusData: PROTEINS.viruses.find((v) => v.name === "HIV"),
 };
 const Faustovirus = {
   iconIdx: 4,
@@ -171,6 +172,7 @@ export const WAVES: Wave[] = [
 ];
 
 export function SpringScaleToTarget({ target }) {
+  const setScale = useStore((s) => s.setScale);
   useSpringStoreImmediately({
     property: "scale",
     target: target,
@@ -180,6 +182,7 @@ export function SpringScaleToTarget({ target }) {
       friction: 50,
       // precision: 0.0001,
     },
+    setterFn: setScale,
   });
   return null;
 }

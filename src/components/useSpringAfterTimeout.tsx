@@ -69,10 +69,12 @@ export function useSpringStoreImmediately({
   target,
   property,
   springConfig,
+  setterFn,
 }: {
   target: number;
   property: string;
   springConfig: any;
+  setterFn?: any;
 }) {
   const set = useStore((s) => s.set);
   const current = useStore((s) => s[property]);
@@ -88,7 +90,12 @@ export function useSpringStoreImmediately({
     progress: animating,
     config: springConfig,
     onChange({ progress }) {
-      set({ [property]: firstValue + delta * progress });
+      if (setterFn) {
+        setterFn(firstValue + delta * progress);
+      } else {
+        // generic set - worse performance
+        set({ [property]: firstValue + delta * progress });
+      }
       if (progress === 1) {
         set({ isPropertyAnimating: false });
       }
