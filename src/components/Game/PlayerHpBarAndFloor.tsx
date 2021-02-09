@@ -4,7 +4,7 @@ import { PROTEINS } from "../../utils/PROTEINS";
 import { usePlane } from "@react-three/cannon";
 import { Html } from "@react-three/drei";
 import styled from "styled-components/macro";
-import * as d3 from "d3-scale-chromatic";
+
 export function PlayerHpBarAndFloor({
   width,
   height,
@@ -40,7 +40,7 @@ export function PlayerHpBarAndFloor({
         <HPIndicatorStyles
           {...{
             playerHpPct,
-            background: `hsla(${Math.round(playerHpPct * 100)}, 50%, 50%, 0.5)`,
+            background: `hsl(${Math.round(playerHpPct * 100)}, 50%, 50%)`,
           }}
         >
           <div className="hpBar">
@@ -60,15 +60,15 @@ export const HPIndicatorStyles = styled.div`
   align-items: center;
   justify-content: center;
   width: 0;
-  margin-top: 6em;
+  margin-top: 6px;
   .hpBar {
-    width: 240px;
+    width: calc(10vw + 240px);
     height: 8px;
     outline: 1px solid grey;
     .hp {
       width: 100%;
       height: 100%;
-      opacity: 0.5;
+      opacity: 0.8;
       background: ${(p) => p.background};
       transition: transform 300ms linear;
       transform: scaleX(${(p) => p.playerHpPct});

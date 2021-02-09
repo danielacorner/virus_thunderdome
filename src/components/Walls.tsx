@@ -66,6 +66,7 @@ export function Walls() {
   ];
 
   const scalePct = useScalePercent();
+  console.log("🌟🚨 ~ Walls ~ scalePct", scalePct);
 
   return (
     <>
