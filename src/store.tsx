@@ -74,14 +74,18 @@ export function getSettingsFromLS() {
   return JSON.parse(settings);
 }
 
+const initialSoundOn = (() => {
+  const settings = getSettingsFromLS();
+  return settings && "soundOn" in settings ? settings.soundOn : true;
+})();
+
 // zustand https://github.com/pmndrs/zustand
 // with typescript https://react-tracked.js.org/docs/tutorial-zustand-01/
 export const useStore = create<GlobalStateType>(
   (set): GlobalStateType => ({
     isTooltipMaximized: false,
     paused: false,
-    soundOn:
-      "soundOn" in getSettingsFromLS() ? getSettingsFromLS().soundOn : true,
+    soundOn: initialSoundOn,
     isPropertyAnimating: false,
     targetVirusIdx: 0,
     cellButtonIdx: 0,
