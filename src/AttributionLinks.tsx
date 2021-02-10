@@ -7,51 +7,91 @@ export function AttributionLinks() {
   // TODO: show when you finish the levels
   // TODO: show on iconbutton click
   const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
+
   return (
     <AttributionLinksStyles>
-      <BtnOpenModal {...{ setOpen }} />
-      <Modal open={open}>
-        <div className="modalContent">
-          <div>
-            <div className="mediaType">Music</div>
-            <div className="source">
-              Nõpi - Aqiral (Mixed) -
-              https://www.traxsource.com/artist/587036/nopi
+      <BtnOpenModal
+        {...{
+          setOpen,
+        }}
+      />
+      <Modal
+        {...{
+          open,
+          onBackdropClick: handleClose,
+          onEscapeKeyDown: handleClose,
+          onClose: handleClose,
+        }}
+      >
+        <ModalContentStyles>
+          <div className="content">
+            <div className="mediaItem">
+              <div className="mediaType">Music</div>
+              <div className="source">
+                <a
+                  href="https://www.traxsource.com/artist/587036/nopi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Nõpi - Aqiral (Mixed)
+                </a>
+              </div>
+            </div>
+
+            <div className="mediaItem">
+              <div className="mediaType">Code</div>
+              <div className="source">
+                <a
+                  href="https://github.com/danielacorner/virus_thunderdome"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  danielacorner/virus_thunderdome
+                </a>
+              </div>
+            </div>
+
+            <div className="mediaItem">
+              <div className="mediaType">Protein Data</div>
+              <div className="source">
+                <a
+                  href="https://rcdsb.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  RCSB Protein DataBank
+                </a>
+              </div>
+            </div>
+
+            <div className="mediaItem">
+              <div className="mediaType">3d Models</div>
+              <div className="source">
+                <a
+                  href="https://www.cgl.ucsf.edu/chimerax/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  UCSF ChimeraX
+                </a>
+              </div>
+            </div>
+
+            <div className="mediaItem">
+              <div className="mediaType">Icons</div>
+              <div className="source">
+                <a href="https://www.freepik.com" title="Freepik">
+                  Freepik
+                </a>{" "}
+                from{" "}
+                <a href="https://www.flaticon.com/" title="Flaticon">
+                  www.flaticon.com
+                </a>
+              </div>
             </div>
           </div>
-
-          <div>
-            <div className="mediaType">Code</div>
-            <div className="source">
-              https://github.com/danielacorner/virus_thunderdome
-            </div>
-          </div>
-
-          <div>
-            <div className="mediaType">Protein Data</div>
-            <div className="source">rcdsb.org</div>
-          </div>
-
-          <div>
-            <div className="mediaType">3d Models</div>
-            <div className="source">
-              UCSF ChimeraX https://www.cgl.ucsf.edu/chimerax/
-            </div>
-          </div>
-
-          <div>
-            <div className="mediaType">Icons</div>
-            <div className="source">
-              <a href="https://www.freepik.com" title="Freepik">
-                Freepik
-              </a>
-              from
-              <a href="https://www.flaticon.com/" title="Flaticon">
-                www.flaticon.com
-              </a>
-            </div>
-          </div>
-        </div>
+        </ModalContentStyles>
       </Modal>
     </AttributionLinksStyles>
   );
@@ -62,10 +102,28 @@ const AttributionLinksStyles = styled.div`
   left: 0;
   .btnOpenModal {
   }
-  .modalContent {
+`;
+
+const ModalContentStyles = styled.div`
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
+  .content {
+    width: 75vw;
+    height: 90vw;
+    max-height: 600px;
+    max-width: 600px;
+  }
+  .mediaItem {
+    display: grid;
+    grid-template-columns: 260px 300px;
+    grid-gap: 2em;
     .mediaType {
+      text-align: right;
     }
     .source {
+      text-align: left;
     }
   }
 `;
