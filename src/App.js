@@ -11,6 +11,7 @@ import MemoryStats from "react-memorystats";
 import { BtnStartNextWave } from "./components/Scene/BtnStartNextWave";
 import { CellAndAntibodyButtons } from "./components/CellAndAntibodyButtons/CellAndAntibodyButtons";
 import { useLocalStorageState } from "./utils/useLocalStorageState";
+import { AttributionLinks } from "./AttributionLinks";
 
 function App() {
   useMount(() => {
@@ -28,6 +29,7 @@ function App() {
       <BtnStartNextWave />
       <CellAndAntibodyButtons />
       {/* <GuidedTour /> */}
+      <AttributionLinks />
       <SaveControlsSettingsToLocalStorage />
     </div>
   );
