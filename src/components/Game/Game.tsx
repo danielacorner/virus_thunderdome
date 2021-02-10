@@ -27,7 +27,7 @@ function Viruses() {
 
   return (
     <>
-      {viruses.map(({ virusData, iconIdx }, idx) => {
+      {viruses.map(({ virusData, iconIdx, id_str }, idx) => {
         const jitter = 1 * worldRadius;
         const x = randBetween(-jitter, jitter);
         const y = worldRadius * 2 - randBetween(0, jitter);
@@ -38,7 +38,7 @@ function Viruses() {
               ...virusData,
               iconIdx,
               position: [x, y, z],
-              key: idx,
+              key: id_str,
             }}
           />
         );
@@ -54,7 +54,7 @@ function Antibodies() {
 
   return (
     <>
-      {antibodies.map(({ abData, iconIdx }, idx) => {
+      {antibodies.map(({ abData, iconIdx, id_str }, idx) => {
         const [x, y, z] = getPosition(worldRadius);
         return (
           <SingleParticleMounted
@@ -62,7 +62,7 @@ function Antibodies() {
               ...abData,
               iconIdx,
               position: [x, y, z],
-              key: idx,
+              key: id_str,
               // each antibody decomposes after a set amount of time
               lifespan: 3.5 * 1000,
             }}
