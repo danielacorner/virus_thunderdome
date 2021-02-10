@@ -16,19 +16,16 @@ export function BtnStartNextWave() {
   const started = useStore((s) => s.started);
   const numDefeatedViruses = useStore((s) => s.numDefeatedViruses);
   const { active: loadingAssets } = useProgress();
+  const currentWaveIdx = useStore((s) => s.currentWaveIdx);
 
   // when the wave ends, show the "next wave" button,
-  const currentWaveIdx = useStore((s) => s.currentWaveIdx);
-  const isWaveComplete = useStore((s) => s.isWaveComplete);
+  const totalVirusesSoFar = useTotalVirusesSoFar();
 
-  // complete the wave when we've defeated all viruses so far
-  const wavesSoFar = WAVES.slice(0, currentWaveIdx);
-  const totalVirusesSoFar = wavesSoFar.reduce(
-    (acc, cur) => acc + cur.viruses.reduce((a, c) => c.numViruses + a, 0),
-    0
-  );
+  const isWaveComplete = useStore((s) => s.isWaveComplete);
   useEffect(() => {
     if (numDefeatedViruses === totalVirusesSoFar && !isWaveComplete) {
+      console.log("🌟🚨 ~ useEffect ~ totalVirusesSoFar", totalVirusesSoFar);
+      console.log("🌟🚨 ~ useEffect ~ numDefeatedViruses", numDefeatedViruses);
       setTimeout(() => {
         set({ isWaveComplete: true });
         // restore full HP
@@ -62,6 +59,7 @@ export function BtnStartNextWave() {
             onClick={() => {
               set({ currentWaveIdx: currentWaveIdx + 1 });
               set({ isWaveComplete: false });
+              set({ waveStartTime: Date.now() });
               setIsWaveIncoming(true);
             }}
             variant="outlined"
@@ -107,6 +105,18 @@ const NextWaveStyles = styled.div`
     }
   }
 `;
+
+export function useTotalVirusesSoFar() {
+  const currentWaveIdx = useStore((s) => s.currentWaveIdx);
+
+  // complete the wave when we've defeated all viruses so far
+  const wavesSoFar = WAVES.slice(0, currentWaveIdx);
+  const totalVirusesSoFar = wavesSoFar.reduce(
+    (acc, cur) => acc + cur.viruses.reduce((a, c) => c.numViruses + a, 0),
+    0
+  );
+  return totalVirusesSoFar;
+}
 
 function NextWaveAssets() {
   const currentWaveIdx = useStore((s) => s.currentWaveIdx);

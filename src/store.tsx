@@ -41,6 +41,7 @@ type GlobalStateType = {
   isPropertyAnimating: boolean;
   /** how high is the 3d container's ceiling */
   ceilingHeight: number;
+  waveStartTime: number | null;
   /** scale of the scene */
   scale: number;
   /** which virus do the produced antibodies target? */
@@ -88,6 +89,7 @@ export const useStore = create<GlobalStateType>(
     soundOn: initialSoundOn,
     isPropertyAnimating: false,
     targetVirusIdx: 0,
+    waveStartTime: null,
     cellButtonIdx: 0,
     viruses: [],
     antibodies: [],

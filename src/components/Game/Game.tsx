@@ -103,21 +103,36 @@ function SingleWave({ viruses, moveCameraTo = null }: Wave) {
   const readyToCreateViruses =
     started && !isPropertyAnimating && isScaleTarget && !loading;
 
-  // start spawning the viruses when the wave and all animations are done
-  useEffectOnce({
-    callback: () => {
-      viruses.forEach(
-        ({ virus: { virusData, iconIdx }, numViruses }, virusIdx) => {
-          [...Array(numViruses)].forEach((_, idx2) => {
-            setTimeout(() => {
-              createVirus({ virusData, iconIdx, id_str: `${Math.random()}` });
-            }, virusIdx * 500 + (idx2 + 1) * APPEAR_INTERVAL + VIRUS_SPAWN_START_DELAY);
-          });
+  const waveStartTime = useStore((s) => s.waveStartTime);
+  const numVirusesCreatedPerType = useRef(viruses.map((_) => 0));
+  // const totalVirusesSoFar = useTotalVirusesSoFar();
+
+  useFrame(() => {
+    if (!readyToCreateViruses) {
+      return;
+    }
+
+    const timeInWave = waveStartTime ? Date.now() - waveStartTime : 0;
+
+    viruses.forEach(
+      ({ virus: { virusData, iconIdx }, numViruses }, virusIdx) => {
+        const totalVirusesNeededByNow = Math.min(
+          numViruses,
+          Math.floor(
+            (timeInWave - virusIdx * 500 - VIRUS_SPAWN_START_DELAY) /
+              APPEAR_INTERVAL
+          )
+        );
+        const shouldCreateVirus =
+          totalVirusesNeededByNow > numVirusesCreatedPerType.current[virusIdx];
+
+        if (shouldCreateVirus) {
+          numVirusesCreatedPerType.current[virusIdx] =
+            numVirusesCreatedPerType.current[virusIdx] + 1;
+          createVirus({ virusData, iconIdx, id_str: `${Math.random()}` });
         }
-      );
-    },
-    shouldRun: readyToCreateViruses,
-    dependencies: [readyToCreateViruses],
+      }
+    );
   });
 
   const [dollyFinished, setDollyFinished] = useState(false);
