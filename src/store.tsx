@@ -7,6 +7,9 @@ type SelectedProtein = Protein & {
   api: any;
 };
 
+type VirusParticle = { virusData: Protein; iconIdx: number; id_str: string };
+type AntibodyParticle = { abData: Protein; iconIdx: number; id_str: string };
+
 type GlobalStateType = {
   /** radius of the cube container */
   worldRadius: number;
@@ -45,13 +48,13 @@ type GlobalStateType = {
   /** which cell was clicked? determines how the antibodies spawn */
   cellButtonIdx: number;
   /** the viruses currently in the game (or already defeated/unmounted) */
-  viruses: { virusData: Protein; iconIdx: number }[];
+  viruses: VirusParticle[];
   /** the antibodies currently in the game (or already defeated/unmounted) */
-  antibodies: { abData: Protein; iconIdx: number }[];
+  antibodies: AntibodyParticle[];
   /** the viruses currently in the game (or already defeated/unmounted) */
-  createVirus: (newVir: { virusData: Protein; iconIdx: number }) => any;
+  createVirus: (newVir: VirusParticle) => any;
   /** the antibodies currently in the game (or already defeated/unmounted) */
-  createAntibody: (newAb: { abData: Protein; iconIdx: number }) => any;
+  createAntibody: (newAb: AntibodyParticle) => any;
   /** which protein was clicked on / displays the tooltip info */
   selectedProtein: null | SelectedProtein;
   /** which protein was clicked on / displays the tooltip info */

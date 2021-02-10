@@ -110,7 +110,7 @@ function SingleWave({ viruses, moveCameraTo = null }: Wave) {
         ({ virus: { virusData, iconIdx }, numViruses }, virusIdx) => {
           [...Array(numViruses)].forEach((_, idx2) => {
             setTimeout(() => {
-              createVirus({ virusData, iconIdx });
+              createVirus({ virusData, iconIdx, id_str: `${Math.random()}` });
             }, virusIdx * 500 + (idx2 + 1) * APPEAR_INTERVAL + VIRUS_SPAWN_START_DELAY);
           });
         }

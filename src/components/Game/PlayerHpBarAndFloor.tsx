@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { INITIAL_PLAYER_HP, useStore } from "../../store";
 import { PROTEINS } from "../../utils/PROTEINS";
 import { usePlane } from "@react-three/cannon";
 import { Html } from "@react-three/drei";
 import styled from "styled-components/macro";
-import { useCameraY } from "../Scene/useCameraY";
 
 export function PlayerHpBarAndFloor({
   width,

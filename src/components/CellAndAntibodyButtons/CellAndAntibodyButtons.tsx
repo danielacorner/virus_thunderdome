@@ -193,7 +193,11 @@ function CellButton({ idx, numCells, cell }) {
       [
         ...Array(typeof absPerShot === "function" ? absPerShot() : absPerShot),
       ].forEach(() => {
-        createAntibody({ abData: antibody, iconIdx: targetVirusIdx });
+        createAntibody({
+          abData: antibody,
+          iconIdx: targetVirusIdx,
+          id_str: `${Math.random()}`,
+        });
       });
       intervalCreateABs = window.setInterval(() => {
         [
@@ -201,7 +205,11 @@ function CellButton({ idx, numCells, cell }) {
             typeof absPerShot === "function" ? absPerShot() : absPerShot
           ),
         ].forEach(() => {
-          createAntibody({ abData: antibody, iconIdx: targetVirusIdx });
+          createAntibody({
+            abData: antibody,
+            iconIdx: targetVirusIdx,
+            id_str: `${Math.random()}`,
+          });
         });
       }, 1 / speed);
     }
