@@ -7,7 +7,6 @@ export function Plane({
   height,
   widthSegments = 1,
   heightSegments = 1,
-  color,
   reflect = false,
   ...rest
 }) {

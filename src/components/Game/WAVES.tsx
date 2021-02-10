@@ -47,13 +47,15 @@ const Faustovirus = {
   virusData: PROTEINS.viruses.find((v) => v.name === "Faustovirus"),
 };
 
-type Wave = {
+export type Wave = {
   viruses: {
     virus: { virusData: Protein; iconIdx: number };
     numViruses: number;
   }[];
   antibody: Protein;
+  moveCameraTo?: [number, number, number];
   scaleTarget?: number;
+  ceilingHeightTarget?: number;
   Spring?: Function;
   assets: string[];
 };
@@ -68,6 +70,7 @@ export const WAVES: Wave[] = [
       "/models/viruses/poliovirus_50.glb",
       "/models/antibodies/antibody_poliovirus_10.glb",
     ],
+    moveCameraTo: [0, 5, 18],
     Spring: () => {
       useSpringStoreImmediately({
         property: "ceilingHeight",
@@ -110,8 +113,19 @@ export const WAVES: Wave[] = [
       "/models/viruses/hpv_100.glb",
       "/models/antibodies/antibody_hpv_10.glb",
     ],
+    moveCameraTo: [0, 16, 19],
     scaleTarget: 0.003,
     Spring: () => {
+      useSpringStoreImmediately({
+        property: "ceilingHeight",
+        target: 24,
+        springConfig: {
+          mass: 1,
+          tension: 170,
+          friction: 10,
+          precision: 0.0001,
+        },
+      });
       return null;
     },
   },
@@ -128,11 +142,12 @@ export const WAVES: Wave[] = [
       "/models/viruses/HIV_200.glb",
       "/models/antibodies/antibody_hiv_10.glb",
     ],
+    moveCameraTo: [0, 20, 24],
     scaleTarget: 0.0025,
     Spring: () => {
       useSpringStoreImmediately({
         property: "ceilingHeight",
-        target: 24,
+        target: 30,
         springConfig: {
           mass: 1,
           tension: 170,

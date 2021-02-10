@@ -4,11 +4,9 @@ import Scene from "./components/Scene/Scene";
 import { useWindowSize } from "./utils/hooks";
 import * as THREE from "three";
 import TopControls from "./components/Controls/TopControls";
-import { IconButton } from "@material-ui/core";
-import { useStore } from "./store";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+
 import SideControls from "./components/Controls/SideControls";
-import { BREAKPOINT_TABLET } from "./utils/constants";
+import { BREAKPOINT_TABLET, INITIAL_CAMERA_POSITION } from "./utils/constants";
 
 export default function CanvasAndScene({ renderProteins = true }) {
   const windowSize = useWindowSize();
@@ -27,7 +25,7 @@ export default function CanvasAndScene({ renderProteins = true }) {
           }}
           gl={{ antialias: false, alpha: false }}
           style={{ height: windowSize.height, width: windowSize.width }}
-          camera={{ fov: 75, position: [0, 0, 15] }}
+          camera={{ fov: 75, position: INITIAL_CAMERA_POSITION }}
         >
           <Scene />
         </Controls.Canvas>
@@ -35,21 +33,21 @@ export default function CanvasAndScene({ renderProteins = true }) {
           <Controls />
         ) : null}
       </Controls.Provider>
-      <HideHpControls />
+      {/* <HideHpControls /> */}
       <SideControls />
       <TopControls />
     </>
   );
 }
 
-function HideHpControls() {
-  const set = useStore((s) => s.set);
-  const showHp = useStore((s) => s.showHp);
-  return (
-    <div style={{ position: "fixed", top: 6, right: 16 }}>
-      <IconButton onClick={() => set({ showHp: !showHp })}>
-        {showHp ? <Visibility /> : <VisibilityOff />}
-      </IconButton>
-    </div>
-  );
-}
+// function HideHpControls() {
+//   const set = useStore((s) => s.set);
+//   const showHp = useStore((s) => s.showHp);
+//   return (
+//     <div style={{ position: "fixed", top: 6, right: 16 }}>
+//       <IconButton onClick={() => set({ showHp: !showHp })}>
+//         {showHp ? <Visibility /> : <VisibilityOff />}
+//       </IconButton>
+//     </div>
+//   );
+// }

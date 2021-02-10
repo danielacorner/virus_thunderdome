@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { INITIAL_PLAYER_HP, useStore } from "../../store";
 import { PROTEINS } from "../../utils/PROTEINS";
 import { usePlane } from "@react-three/cannon";
 import { Html } from "@react-three/drei";
 import styled from "styled-components/macro";
+import { useCameraY } from "../Scene/useCameraY";
+
 export function PlayerHpBarAndFloor({
   width,
   height,
@@ -13,10 +15,13 @@ export function PlayerHpBarAndFloor({
   ...rest
 }) {
   const set = useStore((s) => s.set);
+  const worldRadius = useStore((s) => s.worldRadius);
   const playerHp = useStore((s) => s.playerHp);
+
   const [ref] = usePlane(() => ({
     // rotation: [-Math.PI / 2, 0, 0],
     ...rest,
+    position: [0, -worldRadius, 0],
     onCollide: (event) => {
       const { body: collidingBody } = event as any;
       // if it's hit by a virus... derease hp
@@ -24,10 +29,15 @@ export function PlayerHpBarAndFloor({
         collidingBody?.name &&
         PROTEINS.viruses.find((v) => v.name === collidingBody.name);
       if (virusCollisionTarget) {
+        console.log(
+          "🌟🚨 ~ const[ref]=usePlane ~ virusCollisionTarget.radius",
+          virusCollisionTarget.radius
+        );
         set({ playerHp: Math.max(0, playerHp - virusCollisionTarget.radius) });
       }
     },
   }));
+
   const playerHpPct = playerHp / INITIAL_PLAYER_HP;
   return (
     <mesh ref={ref}>

@@ -1,5 +1,7 @@
 import { useMediaQuery } from "@material-ui/core";
 
+export const INITIAL_CAMERA_POSITION = [0, 0, 15];
+
 export const SCALE = 0.001;
 export const BREAKPOINT_MOBILE = 500;
 export const BREAKPOINT_TABLET = 768;

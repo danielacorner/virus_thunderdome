@@ -7,6 +7,7 @@ export function useAudioTrack() {
   const started = useStore((s) => s.started);
   const isWaveComplete = useStore((s) => s.isWaveComplete);
   const currentWaveIdx = useStore((s) => s.currentWaveIdx);
+  const soundOn = useStore((s) => s.soundOn);
   const [play, { isPlaying, pause }] = useSound(music, {
     volume: isWaveComplete ? 0.4 : 1,
   });
@@ -20,7 +21,7 @@ export function useAudioTrack() {
   }, [started, isWaveComplete, isAudioEnabled, currentWaveIdx]);
 
   useEffect(() => {
-    if (isAudioEnabled && !isPlaying) {
+    if (soundOn && isAudioEnabled && !isPlaying) {
       play();
     } else if (!isAudioEnabled && isPlaying) {
       pause();
@@ -29,5 +30,5 @@ export function useAudioTrack() {
       pause();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAudioEnabled]);
+  }, [isAudioEnabled, soundOn]);
 }

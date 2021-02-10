@@ -24,6 +24,8 @@ type GlobalStateType = {
   isTooltipMaximized: boolean;
   /** player HP, shows in the playerHpBar */
   playerHp: number;
+  /** mute the music */
+  soundOn: boolean;
   /** show/hide the HP bar & icons */
   showHp: boolean;
   /** are assets loading? */
@@ -69,6 +71,7 @@ export const useStore = create<GlobalStateType>(
   (set): GlobalStateType => ({
     isTooltipMaximized: false,
     paused: false,
+    soundOn: true,
     isPropertyAnimating: false,
     targetVirusIdx: 0,
     cellButtonIdx: 0,

@@ -16,7 +16,7 @@ const SideControls = () => {
 const Styles = styled.div`
   position: fixed;
   right: 16px;
-  height: calc(100vh - 176px);
+  height: calc(100vh - 204px);
   bottom: 112px;
   min-height: 50vh;
   display: grid;

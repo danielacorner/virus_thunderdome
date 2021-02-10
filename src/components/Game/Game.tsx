@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { SingleParticleMounted } from "../particle/SingleParticleMounted";
 import { useStore } from "../../store";
-import { randBetween } from "../../utils/utils";
+import { randBetween, useMount } from "../../utils/utils";
 import { useEffectOnce } from "../../utils/hooks";
-import { WAVES } from "./WAVES";
+import { WAVES, Wave } from "./WAVES";
 import { SHOT_TYPES } from "../CellAndAntibodyButtons/CellAndAntibodyButtons";
+import { useFrame, useThree } from "react-three-fiber";
 
 const VIRUS_SPAWN_START_DELAY = 1 * 1000;
 
@@ -87,7 +88,8 @@ function WavesOfVirusCreation() {
 
 const APPEAR_INTERVAL = 1000;
 
-function SingleWave({ viruses }) {
+/** perform all actions necessary for the wave e.g. spawn viruses, move camera */
+function SingleWave({ viruses, moveCameraTo = null }: Wave) {
   const createVirus = useStore((s) => s.createVirus);
   const started = useStore((s) => s.started);
   const scale = useStore((s) => s.scale);
@@ -116,6 +118,62 @@ function SingleWave({ viruses }) {
     },
     shouldRun: readyToCreateViruses,
     dependencies: [readyToCreateViruses],
+  });
+
+  const { camera } = useThree();
+
+  useMount(() => {
+    console.log("🌟🚨 ~ SingleWave ~ camera", camera);
+  });
+
+  const [dollyFinished, setDollyFinished] = useState(false);
+  console.log("🌟🚨 ~ SingleWave ~ dollyFinished", dollyFinished);
+
+  return moveCameraTo && !dollyFinished ? (
+    <DollyMoveCamera {...{ moveCameraTo, setDollyFinished }} />
+  ) : null;
+}
+
+const ANIMATION_DURATION = 10 * 1000;
+const CAMERA_TILT = 0.85;
+function DollyMoveCamera({ moveCameraTo, setDollyFinished }) {
+  const [x2, y2, z2] = moveCameraTo;
+  const now = useRef(Date.now());
+
+  useFrame(({ clock, camera }) => {
+    // const secondsElapsed = clock.getElapsedTime();
+    const timeSinceMounted = Date.now() - now.current;
+    const pctDone = timeSinceMounted / ANIMATION_DURATION;
+    if (pctDone >= 1) {
+      setDollyFinished(true);
+      return;
+    }
+
+    const { x, y, z } = camera.position;
+    const [dx, dy, dz] = [x2 - x, y2 - y, z2 - z];
+
+    // camera.position.x = x + dx * pctDone;
+    // camera.position.y = y + dy * pctDone;
+    camera.position.z = z + dz * pctDone;
+  });
+
+  // useFrame(({ clock, camera }) => {
+  //   // const secondsElapsed = clock.getElapsedTime();
+  //   const timeSinceMounted = Date.now() - now.current;
+  //   const pctDone = timeSinceMounted / ANIMATION_DURATION;
+  //   if (pctDone >= 1) {
+  //     return;
+  //   }
+  //   const newCamLookY = y2 * pctDone * CAMERA_TILT;
+  //   camera.lookAt(0, newCamLookY, 0);
+  // });
+
+  // on unmount, keep the final camera position (resets otherwise)
+  const { camera } = useThree();
+  useMount(() => {
+    return () => {
+      camera.lookAt(0, y2 * CAMERA_TILT, 0);
+    };
   });
 
   return null;
