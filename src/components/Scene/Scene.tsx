@@ -21,7 +21,6 @@ const Scene = () => {
       <OrbitControls />
       <PhysicsScene />
       <Lighting />
-
       {/* <Effects /> */}
     </Suspense>
   );
@@ -29,7 +28,6 @@ const Scene = () => {
 
 function PhysicsScene() {
   const newY = useCameraY();
-  console.log("🌟🚨 ~ Walls ~ newY", newY);
 
   const springDownOnWaveChange = useSpring({ position: [0, newY, 0] });
 

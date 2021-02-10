@@ -98,6 +98,16 @@ export const WAVES: Wave[] = [
     ],
     scaleTarget: 0.006,
     Spring: () => {
+      useSpringStoreImmediately({
+        property: "ceilingHeight",
+        target: 18,
+        springConfig: {
+          mass: 1,
+          tension: 170,
+          friction: 10,
+          precision: 0.0001,
+        },
+      });
       return null;
     },
   },
