@@ -61,6 +61,7 @@ type GlobalStateType = {
   setSelectedProtein: (newSelectedProtein: null | SelectedProtein) => void;
   set: (newState: any) => any;
   setScale: (newScale: any) => any;
+  setTemperature: (newTemp: any) => any;
 };
 
 const startsStarted = /* false && */ process.env.NODE_ENV === "development";
@@ -104,6 +105,7 @@ export const useStore = create<GlobalStateType>(
     ceilingHeight: INITIAL_CEILING_HEIGHT,
     scale: MAX_SCALE,
     setScale: (newValue) => set(() => ({ scale: newValue })),
+    setTemperature: (newValue) => set(() => ({ temperature: newValue })),
     selectedProtein: null as null | SelectedProtein,
     setSelectedProtein: (selectedProtein) => set(() => ({ selectedProtein })),
     set: (newState) => set((state) => ({ ...state, ...newState })),

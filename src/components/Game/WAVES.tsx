@@ -55,6 +55,7 @@ export type Wave = {
   antibody: Protein;
   moveCameraTo?: [number, number, number];
   scaleTarget?: number;
+  temperatureTarget?: number;
   ceilingHeightTarget?: number;
   Spring?: Function;
   assets: string[];
@@ -125,6 +126,7 @@ export const WAVES: Wave[] = [
     ],
     moveCameraTo: [0, 16, 19],
     scaleTarget: 0.003,
+    temperatureTarget: 2,
     Spring: () => {
       useSpringStoreImmediately({
         property: "ceilingHeight",
@@ -154,6 +156,7 @@ export const WAVES: Wave[] = [
     ],
     moveCameraTo: [0, 20, 24],
     scaleTarget: 0.0025,
+    temperatureTarget: 3.5,
     Spring: () => {
       useSpringStoreImmediately({
         property: "ceilingHeight",
@@ -180,6 +183,7 @@ export const WAVES: Wave[] = [
       "/models/antibodies/antibody_hiv_10.glb",
     ],
     scaleTarget: 0.0025,
+    temperatureTarget: 4,
     Spring: () => {
       useSpringStoreImmediately({
         property: "ceilingHeight",
@@ -208,6 +212,22 @@ export function SpringScaleToTarget({ target }) {
       // precision: 0.0001,
     },
     setterFn: setScale,
+  });
+  return null;
+}
+
+export function SpringTemperatureToTarget({ target }) {
+  const setTemperature = useStore((s) => s.setTemperature);
+  useSpringStoreImmediately({
+    property: "temperature",
+    target: target,
+    springConfig: {
+      mass: 1,
+      tension: 170,
+      friction: 50,
+      // precision: 0.0001,
+    },
+    setterFn: setTemperature,
   });
   return null;
 }

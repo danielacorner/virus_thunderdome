@@ -1,12 +1,13 @@
 import React from "react";
-import { useStore } from "../store";
-import { Plane } from "./Shapes/Plane";
-import { useScalePercent } from "./useScalePercent";
-import { PlayerHpBarAndFloor } from "./Game/PlayerHpBarAndFloor";
+import { useStore } from "../../store";
+import { Plane } from "../Shapes/Plane";
+import { PlayerHpBarAndFloor } from "../Game/PlayerHpBarAndFloor";
+import { IcosahedronBackground } from "./IcosahedronBackground";
 
 // https://www.npmjs.com/package/nice-color-palettes
 // https://raw.githubusercontent.com/Jam3/nice-color-palettes/HEAD/visualize/1000.png
 // const palette = niceColors[6]; // e.g. => [ "#69d2e7", "#a7dbd8", "#e0e4cc", "#f38630", "#fa6900" ]
+
 export function Walls() {
   const worldRadius = useStore((state) => state.worldRadius);
   const ceilingHeight = useStore((state) => state.ceilingHeight);
@@ -56,27 +57,12 @@ export function Walls() {
     },
   ];
 
-  const scalePct = useScalePercent();
-
   return (
     <>
       {walls.map((props, idx) => (
         <Plane {...props} key={JSON.stringify(props.position)} />
       ))}
-      <mesh>
-        <icosahedronBufferGeometry args={[scalePct * 100, 5]} />
-        <meshPhysicalMaterial
-          color="rebeccapurple"
-          opacity={0.018}
-          transparent={true}
-          depthTest={false}
-          flatShading={true}
-          roughness={0.4}
-          vertexColors={true}
-          reflectivity={1}
-          wireframe={true}
-        />
-      </mesh>
+      <IcosahedronBackground />
       <PlayerHpBarAndFloor
         {...{
           name: "floor",

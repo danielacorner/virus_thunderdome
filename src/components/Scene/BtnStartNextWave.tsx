@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { INITIAL_PLAYER_HP, useStore } from "../../store";
 import styled from "styled-components/macro";
 import { Button } from "@material-ui/core";
-import { SpringScaleToTarget, WAVES } from "../Game/WAVES";
+import {
+  SpringScaleToTarget,
+  SpringTemperatureToTarget,
+  WAVES,
+} from "../Game/WAVES";
 import { useGLTF, useProgress } from "@react-three/drei";
 
 const WAVE_START_DELAY = 1 * 1000;
@@ -141,7 +145,7 @@ function NextWaveSprings() {
     return null;
   }
 
-  const { Spring, scaleTarget } = nextWave;
+  const { Spring, scaleTarget, temperatureTarget } = nextWave;
 
   // some waves animate properties in the store
   // like scale, wallHeight
@@ -150,6 +154,9 @@ function NextWaveSprings() {
       {ready && Spring ? <Spring /> : null}
       {ready && scaleTarget ? (
         <SpringScaleToTarget target={scaleTarget} />
+      ) : null}
+      {ready && temperatureTarget ? (
+        <SpringTemperatureToTarget target={temperatureTarget} />
       ) : null}
     </>
   );

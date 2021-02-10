@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useControl } from "react-three-gui";
-import {
-  SingleParticle,
-  useShouldRenderParticle,
-} from "./particle/SingleParticle";
-import { getRandStartPosition } from "./Shapes/particleUtils";
-import { useStore } from "../store";
-import { PROTEIN_TYPES } from "../utils/PROTEINS";
+import { SingleParticle, useShouldRenderParticle } from "./SingleParticle";
+import { getRandStartPosition } from "../Shapes/particleUtils";
+import { useStore } from "../../store";
+import { PROTEIN_TYPES } from "../../utils/PROTEINS";
 
 /** a set of proteins of the same species (i.e. 3d model) -- each species of protein can be rendered multiple times */
 const ProteinGroup = (props) => {
