@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import Tooltip from "./components/SelectedParticle/SelectedParticleTooltip";
 import { Button, Typography } from "@material-ui/core";
 import WarningOutlined from "@material-ui/icons/WarningOutlined";
@@ -10,6 +10,7 @@ import { render } from "react-dom";
 import MemoryStats from "react-memorystats";
 import { BtnStartNextWave } from "./components/Scene/BtnStartNextWave";
 import { CellAndAntibodyButtons } from "./components/CellAndAntibodyButtons/CellAndAntibodyButtons";
+import { useLocalStorageState } from "./utils/useLocalStorageState";
 
 function App() {
   useMount(() => {
@@ -27,7 +28,7 @@ function App() {
       <BtnStartNextWave />
       <CellAndAntibodyButtons />
       {/* <GuidedTour /> */}
-      {/* <SaveControlsSettingsToLocalStorage /> */}
+      <SaveControlsSettingsToLocalStorage />
     </div>
   );
 }
@@ -92,32 +93,27 @@ function LazyLoadedScene() {
   );
 }
 
-// function SaveControlsSettingsToLocalStorage() {
-// 	const set = useStore((s) => s.set);
-// 	const scale = useStore((s) => s.scale);
-// 	// const temperature = useStore((s) => s.temperature);
+function SaveControlsSettingsToLocalStorage() {
+  const set = useStore((s) => s.set);
+  const soundOn = useStore((s) => s.soundOn);
 
-// 	const [settings, setSettings] = useLocalStorageState("settings", {
-// 		// temperature,
-// 		scale,
-// 	});
+  const [settings, setSettings] = useLocalStorageState("settings", {
+    soundOn,
+  });
 
-// 	// when app mounts, retrieve settings from local storage
-// 	useMount(() => {
-// 		if (!settings) {
-// 			return;
-// 		}
-// 		// if (settings.temperature) {
-// 		//   set({ temperature: settings.temperature });
-// 		// }
-// 		if (settings.scale) {
-// 			set({ scale: settings.scale });
-// 		}
-// 	});
+  // when app mounts, retrieve settings from local storage
+  useMount(() => {
+    if (!settings) {
+      return;
+    }
+    if (settings.soundOn) {
+      set({ soundOn: settings.soundOn });
+    }
+  });
 
-// 	useEffect(() => {
-// 		setSettings({ scale });
-// 	}, [scale, setSettings]);
+  useEffect(() => {
+    setSettings({ soundOn });
+  }, [soundOn, setSettings]);
 
-// 	return null;
-// }
+  return null;
+}

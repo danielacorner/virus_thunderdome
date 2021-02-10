@@ -68,13 +68,19 @@ const startsStarted = /* false && */ process.env.NODE_ENV === "development";
 export const INITIAL_PLAYER_HP = 4000;
 export const INITIAL_CEILING_HEIGHT = 10;
 
+export function getSettingsFromLS() {
+  const settings = window.localStorage.getItem("settings");
+  return JSON.parse(settings);
+}
+
 // zustand https://github.com/pmndrs/zustand
 // with typescript https://react-tracked.js.org/docs/tutorial-zustand-01/
 export const useStore = create<GlobalStateType>(
   (set): GlobalStateType => ({
     isTooltipMaximized: false,
     paused: false,
-    soundOn: true,
+    soundOn:
+      "soundOn" in getSettingsFromLS() ? getSettingsFromLS().soundOn : true,
     isPropertyAnimating: false,
     targetVirusIdx: 0,
     cellButtonIdx: 0,

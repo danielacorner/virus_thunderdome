@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
 import { SingleParticleMounted } from "../particle/SingleParticleMounted";
 import { useStore } from "../../store";
-import { randBetween, useMount } from "../../utils/utils";
+import { randBetween } from "../../utils/utils";
 import { useEffectOnce } from "../../utils/hooks";
 import { WAVES, Wave } from "./WAVES";
 import { SHOT_TYPES } from "../CellAndAntibodyButtons/CellAndAntibodyButtons";
-import { useFrame, useThree } from "react-three-fiber";
+import { useFrame } from "react-three-fiber";
 
 const VIRUS_SPAWN_START_DELAY = 1 * 1000;
 
