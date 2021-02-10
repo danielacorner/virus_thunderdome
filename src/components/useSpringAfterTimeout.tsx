@@ -90,6 +90,9 @@ export function useSpringStoreImmediately({
     progress: animating,
     config: springConfig,
     onChange({ progress }) {
+      if (!progress) {
+        return;
+      }
       if (setterFn) {
         console.log("🌟🚨 ~ onChange ~ firstValue", firstValue);
         console.log(
