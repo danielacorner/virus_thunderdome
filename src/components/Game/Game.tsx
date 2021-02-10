@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { SingleParticleMounted } from "../particle/SingleParticleMounted";
 import { useStore } from "../../store";
 import { randBetween } from "../../utils/utils";
-import { useEffectOnce } from "../../utils/hooks";
 import { WAVES, Wave } from "./WAVES";
 import { SHOT_TYPES } from "../CellAndAntibodyButtons/CellAndAntibodyButtons";
 import { useFrame } from "react-three-fiber";
@@ -15,10 +14,50 @@ export default function Game() {
     <>
       {/* <StorylineSequence {...{ setViruses }} /> */}
       <WavesOfVirusCreation />
+      <CreateAntibodiesOnPointerDown />
       <Viruses />
       <Antibodies />
     </>
   );
+}
+
+function CreateAntibodiesOnPointerDown() {
+  const pointerDownStartTime = useStore((s) => s.pointerDownStartTime);
+  const set = useStore((s) => s.set);
+  const absCreatedSincePointerDown = useStore(
+    (s) => s.absCreatedSincePointerDown
+  );
+  const targetVirusIdx = useStore((s) => s.targetVirusIdx);
+  const createAntibody = useStore((s) => s.createAntibody);
+  const cellButtonIdx = useStore((s) => s.cellButtonIdx);
+  const { absPerShot, speed } = SHOT_TYPES[cellButtonIdx];
+
+  const antibody = WAVES[targetVirusIdx].antibody;
+  useFrame(() => {
+    if (!pointerDownStartTime) {
+      return;
+    }
+    // create antibodies at a certain speed as long as the pointer is down
+    const now = Date.now();
+    const timeSincePointerDown = now - pointerDownStartTime;
+    const numAbsNeededByNow = Math.max(
+      0,
+      1 + Math.floor(timeSincePointerDown * speed)
+    );
+    const shouldCreateAntibody = absCreatedSincePointerDown < numAbsNeededByNow;
+    if (shouldCreateAntibody) {
+      [...Array(absPerShot)].forEach(() => {
+        createAntibody({
+          abData: antibody,
+          iconIdx: targetVirusIdx,
+          id_str: `${Math.random()}`,
+        });
+      });
+      set({ absCreatedSincePointerDown: absCreatedSincePointerDown + 1 });
+    }
+  });
+
+  return null;
 }
 
 function Viruses() {

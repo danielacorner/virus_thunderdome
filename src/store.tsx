@@ -42,6 +42,8 @@ type GlobalStateType = {
   /** how high is the 3d container's ceiling */
   ceilingHeight: number;
   waveStartTime: number | null;
+  pointerDownStartTime: number | null;
+  absCreatedSincePointerDown: number;
   /** scale of the scene */
   scale: number;
   /** which virus do the produced antibodies target? */
@@ -91,6 +93,8 @@ export const useStore = create<GlobalStateType>(
     targetVirusIdx: 0,
     waveStartTime: null,
     cellButtonIdx: 0,
+    pointerDownStartTime: null,
+    absCreatedSincePointerDown: 0,
     viruses: [],
     antibodies: [],
     createVirus: (newVir) =>

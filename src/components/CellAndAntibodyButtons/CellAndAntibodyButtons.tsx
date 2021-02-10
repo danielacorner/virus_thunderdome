@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useStore } from "../../store";
 import { useCellsFiltered } from "../useCellsFiltered";
 import styled from "styled-components/macro";
@@ -7,6 +7,7 @@ import { randBetween } from "../../utils/utils";
 import { useSpring, animated } from "react-spring";
 import { AntibodyButtons, ANTIBODY_BTN_WIDTH } from "./AntibodyButtons";
 import { Button, Tooltip } from "@material-ui/core";
+import { useFrame } from "react-three-fiber";
 
 export const ANTIBODY_BTN_GAP = 240;
 export const CELLS_GAP = 3.4;
@@ -169,13 +170,11 @@ export const SHOT_TYPES = [
 function CellButton({ idx, numCells, cell }) {
   const [enabled, setEnabled] = useState(true);
   const [isPointerDown, setIsPointerDown] = useState(false);
-  const createAntibody = useStore((s) => s.createAntibody);
-  const targetVirusIdx = useStore((s) => s.targetVirusIdx);
   const cellButtonIdx = useStore((s) => s.cellButtonIdx);
   const isPropertyAnimating = useStore((s) => s.isPropertyAnimating);
   const set = useStore((s) => s.set);
 
-  const { absPerShot, speed } = SHOT_TYPES[cellButtonIdx];
+  const { speed } = SHOT_TYPES[cellButtonIdx];
 
   // disable button on pointerup so we can't spam clicks
   useEffect(() => {
@@ -185,48 +184,6 @@ function CellButton({ idx, numCells, cell }) {
       }, 1 / speed);
     }
   }, [enabled, speed]);
-
-  useEffect(() => {
-    const antibody = WAVES[targetVirusIdx].antibody;
-    let intervalCreateABs;
-    if (isPointerDown && enabled) {
-      [
-        ...Array(typeof absPerShot === "function" ? absPerShot() : absPerShot),
-      ].forEach(() => {
-        createAntibody({
-          abData: antibody,
-          iconIdx: targetVirusIdx,
-          id_str: `${Math.random()}`,
-        });
-      });
-      intervalCreateABs = window.setInterval(() => {
-        [
-          ...Array(
-            typeof absPerShot === "function" ? absPerShot() : absPerShot
-          ),
-        ].forEach(() => {
-          createAntibody({
-            abData: antibody,
-            iconIdx: targetVirusIdx,
-            id_str: `${Math.random()}`,
-          });
-        });
-      }, 1 / speed);
-    }
-    return () => {
-      if (intervalCreateABs) {
-        window.clearInterval(intervalCreateABs);
-      }
-    };
-  }, [
-    isPointerDown,
-    createAntibody,
-    targetVirusIdx,
-    idx,
-    absPerShot,
-    speed,
-    enabled,
-  ]);
 
   const disabled = isPropertyAnimating || !enabled;
   const springY = useSpring({
@@ -244,6 +201,7 @@ function CellButton({ idx, numCells, cell }) {
         className={disabled ? "disabled" : isPointerDown ? "active" : ""}
         {...{ idx, numCells }}
         onPointerDown={() => {
+          set({ pointerDownStartTime: Date.now() });
           set({ cellButtonIdx: idx });
           setIsPointerDown(true);
         }}
@@ -251,6 +209,8 @@ function CellButton({ idx, numCells, cell }) {
         onPointerUp={() => {
           setEnabled(false);
           setIsPointerDown(false);
+          set({ pointerDownStartTime: null });
+          set({ absCreatedSincePointerDown: 0 });
         }}
       />
     </Tooltip>
