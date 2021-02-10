@@ -6,6 +6,7 @@ import { PROTEIN_TYPES } from "../../utils/PROTEINS";
 import { useStore } from "../../store";
 import { ICONS } from "../Game/WAVES";
 import Block from "@material-ui/icons/GpsFixed";
+import { useScalePercent } from "../useScalePercent";
 
 export function FloatingHtmlOverlay({
   name,
@@ -25,11 +26,20 @@ export function FloatingHtmlOverlay({
   });
   const isAntibody = type === PROTEIN_TYPES.antibody;
   const isVirus = type === PROTEIN_TYPES.virus;
+  const scalePct = useScalePercent();
 
   return showHp ? (
     <Html>
       <HtmlOverlayStyles
-        {...{ mounted, lifespan, type, virusHpPct, isAntibody, isVirus }}
+        {...{
+          mounted,
+          lifespan,
+          type,
+          virusHpPct,
+          isAntibody,
+          isVirus,
+          scalePct,
+        }}
       >
         {Icon ? (
           <div className="icon">
@@ -57,6 +67,7 @@ type HtmlOverlayProps = {
   mounted: boolean;
   isVirus: boolean;
   isAntibody: boolean;
+  scalePct: number;
 };
 
 const HtmlOverlayStyles = styled.div<HtmlOverlayProps>`
@@ -79,7 +90,9 @@ const HtmlOverlayStyles = styled.div<HtmlOverlayProps>`
     }
   }
   transform: translateY(16px)
-    scale(${(p) => (p.isAntibody ? 0.9 : p.isVirus ? 1.5 : 1)});
+    scale(
+      ${(p) => (p.isAntibody ? 0.9 : p.isVirus ? 1.5 : 1) * p.scalePct ** 0.2}
+    );
   pointer-events: none;
   display: flex;
   flex-direction: column;

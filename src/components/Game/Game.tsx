@@ -120,14 +120,7 @@ function SingleWave({ viruses, moveCameraTo = null }: Wave) {
     dependencies: [readyToCreateViruses],
   });
 
-  const { camera } = useThree();
-
-  useMount(() => {
-    console.log("🌟🚨 ~ SingleWave ~ camera", camera);
-  });
-
   const [dollyFinished, setDollyFinished] = useState(false);
-  console.log("🌟🚨 ~ SingleWave ~ dollyFinished", dollyFinished);
 
   return moveCameraTo && !dollyFinished ? (
     <DollyMoveCamera {...{ moveCameraTo, setDollyFinished }} />
@@ -135,45 +128,24 @@ function SingleWave({ viruses, moveCameraTo = null }: Wave) {
 }
 
 const ANIMATION_DURATION = 10 * 1000;
-const CAMERA_TILT = 0.85;
 function DollyMoveCamera({ moveCameraTo, setDollyFinished }) {
-  const [x2, y2, z2] = moveCameraTo;
+  const [, , z2] = moveCameraTo;
   const now = useRef(Date.now());
 
   useFrame(({ clock, camera }) => {
     // const secondsElapsed = clock.getElapsedTime();
     const timeSinceMounted = Date.now() - now.current;
     const pctDone = timeSinceMounted / ANIMATION_DURATION;
+
     if (pctDone >= 1) {
       setDollyFinished(true);
       return;
     }
 
-    const { x, y, z } = camera.position;
-    const [dx, dy, dz] = [x2 - x, y2 - y, z2 - z];
+    const { z } = camera.position;
+    const dz = z2 - z;
 
-    // camera.position.x = x + dx * pctDone;
-    // camera.position.y = y + dy * pctDone;
     camera.position.z = z + dz * pctDone;
-  });
-
-  // useFrame(({ clock, camera }) => {
-  //   // const secondsElapsed = clock.getElapsedTime();
-  //   const timeSinceMounted = Date.now() - now.current;
-  //   const pctDone = timeSinceMounted / ANIMATION_DURATION;
-  //   if (pctDone >= 1) {
-  //     return;
-  //   }
-  //   const newCamLookY = y2 * pctDone * CAMERA_TILT;
-  //   camera.lookAt(0, newCamLookY, 0);
-  // });
-
-  // on unmount, keep the final camera position (resets otherwise)
-  const { camera } = useThree();
-  useMount(() => {
-    return () => {
-      camera.lookAt(0, y2 * CAMERA_TILT, 0);
-    };
   });
 
   return null;

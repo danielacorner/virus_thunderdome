@@ -19,14 +19,13 @@ const Scene = () => {
     <Suspense fallback={null}>
       <AudioTrack />
       <OrbitControls />
-      <PhysicsScene />
+      <PhysicsSceneMovable />
       <Lighting />
-      {/* <Effects /> */}
     </Suspense>
   );
 };
 
-function PhysicsScene() {
+function PhysicsSceneMovable() {
   const newY = useCameraY();
 
   const springDownOnWaveChange = useSpring({ position: [0, newY, 0] });
@@ -54,57 +53,3 @@ function AudioTrack() {
 // PROTEINS.forEach(({ pathToGLTF }) => // useGLTF.preload(pathToGLTF));
 
 export default Scene;
-
-// function useCameraWobble() {
-//   useFrame(
-//     ({
-//       active,
-//       aspect,
-//       camera,
-//       captured,
-//       clock,
-//       colorManagement,
-//       concurrent,
-//       events,
-//       forceResize,
-//       frames,
-//       gl,
-//       initialClick,
-//       initialHits,
-//       intersect,
-//       invalidate,
-//       invalidateFrameloop,
-//       manual,
-//       mouse,
-//       noEvents,
-//       pointer,
-//       raycaster,
-//       ready,
-//       scene,
-//       setDefaultCamera,
-//       size,
-//       subscribe,
-//       subscribers,
-//       viewport,
-//       vr,
-//     }) => {
-//       const { x, y, z } = camera.position;
-//       console.log("🌟🚨 ~ useCameraWobble ~ noise(1)", noise(1));
-//       const jitter = 0.0000001;
-//       const pb = perlinBetween(-jitter, jitter);
-//       console.log("🌟🚨 ~ useCameraWobble ~ pb", pb);
-//       camera.position.set(
-//         x,
-//         y,
-//         z
-//         // x + perlinBetween(-jitter, jitter),
-//         // y + perlinBetween(-jitter, jitter),
-//         // z + perlinBetween(-jitter, jitter)
-//       );
-//     }
-//   );
-// }
-
-// function perlinBetween(min, max) {
-//   return noise(max - min) + min;
-// }
