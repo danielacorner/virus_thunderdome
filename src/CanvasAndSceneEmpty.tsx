@@ -9,11 +9,13 @@ import { Water } from "./components/Scene/Water";
 import { PHYSICS_PROPS } from "./utils/PHYSICS_PROPS";
 import { Walls } from "./components/Scene/Walls";
 import { ScaleIndicator } from "./components/Sliders/ScaleIndicator";
+import { useStore } from "./store";
 
 export function CanvasAndSceneEmpty({
   children = null,
   isLoadingIndicator = false,
 }) {
+  const started = useStore((s) => s.started);
   const windowSize = useWindowSize();
 
   const SpinIfLoadingIndicator = isLoadingIndicator
@@ -35,7 +37,10 @@ export function CanvasAndSceneEmpty({
       <SpinIfLoadingIndicator>
         <OrbitControls />
         <Physics {...PHYSICS_PROPS}>
-          <mesh scale={isLoadingIndicator ? [0.75, 0.75, 0.75] : [1, 1, 1]}>
+          <mesh
+            rotation={[0, started ? Math.PI / 2 : -Math.PI, 0]}
+            scale={isLoadingIndicator ? [0.75, 0.75, 0.75] : [1, 1, 1]}
+          >
             <Water />
             {children}
             <Walls />

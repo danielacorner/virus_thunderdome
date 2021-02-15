@@ -5,6 +5,7 @@ import { randBetween } from "../../utils/utils";
 import { WAVES, Wave } from "./WAVES";
 import { SHOT_TYPES } from "../CellAndAntibodyButtons/CellAndAntibodyButtons";
 import { useFrame } from "react-three-fiber";
+import { useProgress } from "@react-three/drei";
 
 const VIRUS_SPAWN_START_DELAY = 1 * 1000;
 
@@ -114,6 +115,7 @@ function Antibodies() {
 
 function WavesOfVirusCreation() {
   const currentWaveIdx = useStore((s) => s.currentWaveIdx);
+  console.log("🌟🚨 ~ WavesOfVirusCreation ~ currentWaveIdx", currentWaveIdx);
   const wavesSoFar = WAVES.slice(0, currentWaveIdx);
 
   return (
@@ -132,7 +134,7 @@ function SingleWave({ viruses, moveCameraTo = null }: Wave) {
   const createVirus = useStore((s) => s.createVirus);
   const started = useStore((s) => s.started);
   const scale = useStore((s) => s.scale);
-  const loading = useStore((s) => s.loading);
+  const { active: loading } = useProgress();
   const currentWaveIdx = useStore((s) => s.currentWaveIdx);
   const scaleTarget = WAVES[Math.max(0, currentWaveIdx - 1)].scaleTarget;
   const isScaleTarget = scale - scaleTarget <= 0.000000000000000002; // seems to be the final value for scale

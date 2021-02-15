@@ -15,7 +15,7 @@ export function BtnStartNextWave() {
   const set = useStore((s) => s.set);
   const started = useStore((s) => s.started);
   const numDefeatedViruses = useStore((s) => s.numDefeatedViruses);
-  const { active: loadingAssets } = useProgress();
+  const { active: loading } = useProgress();
   const currentWaveIdx = useStore((s) => s.currentWaveIdx);
 
   // when the wave ends, show the "next wave" button,
@@ -45,7 +45,7 @@ export function BtnStartNextWave() {
     }
   }, [isWaveIncoming]);
 
-  return !started || loadingAssets ? null : (
+  return !started || loading ? null : (
     <NextWaveStyles>
       {isWaveComplete ? (
         <>
@@ -139,17 +139,17 @@ function NextWaveAssets() {
 function NextWaveSprings() {
   const currentWaveIdx = useStore((s) => s.currentWaveIdx);
   const nextWave = WAVES[currentWaveIdx - 1];
-  const { active: loadingAssets } = useProgress();
+  const { active: loading } = useProgress();
 
   // when assets are done loading, launch the spring after a short timeout (otherwise it gets blocked in production?)
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    if (!ready && !loadingAssets) {
+    if (!ready && !loading) {
       setTimeout(() => {
         setReady(true);
       }, WAVE_START_DELAY);
     }
-  }, [ready, loadingAssets]);
+  }, [ready, loading]);
 
   if (!nextWave) {
     return null;

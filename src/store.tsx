@@ -31,8 +31,6 @@ type GlobalStateType = {
   soundOn: boolean;
   /** show/hide the HP bar & icons */
   showHp: boolean;
-  /** are assets loading? */
-  loading: boolean;
   /** has the app been started */
   started: boolean;
   /** is the game paused / temperature === 0 */
@@ -104,7 +102,6 @@ export const useStore = create<GlobalStateType>(
     playerHp: INITIAL_PLAYER_HP,
     showHp: true,
     started: startsStarted,
-    loading: !startsStarted,
     worldRadius: 5,
     isWaveComplete: false,
     currentWaveIdx: 0,

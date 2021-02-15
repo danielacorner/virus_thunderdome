@@ -8,6 +8,7 @@
     "@material-ui/icons": "^4.11.2",
     "@react-three/cannon": "^0.5.3",
     "@react-three/drei": "^2.2.12",
+    "@react-three/xr": "^2.0.0",
     "@rehooks/component-size": "^1.0.3",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",

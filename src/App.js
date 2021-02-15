@@ -64,13 +64,31 @@ function LazyLoadedScene() {
           grid-gap: 1em;
           min-height: 100vh;
           .title {
+            pointer-events: auto;
+            .logo {
+              display: grid;
+              align-content: center;
+              font-size: 0.7em;
+              position: relative;
+              .l {
+                opacity: 0.8;
+              }
+              .r {
+                position: absolute;
+                top: -8px;
+                right: -7px;
+                font-size: 0.8em;
+                opacity: 0.7;
+              }
+            }
             h3 {
               display: grid;
               grid-auto-flow: column;
               font-size: 2.4em;
               .left {
-                margin-top: 0.5ch;
                 display: flex;
+                margin-top: 0.6ch;
+                margin-right: -1.4ch;
               }
               .right {
                 margin-bottom: 0.5ch;
@@ -98,7 +116,11 @@ function LazyLoadedScene() {
         <div className="title">
           <Typography style={{ textAlign: "center" }} variant="h3">
             <div className="left">
-              nano<div style={{ fontSize: "0.7em" }}>🦠</div>
+              virus
+              <div className="logo">
+                <div className="l">🦠</div>
+                <div className="r">⚡</div>
+              </div>
             </div>
             <div className="right">Thunderdome</div>
           </Typography>
@@ -110,7 +132,7 @@ function LazyLoadedScene() {
           </div>
         </div>
         <Button onClick={() => set({ started: true })} variant="outlined">
-          Start ⚡
+          Start
         </Button>
       </StyledDiv>
     </>
