@@ -6,38 +6,35 @@ import styled from "styled-components/macro";
 import { animated } from "react-spring";
 import Block from "@material-ui/icons/GpsFixedTwoTone";
 import { Tooltip } from "@material-ui/core";
-import { useCellsFiltered } from "../useCellsFiltered";
 import { WAVES } from "../Game/WAVES";
 export const ANTIBODY_BTN_WIDTH = 48;
 
-export function AntibodyButtons({ springLeftRight }) {
-  const cellsFiltered = useCellsFiltered();
-  const numCells = cellsFiltered.length;
+export function AntibodyButtons({ springLeftRight, numAbTargets }) {
   return (
-    <VirusTargetIconsStyles numCells={numCells}>
+    <IconsWrapperStyles>
       <animated.div style={springLeftRight} className="blockIcon">
         <Block />
       </animated.div>
       <div className="label top">Antibodies</div>
-      {cellsFiltered.map((cell, idx) => (
+      {[...Array(numAbTargets)].map((_, idx) => (
         <VirusTargetIconButton
           key={idx}
           {...{
             idx,
-            numCells: numCells,
+            numAbTargets,
           }}
         />
       ))}
-    </VirusTargetIconsStyles>
+    </IconsWrapperStyles>
   );
 }
 
-export function VirusTargetIconButton({ idx, numCells }) {
+export function VirusTargetIconButton({ idx, numAbTargets }) {
   const Icon = ICONS[idx];
   const targetVirusIdx = useStore((s) => s.targetVirusIdx);
   const set = useStore((s) => s.set);
   const active = targetVirusIdx === idx;
-  const buttonGap = ANTIBODY_BTN_GAP / numCells;
+  const buttonGap = ANTIBODY_BTN_GAP / numAbTargets;
 
   return (
     <Tooltip key={idx} title={WAVES[idx].antibody.name}>
@@ -45,7 +42,7 @@ export function VirusTargetIconButton({ idx, numCells }) {
         onClick={() => (active ? null : set({ targetVirusIdx: idx }))}
         className={`svgIcon${active ? " active" : ""}`}
         buttonGap={buttonGap}
-        numCells={numCells}
+        numAbTargets={numAbTargets}
         idx={idx}
       >
         <div className="container">
@@ -59,7 +56,7 @@ export function VirusTargetIconButton({ idx, numCells }) {
 export const VirusTargetIconStyles = styled.div`
   left: calc(
     50vw - ${ANTIBODY_BTN_WIDTH / 2}px -
-      ${(p) => p.buttonGap * (-p.idx + (p.numCells - 1) / 2)}px
+      ${(p) => p.buttonGap * (-p.idx + (p.numAbTargets - 1) / 2)}px
   );
   position: absolute;
   bottom: 0px;
@@ -89,7 +86,7 @@ export const VirusTargetIconStyles = styled.div`
   }
 `;
 
-export const VirusTargetIconsStyles = styled.div`
+export const IconsWrapperStyles = styled.div`
   position: relative;
   bottom: 112px;
   .blockIcon {

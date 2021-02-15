@@ -1,5 +1,6 @@
 import { useStore } from "../../store";
 import { Protein, PROTEINS } from "../../utils/PROTEINS";
+import { getMaxTemp } from "../Controls/TemperatureControls";
 import { useSpringStoreImmediately } from "../useSpringAfterTimeout";
 import { ReactComponent as Icon1 } from "./icons/virus_1.svg";
 import { ReactComponent as Icon2 } from "./icons/virus_2.svg";
@@ -84,6 +85,7 @@ export const WAVES: Wave[] = [
     viruses: [{ numViruses: 8, virus: Polio }],
     antibody: antibody_poliovirus,
     scaleTarget: 0.01,
+    temperatureTarget: getMaxTemp(0.01) * 0.1,
     assets: [
       "/models/cells/lymphocyte.glb",
       "/models/viruses/poliovirus_50.glb",
@@ -116,6 +118,7 @@ export const WAVES: Wave[] = [
       "/models/antibodies/antibody_hpv_10.glb",
     ],
     scaleTarget: 0.006,
+    temperatureTarget: getMaxTemp(0.006) * 0.2,
     Spring: () => {
       useSpringStoreImmediately({
         property: "ceilingHeight",
@@ -144,7 +147,7 @@ export const WAVES: Wave[] = [
     ],
     moveCameraTo: [0, 16, 19],
     scaleTarget: 0.003,
-    temperatureTarget: 2,
+    temperatureTarget: getMaxTemp(0.003) * 0.4,
     Spring: () => {
       useSpringStoreImmediately({
         property: "ceilingHeight",
@@ -174,7 +177,7 @@ export const WAVES: Wave[] = [
     ],
     moveCameraTo: [0, 20, 24],
     scaleTarget: 0.0025,
-    temperatureTarget: 3.5,
+    temperatureTarget: getMaxTemp(0.0025) * 0.45,
     Spring: () => {
       useSpringStoreImmediately({
         property: "ceilingHeight",
@@ -191,17 +194,16 @@ export const WAVES: Wave[] = [
   },
   {
     viruses: [
+      { numViruses: 1, virus: Polio },
+      { numViruses: 1, virus: HPV },
+      { numViruses: 3, virus: GTA_virion },
       { numViruses: 8, virus: Bacteriophage_phi29_prohead_80 },
-      { numViruses: 8, virus: Faustovirus },
+      { numViruses: 1, virus: Faustovirus },
     ],
     antibody: antibody_faustovirus,
-    assets: [
-      "/models/cells/monocyte.glb",
-      "/models/viruses/HIV_200.glb",
-      "/models/antibodies/antibody_hiv_10.glb",
-    ],
+    assets: ["/models/viruses/faust_1200_1.glb"],
     scaleTarget: 0.0025,
-    temperatureTarget: 4,
+    temperatureTarget: getMaxTemp(0.0025) * 0.5,
     Spring: () => {
       useSpringStoreImmediately({
         property: "ceilingHeight",

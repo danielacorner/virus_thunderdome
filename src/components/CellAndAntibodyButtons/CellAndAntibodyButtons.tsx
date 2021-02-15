@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useStore } from "../../store";
 import { useCellsFiltered } from "../useCellsFiltered";
 import styled from "styled-components/macro";
-import { WAVES } from "../Game/WAVES";
 import { randBetween } from "../../utils/utils";
 import { useSpring, animated } from "react-spring";
 import { AntibodyButtons, ANTIBODY_BTN_WIDTH } from "./AntibodyButtons";
 import { Button, Tooltip } from "@material-ui/core";
-import { useFrame } from "react-three-fiber";
 
 export const ANTIBODY_BTN_GAP = 240;
 export const CELLS_GAP = 3.4;
@@ -35,15 +33,23 @@ export function CellAndAntibodyButtons() {
   const cellsBtnGap = CELLS_GAP * 5;
   const totalButtonsGap = Math.max(0, cellsBtnGap * (numCells - 1));
   const totalButtonsWidth = CELL_BTN_WIDTH * numCells + totalButtonsGap;
+
+  const currentWaveIdx = useStore((s) => s.currentWaveIdx);
+  const isWaveComplete = useStore((s) => s.isWaveComplete);
+  const numAbTargets = currentWaveIdx + (isWaveComplete ? 1 : 0);
+
   return !started ? null : (
     <Styles
       {...{
-        numCells,
+        numAbTargets,
         absButtonGap,
         cellsOffsetLeft: -totalButtonsWidth / 2,
       }}
     >
-      <AntibodyButtons springLeftRight={springLeftRight} />
+      <AntibodyButtons
+        springLeftRight={springLeftRight}
+        numAbTargets={numAbTargets}
+      />
       <div className="label bottom">Immune Cells</div>
 
       <AllCellButtons />
@@ -95,7 +101,7 @@ const Styles = styled.div`
     height: 1em;
     bottom: 128px;
     left: calc(
-      50vw - ${88}px - ${(p) => p.absButtonGap * ((p.numCells - 1) / 2)}px
+      50vw - ${88}px - ${(p) => p.absButtonGap * ((p.numAbTargets - 1) / 2)}px
     );
     display: grid;
     place-items: center;

@@ -6,6 +6,7 @@ import { AcUnit, Whatshot } from "@material-ui/icons";
 
 export function TemperatureControls() {
   const temperature = useStore((s) => s.temperature);
+  const setTemperature = useStore((s) => s.setTemperature);
   const scale = useStore((s) => s.scale);
   const set = useStore((s) => s.set);
   const paused = useStore((s) => s.paused);
@@ -27,13 +28,13 @@ export function TemperatureControls() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [set]);
 
-  const max = 0.005 / scale ** 2;
+  const max = getMaxTemp(scale);
 
   return (
     <TemperatureControlsStyles>
       <div className="grid">
         <div className="grid-item">
-          <Whatshot />
+          <Whatshot style={{ fill: "#555555" }} />
         </div>
         <div className="grid-item slider">
           <Slider
@@ -48,7 +49,7 @@ export function TemperatureControls() {
                 set({ paused: false });
               }
 
-              set({ temperature: newValue });
+              setTemperature(newValue);
             }}
             min={0}
             max={max}
@@ -57,7 +58,7 @@ export function TemperatureControls() {
           />
         </div>
         <div className="grid-item">
-          <AcUnit />
+          <AcUnit style={{ fill: "#555555" }} />
         </div>
       </div>
     </TemperatureControlsStyles>
@@ -82,3 +83,7 @@ const TemperatureControlsStyles = styled.div`
     }
   }
 `;
+
+export function getMaxTemp(scale) {
+  return 0.005 / scale ** 2;
+}
