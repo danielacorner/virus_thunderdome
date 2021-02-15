@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMount } from "../../utils/utils";
 import { Html } from "@react-three/drei";
 import styled from "styled-components/macro";
@@ -7,6 +7,7 @@ import { useStore } from "../../store";
 import { ICONS } from "../Game/WAVES";
 import Block from "@material-ui/icons/GpsFixed";
 import { useScalePercent } from "../useScalePercent";
+import { useSpring, animated } from "react-spring";
 
 export function FloatingHtmlOverlay({
   name,
@@ -28,6 +29,9 @@ export function FloatingHtmlOverlay({
   const isVirus = type === PROTEIN_TYPES.virus;
   const scalePct = useScalePercent();
 
+  // when virusHp changes, highlight the particle
+  const springDamageAnimation = useSpringDamageAnimation(isVirus, virusHpPct);
+
   return showHp ? (
     <Html>
       <HtmlOverlayStyles
@@ -41,6 +45,10 @@ export function FloatingHtmlOverlay({
           scalePct,
         }}
       >
+        <animated.div
+          className="damageAnimation"
+          style={springDamageAnimation}
+        />
         {Icon ? (
           <div className="icon">
             <Icon />
@@ -70,13 +78,39 @@ type HtmlOverlayProps = {
   scalePct: number;
 };
 
+const HP_BAR_WIDTH = 50;
+const HP_BAR_HEIGHT = 5;
+
+const DAMAGE_ANIMATION_WIDTH = HP_BAR_WIDTH * 1.2;
+const DAMAGE_ANIMATION_HEIGHT = DAMAGE_ANIMATION_WIDTH;
+
+const SVG_TOP = -40;
+
 const HtmlOverlayStyles = styled.div<HtmlOverlayProps>`
+  .damageAnimation {
+    position: absolute;
+    width: ${DAMAGE_ANIMATION_WIDTH}px;
+    height: ${DAMAGE_ANIMATION_HEIGHT}px;
+    border-radius: 50%;
+    top: ${-DAMAGE_ANIMATION_HEIGHT / 2 + HP_BAR_HEIGHT / 2 + SVG_TOP / 2}px;
+    bottom: 0;
+    left: ${-DAMAGE_ANIMATION_WIDTH / 2}px;
+    right: 0;
+    background: radial-gradient(
+      circle,
+      rgba(214, 7, 7, 1) 0%,
+      rgba(209, 66, 66, 0.8) 25%,
+      rgba(209, 66, 66, 0.5) 50%,
+      rgba(209, 66, 66, 0.2) 75%,
+      rgba(255, 21, 0, 0) 100%
+    );
+  }
   .icon {
     width: 100%;
     height: 100%;
     svg {
       position: absolute;
-      top: -40px;
+      top: ${SVG_TOP}px;
       right: -16px;
       width: 32px;
       height: 32px;
@@ -108,8 +142,8 @@ const HtmlOverlayStyles = styled.div<HtmlOverlayProps>`
     text-align: center;
   }
   .hpBar {
-    width: 50px;
-    height: 5px;
+    width: ${HP_BAR_WIDTH}px;
+    height: ${HP_BAR_HEIGHT}px;
     outline: 1px solid grey;
     .hp {
       width: 100%;
@@ -134,3 +168,26 @@ const HtmlOverlayStyles = styled.div<HtmlOverlayProps>`
     }
   }
 `;
+
+/** when virusHp changes, highlight the particle */
+function useSpringDamageAnimation(isVirus: boolean, virusHpPct: any) {
+  const [highlighted, setHighlighted] = useState(false);
+  useEffect(() => {
+    let timer;
+    if (isVirus && virusHpPct !== 1) {
+      setHighlighted(true);
+      timer = setTimeout(() => {
+        setHighlighted(false);
+      }, 200);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [virusHpPct, isVirus]);
+
+  const springDamageAnimation = useSpring({
+    opacity: highlighted ? 1 : 0,
+    immediate: highlighted,
+  });
+  return springDamageAnimation;
+}

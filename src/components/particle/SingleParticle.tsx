@@ -159,6 +159,7 @@ function InteractiveParticle(props: ParticleProps) {
       <meshStandardMaterial opacity={0.1} transparent={true} />
       {/* {isSelectedProtein && !isTooltipMaximized ? <HighlightParticle /> : null} */}
       <Component />
+
       <FloatingHtmlOverlay
         {...{
           name,
