@@ -12,7 +12,7 @@ import { BtnStartNextWave } from "./components/Scene/BtnStartNextWave";
 import { CellAndAntibodyButtons } from "./components/CellAndAntibodyButtons/CellAndAntibodyButtons";
 import { useLocalStorageState } from "./utils/useLocalStorageState";
 import { AttributionLinks } from "./AttributionLinks";
-
+import styled from "styled-components/macro";
 function App() {
   useMount(() => {
     render(
@@ -50,50 +50,74 @@ function LazyLoadedScene() {
   ) : (
     <>
       <CanvasAndSceneEmpty />
-      <div
-        style={{
-          pointerEvents: "none",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: "grid",
-          placeItems: "center",
-          alignContent: "center",
-          gridGap: "1em",
-          minHeight: "100vh",
-        }}
+      <StyledDiv
+        css={`
+          pointer-events: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          display: grid;
+          place-items: center;
+          align-content: center;
+          grid-gap: 1em;
+          min-height: 100vh;
+          .title {
+            h3 {
+              display: grid;
+              grid-auto-flow: column;
+              font-size: 2.4em;
+              .left {
+                margin-top: 0.5ch;
+                display: flex;
+              }
+              .right {
+                margin-bottom: 0.5ch;
+                font-size: 0.8em;
+              }
+            }
+          }
+          .requirements {
+            display: grid;
+            grid-auto-flow: column;
+            place-items: center;
+            grid-gap: 0.25em;
+            height: fit-content;
+            justify-items: center;
+            svg {
+              fill: #555555;
+            }
+          }
+          button {
+            padding: 0.5em 2em;
+            pointer-events: auto;
+          }
+        `}
       >
-        <Typography style={{ textAlign: "center" }} variant="h3">
-          <div>Virus</div>
-          <div>ThunderDome</div>
-          <div>⚡🦠⚡</div>
-        </Typography>
-        <div
-          style={{
-            display: "grid",
-            gridAutoFlow: "column",
-            placeItems: "center",
-            gridGap: "0.25em",
-          }}
-        >
-          <WarningOutlined />
-          <Typography variant="body2">
-            Requirements: 20MB download, 1GB memory
+        <div className="title">
+          <Typography style={{ textAlign: "center" }} variant="h3">
+            <div className="left">
+              nano<div style={{ fontSize: "0.7em" }}>🦠</div>
+            </div>
+            <div className="right">Thunderdome</div>
           </Typography>
+          <div className="requirements">
+            <WarningOutlined />
+            <Typography variant="body2">
+              Requirements: 50MB download, 1GB memory
+            </Typography>
+          </div>
         </div>
-        <Button
-          style={{ padding: "0.25em 3em", pointerEvents: "auto" }}
-          onClick={() => set({ started: true })}
-          variant="outlined"
-        >
-          Start
+        <Button onClick={() => set({ started: true })} variant="outlined">
+          Start ⚡
         </Button>
-      </div>
+      </StyledDiv>
     </>
   );
 }
+
+const StyledDiv = styled.div``;
 
 function SaveControlsSettingsToLocalStorage() {
   const set = useStore((s) => s.set);

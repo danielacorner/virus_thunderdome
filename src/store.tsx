@@ -67,7 +67,7 @@ type GlobalStateType = {
   setTemperature: (newTemp: any) => any;
 };
 
-const startsStarted = /* false && */ process.env.NODE_ENV === "development";
+const startsStarted = false && process.env.NODE_ENV === "development";
 
 export const INITIAL_PLAYER_HP = 4000;
 export const INITIAL_CEILING_HEIGHT = 10;
