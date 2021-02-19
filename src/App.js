@@ -4,7 +4,6 @@ import { Button, Typography } from "@material-ui/core";
 import WarningOutlined from "@material-ui/icons/WarningOutlined";
 import { CanvasAndSceneEmpty } from "./CanvasAndSceneEmpty";
 import { useStore } from "./store";
-import { LoadingIndicator } from "./components/Scene/LoadingIndicator";
 import { useMount } from "./utils/utils";
 import { render } from "react-dom";
 import MemoryStats from "react-memorystats";
@@ -22,7 +21,7 @@ function App() {
   });
   return (
     <div className="App">
-      <LoadingIndicator />
+      {/* <LoadingIndicator /> */}
       <LazyLoadedScene />
       <div id="memoryStats"></div>
       <Tooltip />
