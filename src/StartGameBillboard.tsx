@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useStore } from "./store";
-import { Billboard, RoundedBox, Text } from "@react-three/drei";
+import { Billboard, Text } from "@react-three/drei";
+import { Button3D } from "./Button3D";
 
 export default function StartGameBillboard() {
   const worldRadius = useStore((s) => s.worldRadius);
@@ -36,28 +37,15 @@ export default function StartGameBillboard() {
 function BtnStartGame() {
   const set = useStore((s) => s.set);
 
-  const [hovered, setHovered] = useState(false);
-
-  useEffect(() => {
-    document.body.style.cursor = hovered ? "pointer" : "auto";
-  }, [hovered]);
-
   return (
-    <mesh
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
+    <Button3D
       onClick={() =>
         set({
           started: true,
         })
       }
     >
-      <RoundedBox position={[0, 0, -0.1]} radius={0.05} args={[1, 0.5, 0.1]}>
-        <meshPhongMaterial attach="material" color="#f3f3f3" />
-      </RoundedBox>
-      <Text color="black" letterSpacing={0.05} fontSize={0.18}>
-        START
-      </Text>
-    </mesh>
+      START
+    </Button3D>
   );
 }
