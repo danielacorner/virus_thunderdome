@@ -49,11 +49,8 @@ export function BtnStartNextWave() {
 
   return !started || loading || !(isWaveComplete || isWaveIncoming) ? null : (
     <Billboard
-      {...{
-        width: worldRadius * 2,
-        height: worldRadius * 2,
-        position: [0, 0, worldRadius / 2],
-      }}
+      position={[0, 0, worldRadius / 2]}
+      args={isWaveIncoming ? [0, 0] : [worldRadius, worldRadius]}
     >
       <Html>
         <NextWaveStyles>

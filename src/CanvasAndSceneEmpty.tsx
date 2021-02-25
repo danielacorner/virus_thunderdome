@@ -10,6 +10,7 @@ import { PHYSICS_PROPS } from "./utils/PHYSICS_PROPS";
 import { Walls } from "./components/Scene/Walls";
 import { ScaleIndicator } from "./components/Sliders/ScaleIndicator";
 import { useStore } from "./store";
+import StartGameBillboard from "./StartGameBillboard";
 
 export function CanvasAndSceneEmpty({
   children = null,
@@ -48,6 +49,7 @@ export function CanvasAndSceneEmpty({
           </mesh>
         </Physics>
       </SpinIfLoadingIndicator>
+      {started ? null : <StartGameBillboard />}
     </Canvas>
   );
 }
