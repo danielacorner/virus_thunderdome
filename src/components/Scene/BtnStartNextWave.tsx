@@ -7,7 +7,7 @@ import {
   SpringTemperatureToTarget,
   WAVES,
 } from "../Game/WAVES";
-import { useGLTF, useProgress } from "@react-three/drei";
+import { Billboard, Html, useGLTF, useProgress } from "@react-three/drei";
 
 const WAVE_START_DELAY = 1 * 1000;
 
@@ -45,35 +45,49 @@ export function BtnStartNextWave() {
     }
   }, [isWaveIncoming]);
 
-  return !started || loading ? null : (
-    <NextWaveStyles>
-      {isWaveComplete ? (
-        <>
-          <NextWaveAssets />
-          <Button
-            style={{
-              padding: "0.5em 2em",
-              pointerEvents: "auto",
-              background: "#88fff914",
-            }}
-            onClick={() => {
-              set({ currentWaveIdx: currentWaveIdx + 1 });
-              set({ isWaveComplete: false });
-              set({ waveStartTime: Date.now() });
-              setIsWaveIncoming(true);
-            }}
-            variant="outlined"
-          >
-            {currentWaveIdx === 0 ? "Ready" : "Next Wave"}
-          </Button>
-        </>
-      ) : isWaveIncoming ? (
-        <>
-          <div className="incomingText">Wave {currentWaveIdx} Incoming!!</div>
-          <NextWaveSprings />
-        </>
-      ) : null}
-    </NextWaveStyles>
+  const worldRadius = useStore((s) => s.worldRadius);
+
+  return !started || loading || !(isWaveComplete || isWaveIncoming) ? null : (
+    <Billboard
+      {...{
+        width: worldRadius * 2,
+        height: worldRadius * 2,
+        position: [0, 0, worldRadius / 2],
+      }}
+    >
+      <Html>
+        <NextWaveStyles>
+          {isWaveComplete ? (
+            <>
+              <NextWaveAssets />
+              <Button
+                style={{
+                  padding: "0.5em 2em",
+                  pointerEvents: "auto",
+                  background: "#88fff914",
+                }}
+                onClick={() => {
+                  set({ currentWaveIdx: currentWaveIdx + 1 });
+                  set({ isWaveComplete: false });
+                  set({ waveStartTime: Date.now() });
+                  setIsWaveIncoming(true);
+                }}
+                variant="outlined"
+              >
+                {currentWaveIdx === 0 ? "Ready" : "Next Wave"}
+              </Button>
+            </>
+          ) : isWaveIncoming ? (
+            <>
+              <div className="incomingText">
+                Wave {currentWaveIdx} Incoming!!
+              </div>
+              <NextWaveSprings />
+            </>
+          ) : null}
+        </NextWaveStyles>
+      </Html>
+    </Billboard>
   );
 }
 const NextWaveStyles = styled.div`

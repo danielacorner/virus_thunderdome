@@ -4,14 +4,16 @@ import Scene from "./components/Scene/Scene";
 import { useWindowSize } from "./utils/hooks";
 import TopControls from "./components/Controls/TopControls";
 import {
-  VRCanvas,
+  // VRCanvas,
   DefaultXRControllers,
   Interactive,
   Hands,
 } from "@react-three/xr";
-
+import * as THREE from "three";
 import SideControls from "./components/Controls/SideControls";
 import { Box } from "@react-three/drei";
+import { BtnStartNextWave } from "./components/Scene/BtnStartNextWave";
+import { Canvas } from "react-three-fiber";
 
 export default function CanvasAndScene({ renderProteins = true }) {
   const windowSize = useWindowSize();
@@ -30,26 +32,27 @@ export default function CanvasAndScene({ renderProteins = true }) {
   return (
     <>
       <Controls.Provider>
-        <VRCanvas
-          // onCreated={({ gl }) => {
-          //   gl.shadowMap.enabled = true;
-          //   gl.shadowMap.type = THREE.PCFShadowMap;
-          // }}
-          // gl={{ antialias: false, alpha: false }}
+        <Canvas
           style={{ height: windowSize.height, width: windowSize.width }}
-          // camera={{ fov: 75 /* position: INITIAL_CAMERA_POSITION */ }}
+          onCreated={({ gl }) => {
+            gl.shadowMap.enabled = true;
+            gl.shadowMap.type = THREE.PCFShadowMap;
+          }}
+          gl={{ antialias: false, alpha: false }}
+          camera={{ fov: 75 /* position: INITIAL_CAMERA_POSITION */ }}
         >
           <Scene />
-          <DefaultXRControllers />
+          <BtnStartNextWave />
+          {/* <DefaultXRControllers />
           <Interactive
             onSelect={() => console.log("clicked!")}
-            // onHover={() => setIsHo/* vered(true)}
-            // onBlur={() => setIsHov */ered(false)}
+            // onHover={() => setIsHovered(true)}
+            // onBlur={() => setIsHovered(false)}
           >
             <Box />
           </Interactive>
-          <Hands />
-        </VRCanvas>
+          <Hands /> */}
+        </Canvas>
       </Controls.Provider>
       {/* <HideHpControls /> */}
       <SideControls />
