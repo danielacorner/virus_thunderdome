@@ -1,114 +1,63 @@
-import React from "react";
-import { Button, Typography } from "@material-ui/core";
-import WarningOutlined from "@material-ui/icons/WarningOutlined";
+import React, { useEffect, useState } from "react";
 import { useStore } from "./store";
-import { Billboard, Html } from "@react-three/drei";
-import { StyledDiv } from "./App";
+import { Billboard, RoundedBox, Text } from "@react-three/drei";
 
 export default function StartGameBillboard() {
-  const set = useStore((s) => s.set);
   const worldRadius = useStore((s) => s.worldRadius);
+
   return (
-    <Billboard position={[0, 0, 0]} args={[worldRadius, worldRadius]}>
-      <Html>
-        <StyledDiv
-          css={`
-            pointer-events: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: grid;
-            place-items: center;
-            align-content: center;
-            grid-gap: 1em;
-            min-height: 100vh;
-            .title {
-              pointer-events: auto;
-              .logo {
-                display: grid;
-                align-content: center;
-                font-size: 0.7em;
-                position: relative;
-                .l {
-                  opacity: 0.8;
-                }
-                .r {
-                  position: absolute;
-                  top: -8px;
-                  right: -7px;
-                  font-size: 0.8em;
-                  opacity: 0.7;
-                }
-              }
-              h3 {
-                display: grid;
-                grid-auto-flow: column;
-                font-size: 2.4em;
-                .left {
-                  display: flex;
-                  margin-top: 0.6ch;
-                  margin-right: -1.4ch;
-                }
-                .right {
-                  margin-bottom: 0.5ch;
-                  font-size: 0.8em;
-                }
-              }
-            }
-            .requirements {
-              display: grid;
-              grid-auto-flow: column;
-              place-items: center;
-              grid-gap: 0.25em;
-              height: fit-content;
-              justify-items: center;
-              svg {
-                fill: #555555;
-              }
-            }
-            button {
-              padding: 0.5em 2em;
-              pointer-events: auto;
-            }
-          `}
-        >
-          <div className="title">
-            <Typography
-              style={{
-                textAlign: "center",
-              }}
-              variant="h3"
-            >
-              <div className="left">
-                virus
-                <div className="logo">
-                  <div className="l">🦠</div>
-                  <div className="r">⚡</div>
-                </div>
-              </div>
-              <div className="right">Thunderdome</div>
-            </Typography>
-            <div className="requirements">
-              <WarningOutlined />
-              <Typography variant="body2">
-                Requirements: 50MB download, 1GB memory
-              </Typography>
-            </div>
-          </div>
-          <Button
-            onClick={() =>
-              set({
-                started: true,
-              })
-            }
-            variant="outlined"
-          >
-            Start
-          </Button>
-        </StyledDiv>
-      </Html>
+    <Billboard
+      position={[0, 0, -0.2]}
+      args={[worldRadius / 1.2, worldRadius / 3]}
+      material-color={"white"}
+      material-opacity={0.6}
+      material-transparent={true}
+    >
+      <group position={[0, 0, 0.25]}>
+        <group position={[0, 0.35, 0]}>
+          {/* Text https://github.com/protectwise/troika/tree/master/packages/troika-three-text */}
+          <Text color="black" fontSize={0.3} letterSpacing={0.05}>
+            Virus Thunderdome
+          </Text>
+        </group>
+        <group position={[0, 0.05, 0]}>
+          <Text color="black" fontSize={0.1}>
+            Requirements: 50MB download, 1GB memory
+          </Text>
+        </group>
+        <group position={[0, -0.4, 0]}>
+          <BtnStartGame />
+        </group>
+      </group>
     </Billboard>
+  );
+}
+
+function BtnStartGame() {
+  const set = useStore((s) => s.set);
+
+  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    document.body.style.cursor = hovered ? "pointer" : "auto";
+  }, [hovered]);
+
+  return (
+    <mesh
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+      onClick={() =>
+        set({
+          started: true,
+        })
+      }
+    >
+      <RoundedBox position={[0, 0, -0.1]} radius={0.05} args={[1, 0.5, 0.1]}>
+        <meshPhongMaterial attach="material" color="#f3f3f3" />
+      </RoundedBox>
+      <Text color="black" letterSpacing={0.05} fontSize={0.18}>
+        START
+      </Text>
+    </mesh>
   );
 }
