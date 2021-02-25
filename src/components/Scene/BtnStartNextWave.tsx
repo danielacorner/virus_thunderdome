@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { INITIAL_PLAYER_HP, useStore } from "../../store";
-import styled from "styled-components/macro";
 import { Button } from "@material-ui/core";
 import {
   SpringScaleToTarget,
   SpringTemperatureToTarget,
   WAVES,
 } from "../Game/WAVES";
-import { Billboard, Html, useGLTF, useProgress } from "@react-three/drei";
+import { Billboard, Text, useGLTF, useProgress } from "@react-three/drei";
+import { Button3D } from "../../Button3D";
 
 const WAVE_START_DELAY = 1 * 1000;
 
@@ -49,73 +49,36 @@ export function BtnStartNextWave() {
 
   return !started || loading || !(isWaveComplete || isWaveIncoming) ? null : (
     <Billboard
-      position={[0, 0, worldRadius / 2]}
+      position={[0, 0, -0.2]}
       args={isWaveIncoming ? [0, 0] : [worldRadius, worldRadius]}
+      material-opacity={0}
+      material-transparent={true}
     >
-      <Html>
-        <NextWaveStyles>
-          {isWaveComplete ? (
-            <>
-              <NextWaveAssets />
-              <Button
-                style={{
-                  padding: "0.5em 2em",
-                  pointerEvents: "auto",
-                  background: "#88fff914",
-                }}
-                onClick={() => {
-                  set({ currentWaveIdx: currentWaveIdx + 1 });
-                  set({ isWaveComplete: false });
-                  set({ waveStartTime: Date.now() });
-                  setIsWaveIncoming(true);
-                }}
-                variant="outlined"
-              >
-                {currentWaveIdx === 0 ? "Ready" : "Next Wave"}
-              </Button>
-            </>
-          ) : isWaveIncoming ? (
-            <>
-              <div className="incomingText">
-                Wave {currentWaveIdx} Incoming!!
-              </div>
-              <NextWaveSprings />
-            </>
-          ) : null}
-        </NextWaveStyles>
-      </Html>
+      <group position={[0, 0, 0.1]}>
+        {isWaveComplete ? (
+          <>
+            <NextWaveAssets />
+            <Button3D
+              onClick={() => {
+                set({ currentWaveIdx: currentWaveIdx + 1 });
+                set({ isWaveComplete: false });
+                set({ waveStartTime: Date.now() });
+                setIsWaveIncoming(true);
+              }}
+            >
+              {currentWaveIdx === 0 ? "START" : "Next Wave"}
+            </Button3D>
+          </>
+        ) : isWaveIncoming ? (
+          <group>
+            <Text color={"tomato"}>Wave {currentWaveIdx} Incoming!!</Text>
+            <NextWaveSprings />
+          </group>
+        ) : null}
+      </group>
     </Billboard>
   );
 }
-const NextWaveStyles = styled.div`
-  font-size: 2em;
-  color: #f0461b;
-  .incomingText {
-    white-space: nowrap;
-    animation-name: appearDisappear;
-    animation-duration: 0.8s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
-  }
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  pointer-events: none;
-  display: grid;
-  place-items: center;
-
-  @keyframes appearDisappear {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-`;
 
 export function useTotalVirusesSoFar() {
   const currentWaveIdx = useStore((s) => s.currentWaveIdx);

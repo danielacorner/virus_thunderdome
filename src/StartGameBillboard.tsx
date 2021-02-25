@@ -45,7 +45,7 @@ function BtnStartGame() {
         })
       }
     >
-      START
+      LOAD
     </Button3D>
   );
 }
